@@ -88,3 +88,20 @@ Cada video queda en `out/<fecha>-<tema>/` con `storyboard.json`, `scene.py`, `fi
 - `explapix/youtube.py`: subida y comentarios (YouTube Data API v3, cuota gratis ~5 videos/día).
 
 Fuentes Fredoka y Nunito: SIL Open Font License (`fonts/OFL-*.txt`).
+
+## Explapix Studio (panel web)
+
+Panel para revisar y controlar todo sin comandos: `http://100.96.241.48:8097` (por Tailscale; también `http://192.168.2.15:8097` en casa). Usuario `magne`, contraseña en `secrets/panel_password` (se genera sola, permisos 600, fuera de git).
+
+| Pantalla | Para qué |
+|---|---|
+| Biblioteca | Videos con reproductor, guion por segmento, estado (por revisar / aprobado / rechazado / YouTube). Aprobar, Rechazar con nota, Regenerar (con Claude usando la nota, o solo voz/render gratis), editar título/descripción/tags y Subir a YouTube con confirmación (privado por defecto). |
+| Nuevo | Uno o varios temas (uno por línea), indicaciones, voz y calidad. Botón de ejemplo sin IA. |
+| Cola | Un trabajo a la vez (GPU), paso actual (guion → voz → animación → mezcla / subida) y log en vivo. Cancelar. |
+| Comentarios | Borradores de `reply_comments.py`: editar, aprobar, descartar, buscar nuevos y «Enviar aprobados» con confirmación. |
+| Voces | Muestras, voz por defecto y ajustes de Chatterbox/Kokoro, subir tu grabación como referencia, probar frases. |
+| Sistema | Clave de Anthropic y YouTube (sin mostrar valores), conectar YouTube desde el navegador, cuota estimada del día, GPU y disco. |
+
+Instalar/actualizar el servicio (systemd de usuario, arranca solo tras reiniciar): `bash deploy/instalar_panel.sh`.
+Logs: `journalctl --user -u explapix-studio -f`. Tests: `.venv/bin/python -m pytest -q`.
+Seguridad: nada se publica sin confirmación; `secrets/` y `.env` nunca se sirven por HTTP (solo rutas explícitas de videos, miniaturas, voces y fuentes).

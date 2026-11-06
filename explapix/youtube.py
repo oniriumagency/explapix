@@ -23,6 +23,31 @@ from googleapiclient.http import MediaFileUpload
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
           "https://www.googleapis.com/auth/youtube.force-ssl"]
+ROOT = Path(__file__).resolve().parent.parent
+QUOTA_FILE = Path(os.environ.get("EXPLAPIX_OUT", ROOT / "out")) / "_studio" / "quota.json"
+COST = {"upload": 1600, "list": 1, "reply": 50}
+
+
+def quota_day() -> str:
+    """La cuota de YouTube se reinicia a medianoche hora del Pacífico."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    return datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y-%m-%d")
+
+
+def spend(units: int) -> None:
+    """Lleva la cuenta (estimada) de unidades de cuota usadas hoy."""
+    try:
+        data = json.loads(QUOTA_FILE.read_text()) if QUOTA_FILE.exists() else {}
+    except ValueError:
+        data = {}
+    day = quota_day()
+    data[day] = data.get(day, 0) + units
+    data = dict(sorted(data.items())[-30:])
+    QUOTA_FILE.parent.mkdir(parents=True, exist_ok=True)
+    QUOTA_FILE.write_text(json.dumps(data, indent=1))
+
+
 SECRETS = Path(os.environ.get("EXPLAPIX_YT_SECRETS", "secrets/client_secret.json"))
 TOKEN = Path(os.environ.get("EXPLAPIX_YT_TOKEN", "secrets/token.json"))
 
@@ -59,10 +84,12 @@ def upload(video: Path, title: str, description: str, tags: list[str],
     resp = None
     while resp is None:
         _, resp = req.next_chunk()
+    spend(COST["upload"])
     return resp["id"]
 
 
 def channel_id(yt) -> str:
+    spend(COST["list"])
     return yt.channels().list(part="id", mine=True).execute()["items"][0]["id"]
 
 
@@ -75,6 +102,7 @@ def unanswered_comments(max_threads: int = 100) -> list[dict]:
         r = yt.commentThreads().list(part="snippet,replies", allThreadsRelatedToChannelId=me,
                                      maxResults=50, order="time", textFormat="plainText",
                                      pageToken=token).execute()
+        spend(COST["list"])
         for th in r.get("items", []):
             top = th["snippet"]["topLevelComment"]
             if top["snippet"].get("authorChannelId", {}).get("value") == me:
@@ -94,12 +122,14 @@ def unanswered_comments(max_threads: int = 100) -> list[dict]:
 
 def video_info(video_id: str) -> dict:
     items = service().videos().list(part="snippet", id=video_id).execute()["items"]
+    spend(COST["list"])
     return items[0]["snippet"] if items else {"title": "", "description": ""}
 
 
 def reply(parent_comment_id: str, text: str) -> str:
     r = service().comments().insert(part="snippet", body={
         "snippet": {"parentId": parent_comment_id, "textOriginal": text}}).execute()
+    spend(COST["reply"])
     return r["id"]
 
 

@@ -1,0 +1,13 @@
+[Unit]
+Description=Explapix Studio (panel web del canal)
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/proyectos/explapix
+ExecStart=%h/proyectos/explapix/.venv/bin/python -m uvicorn web.app:app --host 0.0.0.0 --port 8097
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

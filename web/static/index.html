@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explapix Studio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%230B0D26'/><circle cx='32' cy='34' r='18' fill='%23FFC93C'/><circle cx='25' cy='31' r='3' fill='%230B0D26'/><circle cx='39' cy='31' r='3' fill='%230B0D26'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span>EXPLA</span><b>PIX</b> <small>Studio</small></div>
+  <nav id="tabs">
+    <button data-tab="biblioteca" class="on">Biblioteca</button>
+    <button data-tab="crear">Nuevo</button>
+    <button data-tab="cola">Cola <i id="qbadge" class="badge" hidden></i></button>
+    <button data-tab="comentarios">Comentarios</button>
+    <button data-tab="voces">Voces</button>
+    <button data-tab="sistema">Sistema</button>
+  </nav>
+  <div id="running" class="running" hidden></div>
+</header>
+
+<main>
+  <!-- BIBLIOTECA -->
+  <section id="biblioteca" class="tab on">
+    <div class="bar">
+      <h1>Biblioteca</h1>
+      <select id="filter">
+        <option value="">Todos</option>
+        <option value="generado">Por revisar</option>
+        <option value="aprobado">Aprobados</option>
+        <option value="rechazado">Rechazados</option>
+        <option value="subido">En YouTube</option>
+        <option value="error">Con error</option>
+      </select>
+    </div>
+    <div id="grid" class="grid"></div>
+  </section>
+
+  <!-- DETALLE -->
+  <section id="detalle" class="tab"></section>
+
+  <!-- NUEVO -->
+  <section id="crear" class="tab">
+    <h1>Nuevo video</h1>
+    <div class="card form">
+      <label>Tema o lista de temas <small>(uno por línea, máx. 20)</small>
+        <textarea id="topics" rows="5" placeholder="Cómo funciona un microondas&#10;Por qué el cielo es azul"></textarea>
+      </label>
+      <label>Indicaciones para el guion <small>(opcional)</small>
+        <input id="notes" placeholder="Ej.: más humor, menciona un dato curioso al final">
+      </label>
+      <div class="row">
+        <label>Voz <select id="engine"></select></label>
+        <label>Calidad
+          <select id="quality"><option value="hd">HD 1080×1920</option><option value="draft">Borrador rápido 540×960</option></select>
+        </label>
+      </div>
+      <p id="nokey" class="warn" hidden>Falta la clave de Anthropic: sin ella solo puedes generar el ejemplo. Ponla en <a href="#sistema">Sistema</a>.</p>
+      <div class="row">
+        <button id="btnCreate" class="primary">Generar</button>
+        <button id="btnExample" class="ghost">Probar con el ejemplo del refri (sin IA, gratis)</button>
+      </div>
+      <p class="hint">Los videos se generan uno a la vez y quedan en la Biblioteca para revisar. Nada se sube a YouTube sin que lo confirmes.</p>
+    </div>
+  </section>
+
+  <!-- COLA -->
+  <section id="cola" class="tab">
+    <h1>Cola de trabajos</h1>
+    <div id="jobs" class="list"></div>
+  </section>
+
+  <!-- COMENTARIOS -->
+  <section id="comentarios" class="tab">
+    <div class="bar">
+      <h1>Comentarios</h1>
+      <div class="row">
+        <button id="btnFetch" class="ghost">Buscar nuevos</button>
+        <button id="btnSend" class="primary">Enviar aprobados</button>
+      </div>
+    </div>
+    <p class="hint">Claude propone una respuesta a cada comentario. Edítala, apruébala o descártala; solo se publican las aprobadas cuando pulses «Enviar aprobados».</p>
+    <div id="comments" class="list"></div>
+  </section>
+
+  <!-- VOCES -->
+  <section id="voces" class="tab">
+    <h1>Voces</h1>
+    <div class="card form">
+      <h2>Voz por defecto</h2>
+      <div class="row">
+        <label>Motor <select id="vEngine"></select></label>
+        <label>Voz Kokoro <select id="vKokoro"><option>em_alex</option><option>ef_dora</option><option>em_santa</option></select></label>
+      </div>
+      <div class="row">
+        <label>Emoción (Chatterbox) <span id="exV"></span><input type="range" id="vEx" min="0.25" max="1.2" step="0.05"></label>
+        <label>Ritmo (Chatterbox, menor = más pausado) <span id="cfgV"></span><input type="range" id="vCfg" min="0.2" max="0.8" step="0.05"></label>
+      </div>
+      <button id="btnVoiceSave" class="primary">Guardar</button>
+    </div>
+    <div class="card form">
+      <h2>Tu voz para Chatterbox</h2>
+      <p class="hint">Sube 10-20 s de tu voz (o de un locutor que te dé permiso) hablando natural, sin música ni ruido. Chatterbox copiará ese timbre.</p>
+      <div id="refInfo"></div>
+      <div class="row">
+        <input type="file" id="refFile" accept="audio/*">
+        <button id="btnRef" class="primary">Subir referencia</button>
+        <button id="btnRefReset" class="ghost">Volver a la voz de Kokoro</button>
+      </div>
+    </div>
+    <div class="card form">
+      <h2>Probar una frase</h2>
+      <div class="row">
+        <input id="vText" value="¿Sabías que tu refri no fabrica frío? ¡Lo que hace es sacar el calor!">
+        <select id="vTestEngine"></select>
+        <button id="btnVoiceTest" class="primary">Generar</button>
+      </div>
+    </div>
+    <h2>Muestras</h2>
+    <div id="samples" class="list"></div>
+  </section>
+
+  <!-- SISTEMA -->
+  <section id="sistema" class="tab">
+    <h1>Sistema</h1>
+    <div id="sys" class="tiles"></div>
+    <div class="card form">
+      <h2>Clave de Anthropic</h2>
+      <p class="hint">Se usa para escribir guiones, animaciones y respuestas. Se guarda en el servidor (.env, permisos 600) y nunca se muestra.</p>
+      <div class="row"><input id="akey" type="password" placeholder="sk-ant-..." autocomplete="off"><button id="btnKey" class="primary">Guardar</button></div>
+    </div>
+    <div class="card form">
+      <h2>Conectar YouTube</h2>
+      <ol class="steps">
+        <li><button id="btnYtUrl" class="ghost">1. Abrir autorización de Google</button> e inicia sesión con la cuenta dueña del canal.</li>
+        <li>Google te llevará a una página que <b>no carga</b> (http://localhost:8765/…). Es normal: copia la dirección completa de la barra.</li>
+        <li><div class="row"><input id="ytCode" placeholder="http://localhost:8765/?state=...&code=..."><button id="btnYtCode" class="primary">2. Conectar</button></div></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg"><form method="dialog" id="dlgForm"></form></dialog>
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
