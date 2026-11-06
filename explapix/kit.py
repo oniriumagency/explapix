@@ -100,6 +100,31 @@ def anticipate_overshoot(t: float, tension: float = 2.2) -> float:
     return 0.5 * a(2 * t) if t < 0.5 else 0.5 * (o(2 * t - 2) + 2)
 
 
+# ---------- Zona segura de Reels / Shorts / TikTok ----------
+# Fracciones de la pantalla que la interfaz tapa: 12 % arriba, 20 % abajo, 15 % a la derecha y un
+# margen de 5 % a la izquierda. Las escenas se diseñan en la caja de siempre (DESIGN_BOX) y el kit
+# las encuadra solas dentro de la zona segura, dejando debajo una franja para los subtítulos.
+SAFE_ZONE = {"top": 0.12, "bottom": 0.20, "right": 0.15, "left": 0.05}
+CAPTION_BAND = 1.75            # alto de la franja de subtítulos (unidades de pantalla, 16 = alto)
+DESIGN_BOX = (-4.3, 4.3, -5.0, 7.3)   # x0, x1, y0, y1 donde va TODO lo importante de la escena
+
+
+def _safe_framing():
+    W, H = config.frame_width, config.frame_height
+    sx0 = -W / 2 + SAFE_ZONE["left"] * W
+    sx1 = W / 2 - SAFE_ZONE["right"] * W
+    sy1 = H / 2 - SAFE_ZONE["top"] * H
+    sy0 = -H / 2 + SAFE_ZONE["bottom"] * H
+    cy0 = sy0 + CAPTION_BAND                   # el contenido queda arriba de los subtítulos
+    x0, x1, y0, y1 = DESIGN_BOX
+    s = min((sx1 - sx0) / (x1 - x0), (sy1 - cy0) / (y1 - y0))
+    screen_c = np.array([(sx0 + sx1) / 2, (cy0 + sy1) / 2, 0])
+    world_c = np.array([(x0 + x1) / 2, (y0 + y1) / 2, 0])
+    return {"scale": s, "center": world_c - screen_c / s, "height": H / s,
+            "caption": np.array([(sx0 + sx1) / 2, sy0 + CAPTION_BAND / 2, 0]),
+            "safe": (sx0, sx1, sy0, sy1), "content_center": screen_c}
+
+
 TEMPO = {"golpe": 0.25, "rapido": 0.45, "normal": 0.8, "lento": 1.2}
 
 
@@ -291,8 +316,19 @@ def pop_in(mob, run_time: float = 0.6, anchor=DOWN, squash: float = 0.35, **kw) 
         s = 1 - np.exp(-6 * t) * np.cos(10 * t)
         v = squash * _spring(t)
         return s * (1 + v), s * (1 - v), 0
-    return Deform(mob, fn, anchor=anchor, run_time=run_time, rate_func=linear,
-                  introducer=True, **kw)
+    a = Deform(mob, fn, anchor=anchor, run_time=run_time, rate_func=linear, introducer=True, **kw)
+    a.sfx = "blip" if _has_text(mob) else "pop"
+    return a
+
+
+def _has_text(mob) -> bool:
+    return any(isinstance(m, (Text, MarkupText)) for m in mob.get_family())
+
+
+def _tag(anim, kind, at: float = 0.0, gain: float = 1.0):
+    """Marca una animación con un efecto de sonido (at = fracción de su duración)."""
+    anim.sfx, anim.sfx_at, anim.sfx_gain = kind, at, gain
+    return anim
 
 
 def squash_bounce(mob, height: float = 0.8, run_time: float = 0.9, **kw) -> Animation:
@@ -308,7 +344,7 @@ def squash_bounce(mob, height: float = 0.8, run_time: float = 0.9, **kw) -> Anim
         u = (t - 0.82) / 0.18              # aterrizaje: aplasta y se asienta
         k = np.sin(np.pi * u) * (1 - u * 0.5)
         return 1 + 0.2 * k, 1 - 0.25 * k, 0
-    return Deform(mob, fn, anchor=DOWN, run_time=run_time, rate_func=linear, **kw)
+    return _tag(Deform(mob, fn, anchor=DOWN, run_time=run_time, rate_func=linear, **kw), "thud", 0.82)
 
 
 def jelly(mob, amount: float = 0.18, run_time: float = 0.8, anchor=DOWN, **kw) -> Animation:
@@ -316,7 +352,7 @@ def jelly(mob, amount: float = 0.18, run_time: float = 0.8, anchor=DOWN, **kw) -
     def fn(t):
         v = amount * np.exp(-4 * t) * np.sin(16 * t)
         return 1 + v, 1 - v, 0
-    return Deform(mob, fn, anchor=anchor, run_time=run_time, rate_func=linear, **kw)
+    return _tag(Deform(mob, fn, anchor=anchor, run_time=run_time, rate_func=linear, **kw), "thud", 0, 0.5)
 
 
 def emphasize(mob, scale: float = 1.25, run_time: float = 0.7, **kw) -> Animation:
@@ -328,7 +364,7 @@ def emphasize(mob, scale: float = 1.25, run_time: float = 0.7, **kw) -> Animatio
             u = (t - 0.3) / 0.7
             s = 1 + (scale - 1) * np.exp(-5 * u) * np.cos(9 * u)
         return s, s, 0
-    return Deform(mob, fn, anchor=ORIGIN, run_time=run_time, rate_func=linear, **kw)
+    return _tag(Deform(mob, fn, anchor=ORIGIN, run_time=run_time, rate_func=linear, **kw), "blip")
 
 
 def exit_out(mob, run_time: float = 0.45, **kw) -> Animation:
@@ -339,13 +375,15 @@ def exit_out(mob, run_time: float = 0.45, **kw) -> Animation:
         else:
             s = 1.12 * (1 - WINDUP((t - 0.25) / 0.75))
         return s, s, 0
-    return Deform(mob, fn, anchor=ORIGIN, run_time=run_time, rate_func=linear, remover=True, **kw)
+    return _tag(Deform(mob, fn, anchor=ORIGIN, run_time=run_time, rate_func=linear, remover=True, **kw),
+                "woosh", 0.1, 0.45)
 
 
 def anticipate_move(mob, target, run_time: float = 0.9, **kw):
     """Mover con anticipación (retrocede) y overshoot (se pasa y vuelve)."""
     target = target.get_center() if isinstance(target, Mobject) else np.array(target, dtype=float)
-    return mob.animate(run_time=run_time, rate_func=anticipate_overshoot, **kw).move_to(target)
+    return _tag(mob.animate(run_time=run_time, rate_func=anticipate_overshoot, **kw).move_to(target).build(),
+                "woosh", 0.3)
 
 
 def move_along_arc(mob, target, angle: float = PI / 3, run_time: float = 0.9,
@@ -353,7 +391,7 @@ def move_along_arc(mob, target, angle: float = PI / 3, run_time: float = 0.9,
     """Viaja en arco (los movimientos naturales nunca son rectos)."""
     target = target.get_center() if isinstance(target, Mobject) else np.array(target, dtype=float)
     path = ArcBetweenPoints(mob.get_center(), target, angle=angle)
-    return MoveAlongPath(mob, path, run_time=run_time, rate_func=rate_func, **kw)
+    return _tag(MoveAlongPath(mob, path, run_time=run_time, rate_func=rate_func, **kw), "woosh", 0.05)
 
 
 def cascade(*mobs, anim=None, lag: float = 0.15, run_time: float | None = None) -> Animation:
@@ -365,7 +403,7 @@ def cascade(*mobs, anim=None, lag: float = 0.15, run_time: float | None = None) 
 
 def draw_in(mob, run_time: float = 1.0) -> Animation:
     """Trazo con slow in/out (para tubos, cables, caminos)."""
-    return Create(mob, run_time=run_time, rate_func=EASE)
+    return _tag(Create(mob, run_time=run_time, rate_func=EASE), "woosh", 0, 0.5)
 
 
 # ---------- Acción secundaria (updaters que dan vida) ----------
@@ -706,12 +744,89 @@ class ExplapixScene(MovingCameraScene):
         self._angle = 0.0
         self._sway = {"amp": 0.0, "period": 7.0}
         self.frame.cam_angle = 0.0
+        self._sfx_events: list[dict] = []
+        sf = _safe_framing() if os.environ.get("EXPLAPIX_SAFE", "1") == "1" else None
+        self._base_center = sf["center"] if sf else ORIGIN.copy()
+        self._base_height = sf["height"] if sf else config.frame_height
+        self._caption_pos = sf["caption"] if sf else DOWN * 6.3
+        self._content_screen = sf["content_center"] if sf else ORIGIN.copy()
+        self.frame.move_to(self._base_center).set(height=self._base_height)
         self.bg = backdrop() if self.show_backdrop else VGroup()
         self.add(self.bg)
         ticker = VMobject()          # motor de tweens no bloqueantes (cámara, color de fondo)
         ticker.add_updater(lambda m, dt: self._tick(dt))
         self._ticker = ticker
         self.add(ticker)
+        if os.environ.get("EXPLAPIX_SAFE_DEBUG") == "1":
+            self._add_safe_debug()
+
+    def _add_safe_debug(self):
+        """Dibuja la zona segura (verde), la franja de subtítulos (amarillo) y lo que tapa la interfaz."""
+        sx0, sx1, sy0, sy1 = _safe_framing()["safe"]
+        frame = self.frame
+        guide = VGroup()
+
+        def build(m, dt=0):
+            k = frame.height / config.frame_height
+            c = frame.get_center()
+            safe = Rectangle(width=(sx1 - sx0) * k, height=(sy1 - sy0) * k, stroke_color=GREEN,
+                             stroke_width=4).move_to(c + np.array([(sx0 + sx1) / 2, (sy0 + sy1) / 2, 0]) * k)
+            band = Rectangle(width=(sx1 - sx0) * k, height=CAPTION_BAND * k, stroke_color=YELLOW,
+                             stroke_width=3).move_to(c + self._caption_pos * k)
+            g = VGroup(safe, band)
+            ang = getattr(frame, "cam_angle", 0.0)
+            if ang:
+                g.rotate(ang, about_point=c)
+            m.become(g)
+        guide.add_updater(build)
+        build(guide)
+        self._guide = guide
+        self.add_foreground_mobject(guide)
+
+    # ----- efectos de sonido -----
+    def sfx(self, kind: str = "pop", delay: float = 0.0, gain: float = 1.0):
+        """Agrega un efecto en el momento actual (+delay s): pop | woosh | blip | shimmer | thud."""
+        self._sfx_events.append({"t": round(self.renderer.time + delay, 3), "kind": kind,
+                                 "gain": gain})
+
+    def _collect_sfx(self, anim, t0: float, scale: float = 1.0):
+        rt = anim.get_run_time() * scale
+        if getattr(anim, "sfx", None):
+            self._sfx_events.append({"t": round(t0 + rt * getattr(anim, "sfx_at", 0.0), 3),
+                                     "kind": anim.sfx, "gain": getattr(anim, "sfx_gain", 1.0)})
+        timings = getattr(anim, "anims_with_timings", None)
+        if timings is not None and len(timings):
+            total = max(float(getattr(anim, "max_end_time", 0)) or 1e-6, 1e-6)
+            k = rt / total
+            for sub, start, _end in timings:
+                self._collect_sfx(sub, t0 + float(start) * k, k)
+
+    def play(self, *args, **kwargs):
+        t0 = self.renderer.time
+        try:
+            anims = [a for a in args if isinstance(a, Animation)]
+            rt = kwargs.get("run_time")
+            for a in anims:
+                if rt is not None:
+                    a.run_time = rt
+                self._collect_sfx(a, t0)
+        except Exception:  # noqa: BLE001  (los efectos nunca deben romper el render)
+            pass
+        return super().play(*args, **kwargs)
+
+    def add(self, *mobjects):
+        for m in mobjects:
+            if isinstance(m, Particles) and m.kind in ("chispas", "confeti", "estrellas", "orbita") \
+                    and hasattr(self, "_sfx_events") and hasattr(self, "renderer"):
+                self.sfx("shimmer", gain=0.7)
+        return super().add(*mobjects)
+
+    def tear_down(self):
+        path = os.environ.get("EXPLAPIX_SFX_EVENTS")
+        if path and hasattr(self, "_sfx_events"):
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(sorted(self._sfx_events, key=lambda e: e["t"]), f)
+        super().tear_down()
 
     def get_moving_mobjects(self, *animations):
         # La cámara puede girar/moverse por tweens en cualquier momento: redibujar todo siempre.
@@ -746,8 +861,13 @@ class ExplapixScene(MovingCameraScene):
         a0 = self._angle
         c1 = (center.get_center() if isinstance(center, Mobject) else np.array(center, dtype=float)) \
             if center is not None else c0
-        h1 = config.frame_height / zoom if zoom else h0
+        if center is not None and not (isinstance(center, np.ndarray) and center is self._base_center):
+            c1 = self._focus_center(c1, zoom or (self._base_height / h0))
+        h1 = self._base_height / zoom if zoom else h0
         a1 = np.deg2rad(angle) if angle is not None else a0
+
+        if hasattr(self, "_sfx_events"):
+            self.sfx("woosh", gain=0.8)
 
         def fn(a):
             self.frame.move_to(c0 + (c1 - c0) * a)
@@ -756,7 +876,12 @@ class ExplapixScene(MovingCameraScene):
         self.tween(fn, dur, rate)
 
     def cam_reset(self, dur: float = 1.0):
-        self.cam_to(ORIGIN, 1.0, 0.0, dur)
+        self.cam_to(self._base_center, 1.0, 0.0, dur)
+
+    def _focus_center(self, p, zoom):
+        """Centro del cuadro para que p quede en el centro de la zona segura con ese zoom."""
+        k = self._base_height / zoom / config.frame_height
+        return np.array(p, dtype=float) - self._content_screen * k
 
     def cam_sway(self, amp_deg: float = 1.5, period: float = 7.0):
         """Balanceo suave y constante de la cámara (0 para apagarlo)."""
@@ -765,14 +890,14 @@ class ExplapixScene(MovingCameraScene):
     def focus(self, target, zoom: float = 1.5, run_time: float = 1.0, rate_func=EASE):
         """Acerca la cámara a algo (bloqueante, para usar dentro de self.play)."""
         p = target.get_center() if isinstance(target, Mobject) else np.array(target, dtype=float)
-        return self.frame.animate(run_time=run_time, rate_func=rate_func).move_to(p).set(
-            height=config.frame_height / zoom)
+        return self.frame.animate(run_time=run_time, rate_func=rate_func).move_to(
+            self._focus_center(p, zoom)).set(height=self._base_height / zoom)
 
     def reset_camera(self, run_time: float = 0.9, rate_func=EASE):
         a0 = self._angle
         self.tween(lambda a: setattr(self, "_angle", a0 * (1 - a)), run_time, rate_func)
-        return self.frame.animate(run_time=run_time, rate_func=rate_func).move_to(ORIGIN).set(
-            height=config.frame_height)
+        return self.frame.animate(run_time=run_time, rate_func=rate_func).move_to(self._base_center).set(
+            height=self._base_height)
 
     # ----- color del fondo -----
     def mood(self, name="noche", dur: float = 1.2):
@@ -786,6 +911,8 @@ class ExplapixScene(MovingCameraScene):
         while len(start) < 3:
             start.append(start[-1])
         end = [ManimColor(c) for c in (lo, mid, hi)]
+        if hasattr(self, "_sfx_events"):
+            self.sfx("shimmer", gain=0.6)
         h0 = ManimColor(halo[0].get_fill_color())
         h1 = ManimColor(hc)
 
@@ -799,7 +926,8 @@ class ExplapixScene(MovingCameraScene):
     def stage(self) -> list:
         """Todo lo que está en escena excepto fondo, motor y subtítulos."""
         return [m for m in self.mobjects if isinstance(m, VMobject) and m is not self.bg
-                and m is not self._caption and m is not self.frame and m is not self._ticker]
+                and m is not self._caption and m is not self.frame and m is not self._ticker
+                and m is not getattr(self, "_guide", None)]
 
     def dim_others(self, *keep, opacity: float = 0.2, run_time: float = 0.5):
         """Apaga todo menos lo que importa (staging). Devuelve una animación."""
@@ -816,15 +944,19 @@ class ExplapixScene(MovingCameraScene):
 
     def outro(self):
         """Cierre de marca con confeti (≈1.2 s)."""
-        c = self.frame.get_center() + UP * 0.5
+        kf = self.frame.height / config.frame_height
+        c = self.frame.get_center() + self._content_screen * kf
         l1 = T("FACTOS", 92, INK)
         l2 = T("DIDÁCTICOS", 64, SUN)
         logo = VGroup(l1, l2).arrange(DOWN, buff=0.05)
         sub = T("ciencia de todos los días", 30, MUTED, weight=NORMAL).next_to(logo, DOWN, buff=0.3)
         halo = glow(logo, VIOLET, radius=3.2, opacity=0.18).move_to(c)
-        VGroup(logo, sub).move_to(c)
-        conf = particles("confeti", c + UP * 2, 9, 12, 60)
+        VGroup(logo, sub).scale(kf).move_to(c)
+        halo.scale(kf).move_to(c)
+        conf = particles("confeti", c + UP * 2 * kf, 9 * kf, 12 * kf, 60)
         self.add(conf)
+        self.sfx("pop", 0.1)
+        self.sfx("pop", 0.35, 0.8)
         self.play(FadeIn(halo, run_time=0.3), pop_in(l1, run_time=0.8, anchor=ORIGIN),
                   Succession(Wait(0.15), pop_in(l2, run_time=0.7, anchor=ORIGIN)),
                   FadeIn(sub, shift=UP * 0.2, run_time=0.6))
@@ -849,6 +981,9 @@ class ExplapixScene(MovingCameraScene):
         g = VGroup(*[T(l, 40, INK, weight=HEAVY, font=CAPTION_FONT) for l in lines]).arrange(
             DOWN, buff=0.14)
         g.set_stroke(BLACK, width=9, background=True)
+        sx0, sx1, _, _ = _safe_framing()["safe"]
+        if g.width > (sx1 - sx0) * 0.96:
+            g.scale_to_fit_width((sx1 - sx0) * 0.96)
         return g.move_to(ORIGIN)
 
     def _start_caption(self, text: str, duration: float):
@@ -876,7 +1011,7 @@ class ExplapixScene(MovingCameraScene):
             s = 0.88 + 0.12 * POP(min(state["since"] / 0.2, 1))   # pop al cambiar de bloque
             k = frame.height / config.frame_height                  # sigue al zoom
             c = frame.get_center()
-            b = blocks[state["idx"]].copy().scale(s * k).move_to(c + DOWN * 6.3 * k)
+            b = blocks[state["idx"]].copy().scale(s * k).move_to(c + self._caption_pos * k)
             ang = getattr(frame, "cam_angle", 0.0)
             if ang:
                 b.rotate(ang, about_point=c)                         # compensa el giro de cámara

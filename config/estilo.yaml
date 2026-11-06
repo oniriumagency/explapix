@@ -49,3 +49,9 @@ llm:
   motor: claude-code        # claude-code (suscripción, sin costo aparte) | api (ANTHROPIC_API_KEY)
   esfuerzo: medium
   pausa_entre_videos_min: 20   # para no agotar los límites de la suscripción
+
+audio:
+  voz_lufs: -16
+  musica_db: -21            # bajo la voz, y baja ~8 dB más cuando hay voz (sidechain)
+  efectos_db: -13           # efectos propios (assets/sfx), con ducking suave
+  musica_fade_s: [1.5, 2.5]

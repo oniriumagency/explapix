@@ -199,7 +199,19 @@ DINAMISMO (kit v3, obligatorio):
   animar ese objeto con Deform/exit_out llama stop_idle(obj).
 - No agregues a un VGroup objetos que ya están en escena (se duplican): anima por separado o
   quítalos con self.remove(...) y añade el grupo.
-- Un objeto que salió con exit_out queda reducido a nada: para que vuelva, créalo de nuevo con una
+ZONA SEGURA (Reels/Shorts/TikTok, obligatorio):
+- Diseña TODO lo importante (título, etiquetas, datos, personajes) dentro de la caja x∈[-4.3, 4.3],
+  y∈[-5.0, 7.3]. El kit la encuadra sola dentro de la zona segura (deja libre 12 % arriba, 20 % abajo
+  y 15 % a la derecha, donde la app pone botones) y pone los subtítulos en su franja, debajo.
+- No pongas texto fuera de esa caja ni cerca de los bordes; el título va arriba (y≈6.6).
+- Para revisar: EXPLAPIX_SAFE_DEBUG=1 dibuja la zona segura en el render.
+
+EFECTOS DE SONIDO (automáticos):
+- pop_in, cascade, exit_out, move_along_arc, anticipate_move, emphasize, squash_bounce, jelly,
+  draw_in, cam_to, mood y las partículas ya suenan solos (pop, blip, woosh, thud, shimmer).
+- Para un acento extra usa self.sfx("pop"|"woosh"|"blip"|"shimmer"|"thud", delay=0, gain=1) justo
+  antes del self.play correspondiente. No abuses: máximo 1-2 extra por segmento.
+- - Un objeto que salió con exit_out queda reducido a nada: para que vuelva, créalo de nuevo con una
   función (p. ej. make_oven()).
 - No combines en el mismo self.play dos animaciones sobre el mismo objeto.
 - Devuelve únicamente el código Python en un bloque ```python.

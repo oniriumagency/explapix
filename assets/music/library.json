@@ -1,0 +1,48 @@
+{
+  "retro-lofi-1.mp3": {
+    "title": "Retro Lo-Fi Background (referencia)",
+    "source": "Magne, Suno (plan gratis)",
+    "license": "Solo referencia: Suno plan gratis NO permite uso comercial",
+    "enabled": false,
+    "commercial": false
+  },
+  "retro-lofi-2.mp3": {
+    "title": "Retro Lo-Fi Background 1 (referencia)",
+    "source": "Magne, Suno (plan gratis)",
+    "license": "Solo referencia: Suno plan gratis NO permite uso comercial",
+    "enabled": false,
+    "commercial": false
+  },
+  "factos-arcade-nocturno.mp3": {
+    "title": "Arcade nocturno",
+    "source": "Generada por código (explapix/musicgen.py)",
+    "license": "Propia (síntesis por código). Uso comercial libre.",
+    "enabled": true,
+    "commercial": true,
+    "bpm": 88
+  },
+  "factos-laboratorio-lofi.mp3": {
+    "title": "Laboratorio lofi",
+    "source": "Generada por código (explapix/musicgen.py)",
+    "license": "Propia (síntesis por código). Uso comercial libre.",
+    "enabled": true,
+    "commercial": true,
+    "bpm": 82
+  },
+  "factos-pixel-curioso.mp3": {
+    "title": "Píxel curioso",
+    "source": "Generada por código (explapix/musicgen.py)",
+    "license": "Propia (síntesis por código). Uso comercial libre.",
+    "enabled": true,
+    "commercial": true,
+    "bpm": 94
+  },
+  "factos-orbita-tranquila.mp3": {
+    "title": "Órbita tranquila",
+    "source": "Generada por código (explapix/musicgen.py)",
+    "license": "Propia (síntesis por código). Uso comercial libre.",
+    "enabled": true,
+    "commercial": true,
+    "bpm": 85
+  }
+}

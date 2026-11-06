@@ -16,7 +16,8 @@ QUALITY = {  # (ancho, alto, fps) en vertical
 def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
                  scene_name: str = "Video") -> tuple[bool, str, Path | None]:
     w, h, fps = QUALITY[quality]
-    env = dict(os.environ, EXPLAPIX_TIMING=str((workdir / "timing.json").resolve()))
+    env = dict(os.environ, EXPLAPIX_TIMING=str((workdir / "timing.json").resolve()),
+               EXPLAPIX_SFX_EVENTS=str((workdir / "sfx_events.json").resolve()))
     root = Path(__file__).resolve().parent.parent
     env["PYTHONPATH"] = f"{root}{os.pathsep}{env.get('PYTHONPATH', '')}"
     media = workdir / "media"
@@ -31,24 +32,54 @@ def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
     return out is not None, log[-2000:], out
 
 
+def _dur(p: Path) -> float:
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                          str(p)], capture_output=True, text=True).stdout.strip()
+    return float(out or 0)
+
+
 def mux(video: Path, narration: Path, out: Path, music: Path | None = None,
-        music_volume: float = 0.12) -> Path:
-    """Une video + voz (+ música de fondo opcional con ducking suave)."""
+        sfx_track: Path | None = None, music_db: float | None = None, sfx_db: float | None = None) -> Path:
+    """Video + voz + música (fade in/out, ducking bajo la voz) + efectos (ducking suave).
+
+    La voz se normaliza a -16 LUFS; la música queda ~20 dB por debajo y baja otros ~8 dB cuando
+    hay voz (sidechain); los efectos ~14 dB por debajo de la voz.
+    """
+    from explapix import config  # noqa: PLC0415
+    music_db = float(config.get("audio.musica_db", -21) if music_db is None else music_db)
+    sfx_db = float(config.get("audio.efectos_db", -13) if sfx_db is None else sfx_db)
     out.parent.mkdir(parents=True, exist_ok=True)
+    dur = _dur(video)
+    inputs = ["-i", str(video), "-i", str(narration)]
+    fc = [f"[1:a]aresample=48000,aformat=channel_layouts=mono,loudnorm=I=-16:TP=-2:LRA=11,"
+          f"apad,atrim=0:{dur:.3f},asplit=3[voice][k1][k2]"]
+    mix = ["[voice]"]
+    n = 2
     if music and music.exists():
-        fc = (f"[2:a]volume={music_volume},aloop=loop=-1:size=2e9[m];"
-              f"[1:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]")
-        cmd = ["ffmpeg", "-y", "-v", "error", "-i", str(video), "-i", str(narration), "-i", str(music),
-               "-filter_complex", fc, "-map", "0:v", "-map", "[a]"]
+        inputs += ["-stream_loop", "-1", "-i", str(music)]
+        fo = max(dur - 2.5, 0)
+        fc.append(f"[{n}:a]aresample=48000,aformat=channel_layouts=mono,loudnorm=I=-16:TP=-2,"
+                  f"volume={music_db}dB,atrim=0:{dur:.3f},afade=t=in:d=1.5,afade=t=out:st={fo:.3f}:d=2.5[m0];"
+                  f"[m0][k1]sidechaincompress=threshold=0.03:ratio=5:attack=30:release=400:makeup=1[mus]")
+        mix.append("[mus]")
+        n += 1
     else:
-        cmd = ["ffmpeg", "-y", "-v", "error", "-i", str(video), "-i", str(narration),
-               "-map", "0:v", "-map", "1:a"]
-    cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
-            "-c:a", "aac", "-b:a", "160k", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
-            "-shortest", "-movflags", "+faststart", str(out)]
-    if music and music.exists():  # -af no se puede combinar con filter_complex
-        i = cmd.index("-af")
-        del cmd[i:i + 2]
+        fc.append("[k1]anullsink")
+    if sfx_track and sfx_track.exists():
+        inputs += ["-i", str(sfx_track)]
+        fc.append(f"[{n}:a]aresample=48000,aformat=channel_layouts=mono,volume={sfx_db}dB,"
+                  f"apad,atrim=0:{dur:.3f}[s0];[s0][k2]sidechaincompress=threshold=0.05:ratio=2.5:"
+                  f"attack=10:release=200:makeup=1[sfx]")
+        mix.append("[sfx]")
+        n += 1
+    else:
+        fc.append("[k2]anullsink")
+    fc.append("".join(mix) + f"amix=inputs={len(mix)}:normalize=0:duration=first,"
+              "alimiter=limit=0.89,aformat=channel_layouts=stereo[a]")
+    cmd = ["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", ";".join(fc),
+           "-map", "0:v", "-map", "[a]", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
+           "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-t", f"{dur:.3f}",
+           "-movflags", "+faststart", str(out)]
     subprocess.run(cmd, check=True)
     return out
 

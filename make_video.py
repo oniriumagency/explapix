@@ -65,11 +65,20 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
         raise SystemExit(f"Render falló, ver {work / 'render_error.log'}")
 
     print("[4/4] Mezcla final", flush=True)
-    final = render.mux(silent, work / "audio" / "narration.wav", work / "final.mp4", music)
+    from explapix import music as music_lib, sfx  # noqa: PLC0415
+    music = music or music_lib.pick()
+    events = sfx.load_events(work / "sfx_events.json")
+    sfx_wav = None
+    if events:
+        sfx_wav = work / "audio" / "sfx.wav"
+        n_sfx = sfx.build_track(events, render._dur(silent), sfx_wav)
+        print(f"   efectos: {n_sfx} · música: {music.name if music else 'ninguna'}", flush=True)
+    final = render.mux(silent, work / "audio" / "narration.wav", work / "final.mp4", music, sfx_wav)
     meta = {"title": sb["title"], "description": sb["description"], "tags": sb["tags"],
             "topic": sb.get("topic", ""), "file": str(final), "engine": timing.get("engine"),
             "duration": timing.get("total"), "quality": quality,
-            "created": datetime.now().isoformat(timespec="seconds")}
+            "created": datetime.now().isoformat(timespec="seconds"),
+            "music": music.name if music else None, "sfx": bool(events)}
     if notes:
         meta["notes"] = notes
     if upload:

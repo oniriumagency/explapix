@@ -1109,6 +1109,107 @@ def api_stats():
     return {"videos": rows, "by_category": by_cat}
 
 
+# ---------------------------------------------------------------- música
+
+def _music():
+    from explapix import music  # noqa: PLC0415
+    return music
+
+
+@app.get("/api/music")
+def api_music():
+    m = _music()
+    lib = m.library()
+    m.save(lib)
+    out = []
+    for name, info in lib.items():
+        f = m.DIR / name
+        out.append({"name": name, **info, "size": f.stat().st_size,
+                    "in_rotation": bool(info.get("enabled") and info.get("commercial"))})
+    return {"tracks": sorted(out, key=lambda x: (not x["in_rotation"], x["name"])),
+            "rotation": m.rotation()}
+
+
+@app.get("/media/music/{name}")
+def media_music(name: str):
+    m = _music()
+    if not SAFE_FILE_RE.match(name) or not name.lower().endswith(m.EXTS):
+        raise HTTPException(404)
+    f = m.DIR / name
+    if not f.exists():
+        raise HTTPException(404)
+    return FileResponse(f, media_type="audio/mpeg" if name.endswith(".mp3") else "audio/wav")
+
+
+@app.put("/api/music/{name}")
+def api_music_edit(name: str, body: dict = Body(...)):
+    m = _music()
+    lib = m.library()
+    if name not in lib:
+        raise HTTPException(404, "Pista no encontrada")
+    info = lib[name]
+    for k in ("title", "source", "license"):
+        if k in body:
+            info[k] = str(body[k]).strip()[:300]
+    if "commercial" in body:
+        info["commercial"] = bool(body["commercial"])
+    if "enabled" in body:
+        if body["enabled"] and not info.get("commercial"):
+            raise HTTPException(422, "Solo pueden entrar a la rotación pistas con licencia que permita "
+                                     "monetizar. Marca primero «licencia comercial» y anota la fuente.")
+        info["enabled"] = bool(body["enabled"])
+    if not info.get("commercial"):
+        info["enabled"] = False
+    m.save(lib)
+    return api_music()
+
+
+@app.post("/api/music")
+async def api_music_upload(file: UploadFile = File(...)):
+    m = _music()
+    name = _slug(Path(file.filename or "pista").stem) or "pista"
+    ext = Path(file.filename or "").suffix.lower()
+    if ext not in m.EXTS:
+        raise HTTPException(422, "Sube mp3, wav, ogg, m4a o flac")
+    data = await file.read()
+    if len(data) > 40 * 1024 * 1024:
+        raise HTTPException(413, "Máximo 40 MB")
+    dest = m.DIR / f"{name}{ext}"
+    m.DIR.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(data)
+    p = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                        str(dest)], capture_output=True, text=True)
+    if p.returncode != 0 or not p.stdout.strip():
+        dest.unlink(missing_ok=True)
+        raise HTTPException(422, "No pude leer ese audio")
+    lib = m.library()
+    lib[dest.name] = {"title": Path(file.filename).stem, "source": "Subida por Magne", "license": "",
+                      "enabled": False, "commercial": False}
+    m.save(lib)
+    return api_music()
+
+
+@app.delete("/api/music/{name}")
+def api_music_delete(name: str):
+    m = _music()
+    lib = m.library()
+    if name not in lib:
+        raise HTTPException(404)
+    (m.DIR / name).unlink(missing_ok=True)
+    lib.pop(name)
+    m.save(lib)
+    return api_music()
+
+
+@app.post("/api/remix")
+def api_remix(body: dict = Body(default={})):
+    vid = body.get("video")
+    if vid:
+        d = video_dir(vid)
+        return jobs.add("remix", f"Remezclar audio: {vid}", [PY, "remix.py", str(d)])
+    return jobs.add("remix", "Remezclar audio de todos los videos", [PY, "remix.py", "--all"])
+
+
 # ---------------------------------------------------------------- frontend
 
 STATIC = Path(__file__).resolve().parent / "static"

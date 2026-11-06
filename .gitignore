@@ -7,3 +7,4 @@ __pycache__/
 *.mp4
 .venv-tts/
 .venv-kokoro/
+assets/music/retro-lofi-*.mp3

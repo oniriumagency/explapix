@@ -135,3 +135,6 @@ dialog .row { justify-content: flex-end; margin-top: 1rem; }
 .st-publicado { background: #FF3B3B; color: #fff; } .st-omitido { background: var(--line); color: var(--ink); }
 .ig { background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF); color: #fff; box-shadow: 0 4px 0 #6A1F5C; }
 code { background: #070818; padding: .1rem .35rem; border-radius: 6px; }
+.navlink { color: var(--muted); padding: .45rem .8rem; border-radius: 999px; font-family: Fredoka; text-decoration: none; white-space: nowrap; }
+.navlink:hover { color: var(--ink); background: var(--card2); }
+.track .row label { flex: 1 1 180px; margin: 0; }

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cómo funciona · Factos Didácticos Studio</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .doc { max-width: 920px; margin: 0 auto; }
+  .doc h1 { font-size: 2rem; }
+  .doc h2 { font-size: 1.35rem; margin: 2rem 0 .7rem; color: var(--sun); }
+  .doc p, .doc li { line-height: 1.6; }
+  .legend { display: flex; flex-wrap: wrap; gap: .5rem; margin: .5rem 0 1rem; }
+  .tag { display: inline-block; padding: .1rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 700; font-family: Fredoka; }
+  .t-claude { background: #E9893E; color: #1b0f05; } .t-local { background: var(--mint); color: var(--bg); }
+  .t-ext { background: var(--blue); color: #fff; } .t-tu { background: var(--pink); color: #fff; }
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .step { display: grid; grid-template-columns: 3rem 1fr; gap: .8rem; position: relative; padding-bottom: 1rem; }
+  .step:not(:last-child)::before { content: ""; position: absolute; left: 1.45rem; top: 2.9rem; bottom: 0; width: 3px; background: linear-gradient(var(--line), var(--violet)); border-radius: 3px; }
+  .dot { width: 2.9rem; height: 2.9rem; border-radius: 50%; display: grid; place-items: center; font-family: Fredoka; font-size: 1.25rem; font-weight: 700; background: var(--card2); border: 3px solid var(--violet); }
+  .step .card { margin: 0; padding: .8rem 1rem; }
+  .step h3 { margin: 0 0 .2rem; font-size: 1.05rem; font-family: Fredoka; }
+  .step p { margin: .2rem 0 0; color: #DDE0FF; font-size: .95rem; }
+  .step code, .doc td code { font-size: .82rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 700; font-family: Fredoka; }
+  .tablewrap { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  details.faq { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: .6rem 1rem; margin-bottom: .5rem; }
+  details.faq summary { font-weight: 700; }
+  .back { display: inline-block; margin-bottom: 1rem; color: var(--muted); text-decoration: none; font-family: Fredoka; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span>FACTOS</span> <b>DIDÁCTICOS</b> <small>Studio</small></div>
+  <nav><a class="navlink" href="/#biblioteca">← Volver al panel</a></nav>
+</header>
+<main class="doc">
+  <h1>Cómo funciona todo</h1>
+  <p>Factos Didácticos produce videos cortos animados que explican cómo funcionan las cosas. Casi todo pasa <b>en tu servidor (Magne Server)</b>. Claude, con tu suscripción, solo escribe el guion, el código de la animación y las respuestas a comentarios. <b>Nada se publica sin tu clic.</b></p>
+  <div class="legend">
+    <span class="tag t-claude">Claude (suscripción)</span>
+    <span class="tag t-local">Local en Magne Server</span>
+    <span class="tag t-ext">Servicio externo</span>
+    <span class="tag t-tu">Tú decides</span>
+  </div>
+
+  <h2>El flujo, de principio a fin</h2>
+  <div class="flow">
+    <div class="step"><div class="dot">1</div><div class="card"><h3>Tema y calendario <span class="tag t-tu">Tú</span> <span class="tag t-local">Local</span></h3><p>30 días de temas en <b>Calendario</b>, cada uno con gancho, título, caption de Instagram, comentario fijado y hora (CDMX). Puedes editarlos, reordenarlos o agregar temas en <b>Nuevo</b>.</p></div></div>
+    <div class="step"><div class="dot">2</div><div class="card"><h3>Guion (storyboard) <span class="tag t-claude">Claude</span></h3><p>6-8 frases para narrar y qué se ve en cada una, con exactitud científica. Los 30 del calendario ya están escritos. Para temas nuevos, Claude lo escribe siguiendo <code>config/estilo.yaml</code>.</p></div></div>
+    <div class="step"><div class="dot">3</div><div class="card"><h3>Voz <span class="tag t-local">Local · GPU</span></h3><p><b>Chatterbox</b> lee cada frase en la RTX 4060 con el timbre de <code>voices/ref.wav</code>. Se mide cuánto dura cada frase para sincronizar la animación.</p></div></div>
+    <div class="step"><div class="dot">4</div><div class="card"><h3>Código de la animación <span class="tag t-claude">Claude</span></h3><p>Claude escribe la escena en Python con el kit del canal (estilo, 12 principios de animación, cámara, partículas, zona segura) usando el microondas como modelo. Los días 1-3 los escribí a mano en <code>data/escenas/</code>.</p></div></div>
+    <div class="step"><div class="dot">5</div><div class="card"><h3>Render <span class="tag t-local">Local · CPU</span></h3><p><b>Manim</b> dibuja la animación en 1080×1920 a 30 fps. Si el código falla, el error vuelve a Claude para que lo corrija (hasta 3 intentos).</p></div></div>
+    <div class="step"><div class="dot">6</div><div class="card"><h3>Efectos y música <span class="tag t-local">Local</span></h3><p>Cada animación del kit deja una marca de tiempo; ahí suenan efectos propios (pop, woosh, blip, shimmer, thud). Se elige una pista de música de la rotación, distinta a la del video anterior.</p></div></div>
+    <div class="step"><div class="dot">7</div><div class="card"><h3>Mezcla final <span class="tag t-local">Local</span></h3><p><b>ffmpeg</b> une video + voz (-16 LUFS) + música (unos 20 dB por debajo, y baja más cuando hay voz) + efectos, y deja el MP4 final.</p></div></div>
+    <div class="step"><div class="dot">8</div><div class="card"><h3>Revisión <span class="tag t-tu">Tú</span></h3><p>En <b>Biblioteca</b> ves el video, el guion y los textos. Puedes aprobarlo, rechazarlo con una nota o regenerarlo (con Claude, o solo la voz y el render, que es gratis).</p></div></div>
+    <div class="step"><div class="dot">9</div><div class="card"><h3>Publicación <span class="tag t-tu">Tú</span> <span class="tag t-ext">YouTube · Instagram</span></h3><p>Con tu confirmación: YouTube Shorts (privado por defecto) e Instagram Reels (Meta descarga el video por un enlace temporal de Tailscale Funnel que se cierra al terminar).</p></div></div>
+    <div class="step"><div class="dot">10</div><div class="card"><h3>Comentarios <span class="tag t-claude">Claude</span> <span class="tag t-tu">Tú</span></h3><p>Se traen los comentarios sin responder y Claude propone una respuesta corta. Tú editas y apruebas; solo se envían las aprobadas.</p></div></div>
+    <div class="step"><div class="dot">11</div><div class="card"><h3>Métricas <span class="tag t-ext">APIs</span> <span class="tag t-local">Local</span></h3><p>Vistas, % visto, alcance, guardados y compartidos por video y por categoría, en <b>Sistema</b>, para elegir los siguientes temas.</p></div></div>
+  </div>
+
+  <h2>Qué hace cada quién</h2>
+  <div class="cols">
+    <div class="card"><h3><span class="tag t-claude">Claude</span></h3><ul>
+      <li>Guiones (storyboards) de temas nuevos</li><li>Código de cada animación (y corregirlo si falla)</li>
+      <li>Respuestas propuestas a comentarios</li><li>Títulos, descripciones y tags de temas nuevos</li></ul>
+      <p class="hint">Vía <b>Claude Code</b> (<code>claude -p</code>) con tu suscripción, sin herramientas y sin costo aparte.</p></div>
+    <div class="card"><h3><span class="tag t-local">Magne Server</span></h3><ul>
+      <li>Voz (Chatterbox en la GPU)</li><li>Animación (Manim)</li><li>Efectos y música propios (numpy)</li>
+      <li>Mezcla y video final (ffmpeg)</li><li>Panel, cola y calendario (FastAPI + systemd)</li></ul></div>
+    <div class="card"><h3><span class="tag t-ext">Externos</span></h3><ul>
+      <li>YouTube Data API v3 y YouTube Analytics API</li><li>Instagram API (Meta)</li>
+      <li>Tailscale (acceso al panel y Funnel temporal)</li><li>GitHub (código) y Hugging Face (descarga inicial de modelos de voz)</li></ul></div>
+  </div>
+
+  <h2>Tecnologías</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Pieza</th><th>Versión</th><th>Para qué</th><th>Licencia</th></tr>
+    <tr><td>Ubuntu · RTX 4060 8 GB · Ryzen 7 7700</td><td>24.04.5 · driver 595</td><td>Servidor</td><td>—</td></tr>
+    <tr><td>Python</td><td>3.12.3</td><td>Todo el pipeline</td><td>PSF</td></tr>
+    <tr><td>Manim Community (+ManimPango, pycairo)</td><td>0.22.1</td><td>Animación</td><td>MIT</td></tr>
+    <tr><td>Chatterbox Multilingual (PyTorch 2.6)</td><td>0.1.7</td><td>Voz natural (GPU)</td><td>MIT</td></tr>
+    <tr><td>Kokoro · Piper</td><td>0.9.4 · 1.8.0</td><td>Voces alternativas</td><td>Apache-2.0 · MIT</td></tr>
+    <tr><td>faster-whisper</td><td>1.2.1</td><td>Verificar que la voz diga el texto</td><td>MIT</td></tr>
+    <tr><td>ffmpeg</td><td>6.1.1</td><td>Mezcla, miniaturas, audio</td><td>LGPL/GPL</td></tr>
+    <tr><td>numpy · scipy</td><td>2.5 · 1.18</td><td>Efectos y música propios</td><td>BSD</td></tr>
+    <tr><td>FastAPI · uvicorn</td><td>0.162 · 0.54</td><td>Este panel</td><td>MIT · BSD</td></tr>
+    <tr><td>Claude Code</td><td>2.1.318</td><td>Guiones, escenas y respuestas</td><td>Tu suscripción</td></tr>
+    <tr><td>google-api-python-client</td><td>2.201</td><td>YouTube</td><td>Apache-2.0</td></tr>
+    <tr><td>Tailscale</td><td>1.104.5</td><td>Acceso privado y Funnel</td><td>—</td></tr>
+    <tr><td>Fredoka · Nunito</td><td>—</td><td>Tipografías</td><td>OFL</td></tr>
+  </table></div>
+
+  <h2>Dónde está cada cosa</h2>
+  <p class="hint">Todo vive en <code>~/proyectos/explapix</code> (el código interno conserva el nombre «explapix»). Repositorio: github.com/oniriumagency/explapix.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Ruta</th><th>Qué es</th></tr>
+    <tr><td><code>config/estilo.yaml</code></td><td>Estándar del canal: voz, duración, cámara, partículas, audio, reglas</td></tr>
+    <tr><td><code>data/calendario.json</code></td><td>Los 30 días (textos, horas, guiones, estado)</td></tr>
+    <tr><td><code>data/escenas/</code></td><td>Escenas escritas a mano (tienen prioridad sobre la IA)</td></tr>
+    <tr><td><code>out/&lt;fecha&gt;-&lt;tema&gt;/</code></td><td>Cada video: final.mp4, guion, scene.py, voz, efectos, meta.json</td></tr>
+    <tr><td><code>explapix/kit.py</code></td><td>Estilo, 12 principios, cámara, partículas, zona segura, efectos</td></tr>
+    <tr><td><code>explapix/llm.py</code></td><td>Prompts y llamada a Claude Code</td></tr>
+    <tr><td><code>explapix/tts.py</code> · <code>voices/</code></td><td>Voz y timbre de referencia</td></tr>
+    <tr><td><code>assets/sfx/</code> · <code>assets/music/</code></td><td>Efectos y música (rotación en library.json)</td></tr>
+    <tr><td><code>web/</code></td><td>Este panel</td></tr>
+    <tr><td><code>secrets/</code></td><td>Credenciales (YouTube, Instagram, contraseña del panel). Nunca se sirven por la web</td></tr>
+  </table></div>
+
+  <h2>Pausar, reanudar y apagar</h2>
+  <ul>
+    <li><b>Pausar la generación automática:</b> en Calendario, apaga «Generar pendientes solo». Lo que está en curso termina.</li>
+    <li><b>Cancelar un trabajo:</b> en Cola, botón Cancelar.</li>
+    <li><b>Apagar el panel:</b> <code>systemctl --user stop explapix-studio</code> (y <code>start</code> para prenderlo). Arranca solo después de cada reinicio.</li>
+    <li><b>Ver logs:</b> <code>journalctl --user -u explapix-studio -f</code></li>
+  </ul>
+
+  <h2>Costos y límites</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Qué</th><th>Costo</th><th>Límite</th></tr>
+    <tr><td>Claude (guion + escena)</td><td>Incluido en tu suscripción</td><td>Límites de uso del plan: la cola genera uno a la vez con 20 min de pausa y, si se llega al límite, espera y sigue</td></tr>
+    <tr><td>Voz, animación, música, efectos</td><td>Gratis (tu servidor)</td><td>Unos 3-7 min por video; luz ≈ 0,02 kWh por video</td></tr>
+    <tr><td>YouTube</td><td>Gratis</td><td>10 000 unidades/día ≈ 6 subidas; responder = 50</td></tr>
+    <tr><td>Instagram</td><td>Gratis</td><td>Hasta 100 publicaciones por API cada 24 h; el token se renueva solo cada 60 días</td></tr>
+    <tr><td>Tailscale</td><td>Gratis (plan personal)</td><td>Funnel solo durante cada subida a Instagram</td></tr>
+  </table></div>
+
+  <h2>Preguntas frecuentes</h2>
+  <details class="faq"><summary>¿Necesito la API de Anthropic o la de Gemini?</summary><p>No. Se usa tu suscripción de Claude a través de Claude Code, que ya está iniciado en el servidor. La opción «api» solo existe como respaldo.</p></details>
+  <details class="faq"><summary>¿Se publica algo solo?</summary><p>No. Generar es automático; publicar en YouTube o Instagram y enviar respuestas siempre piden tu confirmación.</p></details>
+  <details class="faq"><summary>¿La música y los efectos se pueden monetizar?</summary><p>Los efectos y las 4 pistas «factos-…» los genera el código del servidor: son nuestros y no tienen restricciones. Si subes otra música, marca su licencia; solo entran a la rotación las que permiten uso comercial. Las de Suno con plan gratis quedan solo como referencia.</p></details>
+  <details class="faq"><summary>¿Por qué los textos no tocan los bordes?</summary><p>Reels, Shorts y TikTok tapan arriba, abajo y a la derecha con botones. El kit encuadra cada escena dentro de la zona segura y pone los subtítulos en su franja.</p></details>
+  <details class="faq"><summary>¿Puedo cambiar la voz?</summary><p>Sí. En <b>Voces</b> eliges el motor, ajustas emoción y ritmo o subes 10-20 s de tu voz para que Chatterbox la imite.</p></details>
+  <details class="faq"><summary>Un video salió mal, ¿qué hago?</summary><p>Recházalo con una nota de qué cambiar y regenéralo: Claude usa tu nota. Si solo quieres otra toma de voz, elige «solo voz y render» (gratis).</p></details>
+  <details class="faq"><summary>¿Y los videos horizontales largos?</summary><p>Se pueden armar reutilizando las mismas escenas en 16:9 y juntando varios temas en un episodio con capítulos. Está propuesto y pendiente de tu visto bueno.</p></details>
+  <p style="margin-top:2rem"><a class="back" href="/#biblioteca">← Volver al panel</a></p>
+</main>
+</body>
+</html>

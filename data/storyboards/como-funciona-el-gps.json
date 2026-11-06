@@ -1,0 +1,39 @@
+{
+  "topic": "Cómo funciona el GPS",
+  "title": "¿Cómo sabe el GPS dónde estás? 🛰️",
+  "description": "Tu celular nunca le habla a los satélites. Tu celular solo escucha: compara la hora que mandan varios satélites con relojes atómicos y calcula tu distancia a cada uno.\n\n#FactosDidacticos #gps #espacio #ciencia",
+  "tags": [
+    "cómo funciona el gps",
+    "tecnología",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Tu celular nunca le habla a los satélites del GPS. Solo los escucha, y con eso sabe dónde estás.",
+      "visual": "Celular con orejitas escuchando; satélites arriba."
+    },
+    {
+      "narration": "Alrededor de la Tierra giran más de treinta satélites, cada uno con relojes atómicos muy precisos.",
+      "visual": "Tierra con satélites en órbita; partículas de estrellas."
+    },
+    {
+      "narration": "Cada satélite transmite sin parar su posición y la hora exacta en que mandó la señal.",
+      "visual": "Señales saliendo con relojitos."
+    },
+    {
+      "narration": "Tu celular mide cuánto tardó cada señal en llegar y calcula a qué distancia está cada satélite.",
+      "visual": "Círculos de distancia creciendo desde cada satélite."
+    },
+    {
+      "narration": "Con al menos cuatro satélites, esos círculos se cruzan en un solo punto: tú.",
+      "visual": "Círculos cruzándose y un pin rebotando en el punto."
+    },
+    {
+      "narration": "Hasta corrige la relatividad de Einstein, porque allá arriba el tiempo corre distinto. Síguenos para más Factos Didácticos.",
+      "visual": "Einstein-reloj guiñando; cierre."
+    }
+  ]
+}

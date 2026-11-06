@@ -46,7 +46,7 @@ function show(tab, push = true) {
   document.querySelectorAll(".tab").forEach((s) => s.classList.toggle("on", s.id === tab));
   document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === tab || (tab === "detalle" && b.dataset.tab === "biblioteca")));
   if (push && location.hash !== "#" + tab && tab !== "detalle") history.replaceState(null, "", "#" + tab);
-  ({ calendario: loadCalendar, biblioteca: loadLibrary, cola: loadJobs, comentarios: loadComments, voces: loadVoices, sistema: loadSystem, crear: loadCreate }[tab] || (() => {}))();
+  ({ musica: loadMusic, calendario: loadCalendar, biblioteca: loadLibrary, cola: loadJobs, comentarios: loadComments, voces: loadVoices, sistema: loadSystem, crear: loadCreate }[tab] || (() => {}))();
 }
 document.querySelectorAll("#tabs button").forEach((b) => (b.onclick = () => show(b.dataset.tab)));
 window.addEventListener("hashchange", () => route());
@@ -375,6 +375,43 @@ $("#btnRef").onclick = async () => {
   if (r) { toast(`Referencia guardada (${r.duration} s) ✓`); loadVoices(); }
 };
 $("#btnRefReset").onclick = () => act(() => api("/api/voices/ref/reset", { method: "POST" }), "Referencia restaurada").then(loadVoices);
+
+// ---------------- música
+async function loadMusic() {
+  const r = await act(() => api("/api/music"));
+  if (!r) return;
+  $("#tracks").innerHTML = r.tracks.map((t) => `
+    <div class="item track" data-name="${esc(t.name)}">
+      <div class="head"><b>${esc(t.title || t.name)}</b><span class="pill st-${t.in_rotation ? "aprobado" : (t.commercial ? "generado" : "rechazado")}">${t.in_rotation ? "En rotación" : (t.commercial ? "Desactivada" : "Sin licencia comercial")}</span></div>
+      <small>${esc(t.name)}${t.bpm ? ` · ${t.bpm} BPM` : ""} · ${Math.round(t.size / 1024)} KB</small>
+      <audio controls preload="none" src="/media/music/${encodeURIComponent(t.name)}"></audio>
+      <div class="form" style="margin-top:.5rem">
+        <div class="row"><label>Fuente <input data-f="source" value="${esc(t.source || "")}"></label><label>Licencia <input data-f="license" value="${esc(t.license || "")}"></label></div>
+        <div class="row" style="align-items:center;margin-top:.5rem">
+          <label class="switch"><input type="checkbox" data-c ${t.commercial ? "checked" : ""}> Licencia comercial (permite monetizar)</label>
+          <label class="switch"><input type="checkbox" data-e ${t.enabled ? "checked" : ""} ${t.commercial ? "" : "disabled"}> En la rotación</label>
+          <button class="ghost" data-s>Guardar</button><button class="ghost" data-d>Borrar</button>
+        </div>
+      </div>
+    </div>`).join("") || `<div class="empty">No hay pistas.</div>`;
+  document.querySelectorAll("#tracks .track").forEach((el) => {
+    const name = encodeURIComponent(el.dataset.name);
+    const body = () => ({ source: $("[data-f=source]", el).value, license: $("[data-f=license]", el).value, commercial: $("[data-c]", el).checked, enabled: $("[data-e]", el).checked && $("[data-c]", el).checked });
+    $("[data-c]", el).onchange = (e) => { $("[data-e]", el).disabled = !e.target.checked; if (!e.target.checked) $("[data-e]", el).checked = false; };
+    $("[data-s]", el).onclick = () => act(() => api(`/api/music/${name}`, { method: "PUT", body: body() }), "Guardado ✓").then(loadMusic);
+    $("[data-e]", el).onchange = () => act(() => api(`/api/music/${name}`, { method: "PUT", body: body() }), "Rotación actualizada").then(loadMusic);
+    $("[data-d]", el).onclick = async () => { if (await dialog("Borrar pista", `<p>¿Borrar <b>${esc(el.dataset.name)}</b> del servidor?</p>`, "Borrar", "danger")) act(() => api(`/api/music/${name}`, { method: "DELETE" }), "Borrada").then(loadMusic); };
+  });
+}
+$("#btnMusUp").onclick = async () => {
+  const f = $("#musFile").files[0]; if (!f) return toast("Elige un archivo", true);
+  const fd = new FormData(); fd.append("file", f);
+  if (await act(() => api("/api/music", { method: "POST", body: fd }), "Subida ✓. Anota la licencia para activarla.")) loadMusic();
+};
+$("#btnRemixAll").onclick = async () => {
+  if (!(await dialog("Remezclar audio", "<p>Vuelve a mezclar voz + música + efectos de todos los videos con la rotación actual. No re-renderiza la animación ni gasta tokens. Los videos ya publicados no cambian en YouTube/Instagram.</p>", "Remezclar"))) return;
+  act(() => api("/api/remix", { method: "POST", body: {} }), "Remezcla en cola ✓").then(refreshRunning);
+};
 
 // ---------------- sistema
 async function loadSystem() {

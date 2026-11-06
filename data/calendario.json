@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "auto_generate": false,
+  "auto_generate": true,
   "start": "2026-11-09",
   "items": [
     {
@@ -88,8 +88,8 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "en_cola",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1639-como-funciona-la-pantalla-tactil",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funciona la pantalla táctil",
@@ -134,7 +134,8 @@
           }
         ]
       },
-      "id": "como-funciona-la-pantalla-tactil"
+      "id": "como-funciona-la-pantalla-tactil",
+      "finished": "2026-11-06T16:41:47"
     },
     {
       "day": 3,
@@ -154,8 +155,8 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "en_cola",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1641-como-funcionan-los-audifonos-con-cancelacion-de-ru",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funcionan los audífonos con cancelación de ruido",
@@ -200,7 +201,8 @@
           }
         ]
       },
-      "id": "como-funcionan-los-audifonos-con-cancela"
+      "id": "como-funcionan-los-audifonos-con-cancela",
+      "finished": "2026-11-06T16:44:02"
     },
     {
       "day": 4,
@@ -220,8 +222,8 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1704-como-funciona-el-gps",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funciona el GPS",
@@ -262,7 +264,8 @@
           }
         ]
       },
-      "id": "como-funciona-el-gps"
+      "id": "como-funciona-el-gps",
+      "finished": "2026-11-06T17:11:54"
     },
     {
       "day": 5,

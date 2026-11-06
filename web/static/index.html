@@ -17,7 +17,9 @@
     <button data-tab="cola">Cola <i id="qbadge" class="badge" hidden></i></button>
     <button data-tab="comentarios">Comentarios</button>
     <button data-tab="voces">Voces</button>
+    <button data-tab="musica">Música</button>
     <button data-tab="sistema">Sistema</button>
+    <a class="navlink" href="/como-funciona.html">Cómo funciona</a>
   </nav>
   <div id="running" class="running" hidden></div>
 </header>
@@ -131,6 +133,18 @@
     </div>
     <h2>Muestras</h2>
     <div id="samples" class="list"></div>
+  </section>
+
+  <!-- MÚSICA -->
+  <section id="musica" class="tab">
+    <div class="bar"><h1>Música de fondo</h1><button id="btnRemixAll" class="ghost">Remezclar todos los videos</button></div>
+    <p class="warn">⚠️ Sube solo música con licencia que permita <b>monetizar</b> en YouTube e Instagram (propia, comprada o con licencia comercial explícita). Las canciones de Suno con plan gratis, Spotify, la radio o videos de YouTube <b>no</b> sirven: el canal puede recibir reclamos o perder la monetización.</p>
+    <p class="hint">Cada video usa una pista distinta de la rotación (nunca la misma dos veces seguidas), con entrada y salida suaves y bajando el volumen cuando habla la voz. Solo entran a la rotación las pistas activadas con licencia comercial.</p>
+    <div class="card form">
+      <h2>Subir pista</h2>
+      <div class="row"><input type="file" id="musFile" accept="audio/*"><button id="btnMusUp" class="primary">Subir</button></div>
+    </div>
+    <div id="tracks" class="list"></div>
   </section>
 
   <!-- SISTEMA -->
