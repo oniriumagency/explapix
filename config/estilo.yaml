@@ -8,9 +8,11 @@ formato:
   vertical: true            # 1080x1920
   calidad: hd               # hd | draft
   fps: 30
-  duracion_objetivo_s: [40, 50]
-  segmentos: [6, 8]
-  palabras_por_segmento: [12, 24]
+  duracion_objetivo_s: [61, 90]   # variable según el tema; mínimo 61 s (TikTok paga > 1 min)
+  duracion_maxima_s: 100           # solo si el tema lo exige; nunca relleno
+  segmentos: [8, 14]
+  palabras_por_segmento: [12, 26]
+  estructura: [gancho 0-2 s, promesa, 3-4 beats con re-gancho cada ~15 s, dato extra, cierre que conecta con el inicio + CTA]
   gancho_s: 1.5             # el gancho debe entenderse en el primer 1,5 s
 
 voz:

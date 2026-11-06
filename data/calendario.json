@@ -285,8 +285,8 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1731-como-funciona-el-codigo-qr",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funciona el código QR",
@@ -327,7 +327,8 @@
           }
         ]
       },
-      "id": "como-funciona-el-codigo-qr"
+      "id": "como-funciona-el-codigo-qr",
+      "finished": "2026-11-06T17:37:48"
     },
     {
       "day": 6,
@@ -347,8 +348,8 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1757-como-funciona-el-jabon",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funciona el jabón",
@@ -389,7 +390,8 @@
           }
         ]
       },
-      "id": "como-funciona-el-jabon"
+      "id": "como-funciona-el-jabon",
+      "finished": "2026-11-06T18:02:59"
     },
     {
       "day": 7,
@@ -409,8 +411,8 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1823-como-vuela-un-avion",
       "notes": "",
       "storyboard": {
         "topic": "Cómo vuela un avión",
@@ -451,7 +453,8 @@
           }
         ]
       },
-      "id": "como-vuela-un-avion"
+      "id": "como-vuela-un-avion",
+      "finished": "2026-11-06T18:28:41"
     },
     {
       "day": 8,
@@ -471,7 +474,7 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
+      "status": "error",
       "video_id": null,
       "notes": "",
       "storyboard": {
@@ -513,7 +516,8 @@
           }
         ]
       },
-      "id": "como-funciona-la-olla-de-presion"
+      "id": "como-funciona-la-olla-de-presion",
+      "finished": "2026-11-06T18:51:13"
     },
     {
       "day": 9,

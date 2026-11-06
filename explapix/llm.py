@@ -124,28 +124,53 @@ STORYBOARD_SCHEMA = {
         "title": {"type": "string"},
         "description": {"type": "string"},
         "tags": {"type": "array", "items": {"type": "string"}},
+        "duracion_objetivo_s": {"type": "integer"},
+        "justificacion_duracion": {"type": "string"},
         "segments": {"type": "array", "items": {
             "type": "object",
-            "properties": {"narration": {"type": "string"}, "visual": {"type": "string"}},
-            "required": ["narration", "visual"], "additionalProperties": False}},
+            "properties": {"narration": {"type": "string"}, "visual": {"type": "string"},
+                           "beat": {"type": "string"}},
+            "required": ["narration", "visual", "beat"], "additionalProperties": False}},
     },
-    "required": ["topic", "title", "description", "tags", "segments"],
+    "required": ["topic", "title", "description", "tags", "duracion_objetivo_s",
+                 "justificacion_duracion", "segments"],
     "additionalProperties": False,
 }
 
-STORYBOARD_SYSTEM = """Eres guionista del canal Factos Didácticos: videos verticales cortos (35-55 s) que \
-explican cómo funcionan las cosas, en español latino neutro, tono curioso y cercano.
-Reglas:
-- 6 a 8 segmentos; cada narración de 12 a 24 palabras, frases cortas y fáciles de decir en voz alta.
-- El segmento 1 es un gancho con una pregunta o dato sorprendente. El último cierra con una \
-consecuencia práctica y "Síguenos para más Factos Didácticos".
-- Exactitud científica ante todo; si algo se simplifica, que no sea falso.
-- Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen (estilo \
-ilustración vectorial sobre fondo oscuro con brillos), animable con Manim, sin fotos. Los objetos \
-protagonistas pueden tener carita (ojos, mejillas) y reaccionar: saltar, temblar, sorprenderse. \
-Indica qué debe brillar, qué entra rebotando y dónde conviene acercar la cámara.
-- title: <= 70 caracteres con un emoji. description: 2-3 frases + 3-5 hashtags (#FactosDidacticos primero).
+STORYBOARD_SYSTEM = """Eres guionista del canal Factos Didácticos: videos verticales que explican \
+cómo funcionan las cosas, en español latino neutro, tono curioso y cercano.
+
+DURACIÓN (variable, la decides tú según el tema):
+- Entre 61 y 90 segundos; mínimo 61 s (los videos de más de 1 minuto califican para el programa de
+  recompensas de TikTok). Hasta ~100 s solo si el tema lo exige. NUNCA rellenes: cada frase debe
+  aportar algo nuevo. Temas simples ~61-70 s; con varios pasos o mecanismos ~75-90 s.
+- La voz dice unas 2,6 palabras por segundo: 61 s ≈ 160 palabras, 75 s ≈ 195, 90 s ≈ 235.
+- Pon en duracion_objetivo_s los segundos que buscas y en justificacion_duracion por qué (1 frase).
+
+ESTRUCTURA (campo beat de cada segmento):
+- gancho (0-2 s): pregunta o dato sorprendente que se entienda en 1,5 s.
+- promesa: qué vas a descubrir en este video.
+- beat1..beat4: 3-4 bloques que explican el mecanismo paso a paso. Cada ~15 s un re-gancho: un dato
+  sorpresa, un contraste o una pregunta que reenganche ("pero aquí viene lo raro…").
+- dato_extra: un dato que casi nadie conoce sobre el tema.
+- cierre: consecuencia práctica en tu vida diaria y una frase final que conecte con el gancho del
+  inicio (para que el video se sienta en loop), + CTA corto: "Síguenos para más Factos Didácticos".
+
+REGLAS:
+- 8 a 14 segmentos; cada narración de 12 a 26 palabras, frases cortas, fáciles de decir en voz alta.
+- Exactitud científica ante todo; si algo se simplifica, que no sea falso. Sin cifras inventadas.
+- Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen (estilo ilustración
+  vectorial sobre fondo oscuro con brillos), animable con Manim, sin fotos. Los protagonistas pueden
+  tener carita y reaccionar. Indica qué brilla, qué entra rebotando, dónde acercar la cámara y el
+  mood de color (calor, frío, energía...).
+- title: <= 60 caracteres con un emoji. description: 2-3 frases + 3-5 hashtags (#FactosDidacticos primero).
 - tags: 5-10 palabras clave en minúsculas."""
+
+EXPAND_SYSTEM = STORYBOARD_SYSTEM + """
+
+TAREA: te paso un guion anterior de ~40 s. Amplíalo a la nueva estructura y duración: conserva lo
+que esté bien (sobre todo el gancho y los datos correctos), agrega promesa, re-ganchos cada ~15 s,
+un dato_extra real y un cierre que conecte con el inicio. Mantén el tema y el tono."""
 
 SCENE_SYSTEM = f"""Escribes escenas de Manim Community (v0.22+) para el canal Factos Didácticos.
 Usa SOLO el kit de estilo siguiente (importa con `from explapix.kit import *`). Lienzo vertical \
@@ -243,8 +268,8 @@ def storyboard(topic: str, notes: str = "") -> dict:
     if ENGINE == "claude-code":
         _, data = _claude_code(STORYBOARD_SYSTEM + "\nResponde SOLO con el JSON pedido.", user,
                                STORYBOARD_SCHEMA)
-        if not 5 <= len(data.get("segments", [])) <= 9:
-            raise RuntimeError("El guion no tiene entre 6 y 8 segmentos")
+        if not 7 <= len(data.get("segments", [])) <= 16:
+            raise RuntimeError("El guion no tiene entre 8 y 14 segmentos")
         return data
     resp = _api().messages.create(
         model=MODEL, max_tokens=16000, system=STORYBOARD_SYSTEM,
@@ -255,10 +280,36 @@ def storyboard(topic: str, notes: str = "") -> dict:
     return json.loads(_text(resp))
 
 
-def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str | None = None) -> str:
-    segs = "\n".join(f"{i}. ({t['duration']:.2f} s) NARRACIÓN: {s['narration']}\n   VISUAL: {s['visual']}"
+def expand_storyboard(sb: dict, notes: str = "") -> dict:
+    """Amplía un guion corto a la estructura de 61-90 s (mantiene lo que sirve)."""
+    old = json.dumps({k: sb[k] for k in ("topic", "title", "description", "tags", "segments") if k in sb},
+                     ensure_ascii=False, indent=1)
+    user = f"Guion anterior:\n{old}\n{('Indicaciones del editor: ' + notes) if notes else ''}".strip()
+    if ENGINE == "claude-code":
+        _, data = _claude_code(EXPAND_SYSTEM + "\nResponde SOLO con el JSON pedido.", user, STORYBOARD_SCHEMA)
+    else:
+        resp = _api().messages.create(
+            model=MODEL, max_tokens=16000, system=EXPAND_SYSTEM,
+            output_config={"effort": EFFORT, "format": {"type": "json_schema", "schema": STORYBOARD_SCHEMA}},
+            messages=[{"role": "user", "content": user}])
+        data = json.loads(_text(resp))
+    if len(data.get("segments", [])) < 7:
+        raise RuntimeError("El guion ampliado quedó demasiado corto")
+    return data
+
+
+def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str | None = None,
+               base_scene: str | None = None) -> str:
+    segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}] NARRACIÓN: {s['narration']}\n"
+                     f"   VISUAL: {s['visual']}"
                      for i, (s, t) in enumerate(zip(sb["segments"], timing["segments"])))
-    messages = [{"role": "user", "content": f"Tema: {sb['topic']}\nSegmentos:\n{segs}"}]
+    content = f"Tema: {sb['topic']}\nSegmentos:\n{segs}"
+    if base_scene:
+        content += ("\n\nVERSIÓN EXTENDIDA: ya existe esta escena de la versión corta. Reutiliza su código "
+                    "(personajes, funciones, estilo, colores) todo lo posible y agrega/reordena segmentos "
+                    "para el guion nuevo. Los índices de self.segment(i) deben seguir el guion NUEVO:\n"
+                    f"```python\n{base_scene}\n```")
+    messages = [{"role": "user", "content": content}]
     if previous and error:
         messages += [{"role": "assistant", "content": f"```python\n{previous}\n```"},
                      {"role": "user", "content": f"El render falló con este error. Corrige el "

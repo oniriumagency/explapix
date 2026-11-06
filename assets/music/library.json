@@ -3,7 +3,7 @@
     "title": "Chiptune saltarín",
     "source": "Generada por código (explapix/musicgen.py, estilos v2)",
     "license": "Propia (síntesis por código). Uso comercial libre.",
-    "enabled": false,
+    "enabled": true,
     "commercial": true,
     "bpm": 118
   },
@@ -11,7 +11,7 @@
     "title": "Synthwave suave",
     "source": "Generada por código (explapix/musicgen.py, estilos v2)",
     "license": "Propia (síntesis por código). Uso comercial libre.",
-    "enabled": false,
+    "enabled": true,
     "commercial": true,
     "bpm": 100
   },
@@ -19,7 +19,7 @@
     "title": "Marimba curiosa",
     "source": "Generada por código (explapix/musicgen.py, estilos v2)",
     "license": "Propia (síntesis por código). Uso comercial libre.",
-    "enabled": false,
+    "enabled": true,
     "commercial": true,
     "bpm": 96
   },
@@ -27,7 +27,7 @@
     "title": "Ambiente espacial",
     "source": "Generada por código (explapix/musicgen.py, estilos v2)",
     "license": "Propia (síntesis por código). Uso comercial libre.",
-    "enabled": false,
+    "enabled": true,
     "commercial": true,
     "bpm": 70
   },
@@ -43,7 +43,7 @@
     "title": "Funk de laboratorio",
     "source": "Generada por código (explapix/musicgen.py, estilos v2)",
     "license": "Propia (síntesis por código). Uso comercial libre.",
-    "enabled": false,
+    "enabled": true,
     "commercial": true,
     "bpm": 104
   }

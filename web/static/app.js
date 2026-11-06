@@ -97,6 +97,7 @@ async function openVideo(id) {
         <div class="actions">
           ${ready && !locked ? `<button class="ok" id="bApprove">Aprobar</button><button class="danger" id="bReject">Rechazar…</button>` : ""}
           <button class="ghost" id="bRegen">Regenerar…</button>
+          ${v.segments?.length && v.segments.length < 8 ? `<button class="ghost" id="bExtend">Versión extendida…</button>` : ""}
           ${ready && !locked ? `<button class="yt" id="bUpload">Subir a YouTube…</button>` : ""}
           ${ready && !v.instagram_id ? `<button class="ig" id="bIg">Subir a Instagram…</button>` : ""}
           <button class="ghost" id="bDelete">Mover a papelera</button>
@@ -134,6 +135,13 @@ async function openVideo(id) {
     await act(() => api(`/api/videos/${id}/review`, { method: "POST", body: { status: "rejected", note: f.get("note") } }), "Rechazado");
     if (f.get("regen")) await act(() => api(`/api/videos/${id}/regenerate`, { method: "POST", body: { mode: "ai", note: f.get("note") } }), "Regeneración en cola");
     reload();
+  });
+  $("#bExtend") && ($("#bExtend").onclick = async () => {
+    const f = await dialog("Versión extendida (61-90 s)", `<p>Claude amplía el guion con promesa, re-ganchos cada ~15 s, un dato extra y un cierre que conecta con el inicio, y reutiliza la animación actual como base. Queda como un video nuevo «por revisar»; este no se borra.</p>
+      <label>Indicaciones <small>(opcional)</small><textarea name="note" rows="3"></textarea></label>`, "Generar");
+    if (!f) return;
+    await act(() => api(`/api/videos/${id}/extend`, { method: "POST", body: { note: f.get("note") } }), "Versión extendida en cola ✓");
+    refreshRunning();
   });
   $("#bRegen").onclick = async () => {
     const f = await dialog("Regenerar", `

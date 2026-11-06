@@ -255,6 +255,13 @@ class Jobs:
             it = next((x for x in calendar_load()["items"] if x["id"] == cid), None)
             mf = OUT / j["result"] / "meta.json"
             meta = read_json(mf, None)
+            nsb = read_json(OUT / j["result"] / "storyboard.json", None)
+            if it and nsb and nsb.get("duracion_objetivo_s") and not it["storyboard"].get("duracion_objetivo_s"):
+                data = calendar_load()        # guarda en el calendario el guion ampliado
+                for x in data["items"]:
+                    if x["id"] == cid:
+                        x["storyboard"] = nsb
+                calendar_save(data)
             if it and meta is not None:   # textos del calendario -> metadatos del video
                 meta.update(title=it["title"], ig_caption=it["ig_caption"],
                             pinned_comment=it["pinned_comment"], calendar_id=cid,
@@ -265,6 +272,12 @@ class Jobs:
                           status="generado" if j["status"] == "done" and j.get("result") else
                           ("pendiente" if j["status"] == "cancelled" else "error"),
                           finished=datetime.now().isoformat(timespec="seconds"))
+        keep = j["meta"].get("keep_texts")
+        if keep and j["status"] == "done" and j.get("result"):
+            nf = OUT / j["result"] / "meta.json"
+            nm = read_json(nf, {}) or {}
+            nm.update(keep)
+            write_json(nf, nm)
         src = j["meta"].get("replaces")
         if j["status"] == "done" and src and j.get("result") and (OUT / src).is_dir():
             mf = OUT / src / "meta.json"
@@ -339,6 +352,8 @@ def calendar_enqueue(it: dict, auto: bool = False) -> dict:
         cmd += ["--scene", str(scene)]
     elif not llm_ready():
         raise HTTPException(409, "No hay escena escrita para este tema y el motor de IA no está listo")
+    elif not it["storyboard"].get("duracion_objetivo_s"):
+        cmd += ["--expand"]          # guion viejo de ~40 s: se amplía a 61-90 s dentro del trabajo
     j = jobs.add("video", f"Día {it['day']}: {it['topic']}" + (" (auto)" if auto else ""), cmd,
                  meta={"calendar_id": it["id"]})
     calendar_mark(it["id"], status="en_cola")
@@ -544,6 +559,27 @@ def api_upload(vid: str, body: dict = Body(...)):
         raise HTTPException(409, "Ya hay una subida en cola para este video")
     return jobs.add("upload", f"Subir ({privacy}): {meta['title']}",
                     [PY, "upload.py", str(d), "--privacy", privacy], meta={"video": vid})
+
+
+@app.post("/api/videos/{vid}/extend")
+def api_extend(vid: str, body: dict = Body(default={})):
+    """Versión extendida (61-90 s): amplía el guion con Claude y reutiliza la escena corta como base."""
+    d = video_dir(vid)
+    _need_anthropic()
+    if not (d / "storyboard.json").exists():
+        raise HTTPException(409, "Este video no tiene guion")
+    sb = read_json(d / "storyboard.json", {}) or {}
+    note = str(body.get("note", "")).strip()[:1000]
+    cmd = [PY, "make_video.py", "--storyboard", str(d / "storyboard.json"), "--expand"]
+    if (d / "scene.py").exists():
+        cmd += ["--base-scene", str(d / "scene.py")]
+    if note:
+        cmd += ["--notes", note]
+    meta = read_json(d / "meta.json", {}) or {}
+    return jobs.add("video", f"Versión extendida: {sb.get('topic', vid)}", cmd, _tts_env(body),
+                    {"replaces": vid, "calendar_id": None, "extend_of": vid,
+                     "keep_texts": {k: meta.get(k) for k in ("ig_caption", "pinned_comment", "scheduled",
+                                                             "calendar_id") if meta.get(k)}})
 
 
 @app.delete("/api/videos/{vid}")

@@ -1,0 +1,39 @@
+{
+  "topic": "Cómo vuela un avión",
+  "title": "¿Cómo vuela algo tan pesado? ✈️",
+  "description": "Un avión de setenta toneladas se sostiene en el aire. Las alas empujan el aire hacia abajo y crean menos presión arriba que abajo: eso sostiene al avión.\n\n#FactosDidacticos #aviones #fisica #ciencia",
+  "tags": [
+    "cómo vuela un avión",
+    "transporte",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Un avión de pasajeros puede pesar más de setenta toneladas. ¿Cómo se queda en el aire?",
+      "visual": "Avión con carita sobre una báscula enorme."
+    },
+    {
+      "narration": "Los motores lo empujan hacia adelante a gran velocidad, y el aire choca con las alas.",
+      "visual": "Motores con chispas; líneas de aire."
+    },
+    {
+      "narration": "El ala está inclinada y curvada, así que desvía muchísimo aire hacia abajo.",
+      "visual": "Corte del ala; flujo de partículas bajando."
+    },
+    {
+      "narration": "Al empujar el aire hacia abajo, el aire empuja el ala hacia arriba. Acción y reacción.",
+      "visual": "Flechas opuestas; ala subiendo."
+    },
+    {
+      "narration": "Además, arriba del ala la presión baja y abajo es mayor. Esa diferencia también la sostiene.",
+      "visual": "Zona azul arriba y roja abajo; mood frío/calor."
+    },
+    {
+      "narration": "A esa fuerza se le llama sustentación. Síguenos para más Factos Didácticos.",
+      "visual": "Avión despegando; cierre."
+    }
+  ]
+}

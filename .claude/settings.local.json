@@ -1,0 +1,1 @@
+{"permissions":{"allow":["Bash(python:*)","Bash(.venv/bin/python:*)","Bash(pytest:*)","Bash(git:*)","Bash(ffmpeg:*)","Bash(ffprobe:*)","Bash(systemctl --user:*)","Bash(curl:*)","Bash(ls:*)","Bash(cat:*)"]}}

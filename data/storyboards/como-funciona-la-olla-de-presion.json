@@ -1,0 +1,39 @@
+{
+  "topic": "Cómo funciona la olla de presión",
+  "title": "La olla que cocina el doble de rápido 🍲",
+  "description": "En esta olla el agua hierve a ciento veinte grados. Al estar sellada, el vapor sube la presión y el agua hierve más caliente: unos 120 °C en vez de 100.\n\n#FactosDidacticos #cocina #ollaexpres #ciencia",
+  "tags": [
+    "cómo funciona la olla de presión",
+    "cocina",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "En esta olla el agua hierve a unos ciento veinte grados, no a cien. Por eso cocina tan rápido.",
+      "visual": "Olla con carita y termómetro en 120."
+    },
+    {
+      "narration": "Normalmente el agua hierve a cien grados porque el vapor escapa libremente.",
+      "visual": "Olla abierta con vapor saliendo."
+    },
+    {
+      "narration": "La olla de presión está sellada, así que el vapor se queda adentro y empuja.",
+      "visual": "Tapa cerrada, burbujas empujando."
+    },
+    {
+      "narration": "Con más presión, a las moléculas les cuesta más escapar, y el agua necesita más calor para hervir.",
+      "visual": "Moléculas apretadas; termómetro subiendo; mood calor."
+    },
+    {
+      "narration": "A más temperatura, los alimentos se cocinan hasta en la mitad del tiempo.",
+      "visual": "Frijoles con reloj acelerado."
+    },
+    {
+      "narration": "La válvula deja salir el exceso de vapor para que nada explote. Síguenos para más Factos Didácticos.",
+      "visual": "Válvula silbando con chispas; cierre."
+    }
+  ]
+}

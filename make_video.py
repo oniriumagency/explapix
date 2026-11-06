@@ -28,9 +28,16 @@ def slug(s: str) -> str:
 
 
 def build(topic: str | None, storyboard: Path | None, scene: Path | None, quality: str,
-          retries: int, music: Path | None, upload: bool, privacy: str, notes: str = "") -> Path:
+          retries: int, music: Path | None, upload: bool, privacy: str, notes: str = "",
+          expand: bool = False, base_scene: Path | None = None) -> Path:
     if storyboard:
         sb = json.loads(storyboard.read_text(encoding="utf-8"))
+        if expand:
+            from explapix import llm
+            print(f"[1/4] Guion ampliado: {sb.get('topic')}", flush=True)
+            sb = llm.expand_storyboard(sb, notes)
+            print(f"   duración objetivo: {sb.get('duracion_objetivo_s')} s · "
+                  f"{len(sb['segments'])} segmentos · {sb.get('justificacion_duracion', '')}", flush=True)
     else:
         from explapix import llm
         print(f"[1/4] Guion: {topic}", flush=True)
@@ -53,7 +60,8 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
         from explapix import llm
         code, err = None, None
         for attempt in range(retries + 1):
-            code = llm.scene_code(sb, timing, previous=code, error=err)
+            code = llm.scene_code(sb, timing, previous=code, error=err,
+                                  base_scene=base_scene.read_text(encoding="utf-8") if base_scene else None)
             scene_file.write_text(code, encoding="utf-8")
             ok, log, silent = render.render_scene(scene_file, work, quality)
             if ok:
@@ -78,7 +86,8 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
             "topic": sb.get("topic", ""), "file": str(final), "engine": timing.get("engine"),
             "duration": timing.get("total"), "quality": quality,
             "created": datetime.now().isoformat(timespec="seconds"),
-            "music": music.name if music else None, "sfx": bool(events)}
+            "music": music.name if music else None, "sfx": bool(events),
+            "target_s": sb.get("duracion_objetivo_s"), "duration_reason": sb.get("justificacion_duracion")}
     if notes:
         meta["notes"] = notes
     if upload:
@@ -98,6 +107,8 @@ def main():
     g.add_argument("--topics", type=Path, help="archivo con un tema por línea")
     g.add_argument("--storyboard", type=Path)
     ap.add_argument("--scene", type=Path, help="usar esta escena en vez de generarla")
+    ap.add_argument("--expand", action="store_true", help="ampliar el guion a la estructura de 61-90 s")
+    ap.add_argument("--base-scene", type=Path, help="escena corta a reutilizar al extender")
     ap.add_argument("--notes", default="", help="indicaciones extra para el guion (p. ej. nota de revisión)")
     from explapix import config
     ap.add_argument("--quality", choices=list(render.QUALITY), default=config.get("formato.calidad", "hd"))
@@ -110,7 +121,8 @@ def main():
     topics = [a.topic] if a.topic else ([None] if a.storyboard else
               [l.strip() for l in a.topics.read_text(encoding="utf-8").splitlines() if l.strip()])
     for t in topics:
-        build(t, a.storyboard, a.scene, a.quality, a.retries, a.music, a.upload, a.privacy, a.notes)
+        build(t, a.storyboard, a.scene, a.quality, a.retries, a.music, a.upload, a.privacy, a.notes,
+              a.expand, a.base_scene)
 
 
 if __name__ == "__main__":

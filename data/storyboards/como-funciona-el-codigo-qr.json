@@ -1,0 +1,39 @@
+{
+  "topic": "Cómo funciona el código QR",
+  "title": "Por qué un QR roto todavía funciona 🔳",
+  "description": "Puedes rayar un QR y aun así funciona. Los cuadritos son unos y ceros, y el código guarda copias de respaldo: hasta un 30 % puede dañarse.\n\n#FactosDidacticos #codigoqr #tecnologia #ciencia",
+  "tags": [
+    "cómo funciona el código qr",
+    "tecnología",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Puedes rayar o tapar parte de un código QR y aun así funciona. Te explico por qué.",
+      "visual": "QR con carita y una mancha encima."
+    },
+    {
+      "narration": "Cada cuadrito negro o blanco es un uno o un cero. Juntos forman un mensaje, como un enlace.",
+      "visual": "Cuadritos que se voltean a 1 y 0."
+    },
+    {
+      "narration": "Los tres cuadros grandes de las esquinas le dicen a la cámara dónde está el código y cómo está girado.",
+      "visual": "Las tres esquinas brillan; cámara alineándose."
+    },
+    {
+      "narration": "Además, el código guarda información repetida de forma matemática, como un respaldo.",
+      "visual": "Bloques duplicados con orbitas de partículas."
+    },
+    {
+      "narration": "Así, aunque hasta un treinta por ciento esté dañado, la cámara puede reconstruir el mensaje.",
+      "visual": "Parte tachada se reconstruye con chispas."
+    },
+    {
+      "narration": "Se inventaron en Japón en 1994 para rastrear piezas de autos. Síguenos para más Factos Didácticos.",
+      "visual": "Pieza de auto con QR; cierre."
+    }
+  ]
+}
