@@ -1,0 +1,43 @@
+{
+  "topic": "Cómo funcionan los audífonos con cancelación de ruido",
+  "title": "Audífonos que borran ruido con ruido 🎧",
+  "description": "Estos audífonos borran el ruido con más ruido. Un micrófono escucha el ruido de afuera y el audífono crea la onda opuesta: juntas se cancelan.\n\n#FactosDidacticos #audifonos #tecnologia #ciencia",
+  "tags": [
+    "cómo funcionan los audífonos con cancelación de ruido",
+    "tecnología",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Estos audífonos borran el ruido… agregando más ruido. Y funciona gracias a las ondas.",
+      "visual": "Audífonos con carita, ondas de ruido alrededor."
+    },
+    {
+      "narration": "El sonido es una onda de presión: el aire se aprieta y se afloja muchas veces por segundo.",
+      "visual": "Onda sinusoidal amarilla avanzando; partículas de aire."
+    },
+    {
+      "narration": "Un micrófono pequeño en el audífono escucha el ruido de afuera, como el motor de un avión.",
+      "visual": "Micrófono captando onda del avión; mood energía."
+    },
+    {
+      "narration": "Un chip crea al instante la onda contraria: donde el ruido aprieta, ella afloja.",
+      "visual": "Onda invertida rosa aparece debajo de la amarilla."
+    },
+    {
+      "narration": "Al sumarse, las dos se anulan y casi no llega nada a tu oído. Se llama interferencia destructiva.",
+      "visual": "Las dos ondas se juntan y queda línea plana; calma."
+    },
+    {
+      "narration": "Funciona mejor con sonidos graves y constantes. Con ruidos rápidos o agudos, ayuda más el acolchado.",
+      "visual": "Comparación: zumbido grave tachado, voz aguda pasando un poco."
+    },
+    {
+      "narration": "Silencio hecho con física. Síguenos para más Factos Didácticos.",
+      "visual": "Persona relajada; cierre."
+    }
+  ]
+}

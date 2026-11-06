@@ -108,3 +108,33 @@ Panel para revisar y controlar todo sin comandos: `http://100.96.241.48:8097` (p
 Instalar/actualizar el servicio (systemd de usuario, arranca solo tras reiniciar): `bash deploy/instalar_panel.sh`.
 Logs: `journalctl --user -u explapix-studio -f`. Tests: `.venv/bin/python -m pytest -q`.
 Seguridad: nada se publica sin confirmación; `secrets/` y `.env` nunca se sirven por HTTP (solo rutas explícitas de videos, miniaturas, voces y fuentes).
+
+## Estándar, calendario y motor de IA
+
+- **Estándar del canal**: `config/estilo.yaml` (voz Chatterbox con emoción 0.6 / ritmo 0.4, HD, 40-50 s, moods, cámara, partículas, reglas). `llm.py` lo incluye en el prompt y usa `examples/microondas/scene.py` como ejemplo principal.
+- **Motor de IA** (`EXPLAPIX_LLM` o `llm.motor` en el YAML):
+  - `claude-code` (por defecto): usa el CLI `claude` ya iniciado con la suscripción de Claude del servidor (`claude -p`, sin herramientas, JSON validado, reintentos). Sin costo aparte. Si se alcanza el límite de uso, espera 30 min y reintenta (hasta 8 h) en vez de fallar.
+  - `api`: API de Anthropic con `ANTHROPIC_API_KEY`.
+- **Calendario** (`data/calendario.json`, pantalla «Calendario» del panel): 30 temas con gancho, título, caption de Instagram, comentario fijado, hora (CDMX) y guion. Se puede editar, reordenar y marcar estado. Con «Generar pendientes solo» activado, el panel genera uno a la vez con 20 min de pausa entre videos (`llm.pausa_entre_videos_min`). Las escenas escritas a mano van en `data/escenas/<id>.py` y tienen prioridad sobre la IA. Regenerar la base: `python scripts/calendario_base.py --force`.
+
+## Instagram (Reels y comentarios)
+
+Usa la «API de Instagram con inicio de sesión de Instagram» de Meta (cuenta profesional: empresa o creador).
+
+1. En [developers.facebook.com](https://developers.facebook.com/) crea una app → agrega el producto **Instagram** → «API setup with Instagram login».
+2. En «Business login settings» agrega la URL de redirección `https://localhost/` (o la que pongas en el panel).
+3. En el panel → Sistema → Conectar Instagram pega el **Instagram App ID** y el **App Secret**, pulsa «Autorizar», inicia sesión y copia de vuelta la dirección a la que te lleva (no carga; es normal).
+4. Mientras la app esté en modo desarrollo, tu cuenta debe estar agregada como «Instagram tester» en la app.
+
+Permisos: `instagram_business_basic`, `instagram_business_content_publish`, `instagram_business_manage_comments`, `instagram_business_manage_insights`. El token dura 60 días y se renueva solo.
+
+**Publicar Reels necesita una URL pública** (Meta descarga el video). `explapix/instagram.py` levanta un servidor que solo entrega ese archivo y lo expone con **Tailscale Funnel** en una ruta aleatoria durante la subida; al terminar lo cierra. Hay que activarlo una vez:
+- En login.tailscale.com → DNS: habilitar **HTTPS Certificates**.
+- En Access controls, agregar el atributo `funnel` a este servidor (`"nodeAttrs": [{"target": ["autogroup:member"], "attr": ["funnel"]}]`).
+- En el servidor: `sudo tailscale set --operator=magne` (para usar `tailscale funnel` sin sudo).
+
+Las subidas a Instagram y las respuestas a comentarios pasan por la misma aprobación del panel (botón + confirmación). La API no permite fijar comentarios: el «comentario fijado» del calendario se publica y fija a mano.
+
+## Métricas
+
+`update_stats.py` (botón «Actualizar métricas» en Sistema) guarda en cada `meta.json`: YouTube (vistas, likes, comentarios; y con YouTube Analytics: % medio visto, duración media, compartidos) e Instagram (alcance, reproducciones, guardados, compartidos, likes, comentarios). Sistema muestra los mejores videos y el promedio por categoría para elegir temas. Para YouTube Analytics habilita «YouTube Analytics API» en el proyecto de Google Cloud.

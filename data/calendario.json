@@ -1,0 +1,1880 @@
+{
+  "version": 1,
+  "auto_generate": false,
+  "start": "2026-11-09",
+  "items": [
+    {
+      "day": 1,
+      "date": "2026-11-09",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Por qué explotan las palomitas",
+      "category": "cocina",
+      "hook": "Cada palomita es una mini olla de presión.",
+      "title": "¿Por qué explotan las palomitas? 🍿",
+      "ig_caption": "Cada palomita es una mini olla de presión. 🤯\n\nDentro de cada grano hay una gotita de agua que, al calentarse, se vuelve vapor y revienta la cáscara.\n\n¿Con qué las prefieres: mantequilla, chile o caramelo? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #palomitas #cienciaencasa #ciencia #datoscuriosos",
+      "pinned_comment": "¿Sabías que el grano salta porque una ‘patita’ de almidón golpea la olla? 👀 ¿Qué otro snack explicamos?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#palomitas",
+        "#cienciaencasa",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "generado",
+      "video_id": "20261106-1637-por-que-explotan-las-palomitas",
+      "notes": "",
+      "storyboard": {
+        "topic": "Por qué explotan las palomitas",
+        "title": "¿Por qué explotan las palomitas? 🍿",
+        "description": "Cada palomita es una mini olla de presión. Dentro de cada grano hay una gotita de agua que, al calentarse, se vuelve vapor y revienta la cáscara.\n\n#FactosDidacticos #palomitas #cienciaencasa #ciencia",
+        "tags": [
+          "por qué explotan las palomitas",
+          "cocina",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Cada palomita es una mini olla de presión. Y cuando revienta, se voltea por completo.",
+            "visual": "Grano de maíz con carita; rótulo 'mini olla'."
+          },
+          {
+            "narration": "Dentro del grano hay almidón y una gotita de agua, encerrados en una cáscara dura y casi impermeable.",
+            "visual": "Corte del grano: cáscara, almidón, gotita de agua con carita."
+          },
+          {
+            "narration": "Al calentarlo, esa agua se convierte en vapor, pero la cáscara no lo deja escapar.",
+            "visual": "Fuego abajo, gotita se vuelve burbujas de vapor que empujan; mood calor."
+          },
+          {
+            "narration": "La presión sube hasta unas nueve veces la del aire, mientras el almidón se ablanda como masa caliente.",
+            "visual": "Manómetro subiendo a 9x, grano inflándose y temblando."
+          },
+          {
+            "narration": "Cerca de los ciento ochenta grados, la cáscara revienta y el almidón se infla en una espuma blanca.",
+            "visual": "¡Pop! explosión con chispas y confeti blanco; palomita aparece."
+          },
+          {
+            "narration": "El almidón se enfría en segundos y se queda así: crujiente y hasta cuarenta veces más grande.",
+            "visual": "Palomita gigante con carita feliz, comparación de tamaño."
+          },
+          {
+            "narration": "Por eso los granos que se secan demasiado ya no truenan. Síguenos para más Factos Didácticos.",
+            "visual": "Grano seco triste sin explotar; cierre."
+          }
+        ]
+      },
+      "id": "por-que-explotan-las-palomitas",
+      "finished": "2026-11-06T16:39:22"
+    },
+    {
+      "day": 2,
+      "date": "2026-11-10",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la pantalla táctil",
+      "category": "tecnología",
+      "hook": "Tu dedo es parte del circuito de tu celular.",
+      "title": "¿Cómo sabe tu celular dónde lo tocas? 📱",
+      "ig_caption": "Tu dedo es parte del circuito de tu celular. 🤯\n\nLa pantalla tiene una rejilla invisible de electrodos y tu dedo, que conduce electricidad, cambia la carga justo donde tocas.\n\n¿Alguna vez intentaste usar el celular con guantes? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #tecnologia #celular #ciencia #datoscuriosos",
+      "pinned_comment": "Prueba: toca la pantalla con una salchicha 🌭 ¿Funciona? Cuéntanos 👇",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#tecnologia",
+        "#celular",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "en_cola",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la pantalla táctil",
+        "title": "¿Cómo sabe tu celular dónde lo tocas? 📱",
+        "description": "Tu dedo es parte del circuito de tu celular. La pantalla tiene una rejilla invisible de electrodos y tu dedo, que conduce electricidad, cambia la carga justo donde tocas.\n\n#FactosDidacticos #tecnologia #celular #ciencia",
+        "tags": [
+          "cómo funciona la pantalla táctil",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu dedo es parte del circuito de tu celular. Sin él, la pantalla no sabría qué tocaste.",
+            "visual": "Celular con carita y dedo gigante acercándose."
+          },
+          {
+            "narration": "Bajo el vidrio hay una rejilla de líneas transparentes que forman miles de cruces invisibles.",
+            "visual": "Zoom bajo el vidrio: rejilla de líneas cian y violeta."
+          },
+          {
+            "narration": "Por esa rejilla corre una pequeña carga eléctrica, y cada cruce guarda un poquito, como un mini depósito.",
+            "visual": "Cargas brillando en los cruces; mood energía."
+          },
+          {
+            "narration": "Tu cuerpo conduce electricidad. Cuando acercas el dedo, roba parte de esa carga justo en ese punto.",
+            "visual": "Dedo se acerca y los cruces debajo se apagan; chispas."
+          },
+          {
+            "narration": "Un chip revisa toda la rejilla más de cien veces por segundo y calcula dónde cambió la carga.",
+            "visual": "Barrido rápido de la rejilla, punto rojo marcando la posición."
+          },
+          {
+            "narration": "Con varios dedos detecta varios puntos a la vez, y así sabe si haces zoom o deslizas.",
+            "visual": "Dos dedos separándose; flechas de zoom."
+          },
+          {
+            "narration": "Por eso no funciona con guantes normales: la tela no conduce. Síguenos para más Factos Didácticos.",
+            "visual": "Guante triste sin efecto; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-pantalla-tactil"
+    },
+    {
+      "day": 3,
+      "date": "2026-11-11",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funcionan los audífonos con cancelación de ruido",
+      "category": "tecnología",
+      "hook": "Estos audífonos borran el ruido con más ruido.",
+      "title": "Audífonos que borran ruido con ruido 🎧",
+      "ig_caption": "Estos audífonos borran el ruido con más ruido. 🤯\n\nUn micrófono escucha el ruido de afuera y el audífono crea la onda opuesta: juntas se cancelan.\n\n¿Dónde los usarías más: avión, metro u oficina? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #audifonos #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "¿Por qué crees que no borran bien las voces? Te leemos 👇",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#audifonos",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "en_cola",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funcionan los audífonos con cancelación de ruido",
+        "title": "Audífonos que borran ruido con ruido 🎧",
+        "description": "Estos audífonos borran el ruido con más ruido. Un micrófono escucha el ruido de afuera y el audífono crea la onda opuesta: juntas se cancelan.\n\n#FactosDidacticos #audifonos #tecnologia #ciencia",
+        "tags": [
+          "cómo funcionan los audífonos con cancelación de ruido",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Estos audífonos borran el ruido… agregando más ruido. Y funciona gracias a las ondas.",
+            "visual": "Audífonos con carita, ondas de ruido alrededor."
+          },
+          {
+            "narration": "El sonido es una onda de presión: el aire se aprieta y se afloja muchas veces por segundo.",
+            "visual": "Onda sinusoidal amarilla avanzando; partículas de aire."
+          },
+          {
+            "narration": "Un micrófono pequeño en el audífono escucha el ruido de afuera, como el motor de un avión.",
+            "visual": "Micrófono captando onda del avión; mood energía."
+          },
+          {
+            "narration": "Un chip crea al instante la onda contraria: donde el ruido aprieta, ella afloja.",
+            "visual": "Onda invertida rosa aparece debajo de la amarilla."
+          },
+          {
+            "narration": "Al sumarse, las dos se anulan y casi no llega nada a tu oído. Se llama interferencia destructiva.",
+            "visual": "Las dos ondas se juntan y queda línea plana; calma."
+          },
+          {
+            "narration": "Funciona mejor con sonidos graves y constantes. Con ruidos rápidos o agudos, ayuda más el acolchado.",
+            "visual": "Comparación: zumbido grave tachado, voz aguda pasando un poco."
+          },
+          {
+            "narration": "Silencio hecho con física. Síguenos para más Factos Didácticos.",
+            "visual": "Persona relajada; cierre."
+          }
+        ]
+      },
+      "id": "como-funcionan-los-audifonos-con-cancela"
+    },
+    {
+      "day": 4,
+      "date": "2026-11-12",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el GPS",
+      "category": "tecnología",
+      "hook": "Tu celular nunca le habla a los satélites.",
+      "title": "¿Cómo sabe el GPS dónde estás? 🛰️",
+      "ig_caption": "Tu celular nunca le habla a los satélites. 🤯\n\nTu celular solo escucha: compara la hora que mandan varios satélites con relojes atómicos y calcula tu distancia a cada uno.\n\n¿Alguna vez el GPS te mandó por un camino rarísimo? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #gps #espacio #ciencia #datoscuriosos",
+      "pinned_comment": "¿Sabías que sin corregir la relatividad de Einstein el GPS fallaría kilómetros al día? 🤯",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#gps",
+        "#espacio",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el GPS",
+        "title": "¿Cómo sabe el GPS dónde estás? 🛰️",
+        "description": "Tu celular nunca le habla a los satélites. Tu celular solo escucha: compara la hora que mandan varios satélites con relojes atómicos y calcula tu distancia a cada uno.\n\n#FactosDidacticos #gps #espacio #ciencia",
+        "tags": [
+          "cómo funciona el gps",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu celular nunca le habla a los satélites del GPS. Solo los escucha, y con eso sabe dónde estás.",
+            "visual": "Celular con orejitas escuchando; satélites arriba."
+          },
+          {
+            "narration": "Alrededor de la Tierra giran más de treinta satélites, cada uno con relojes atómicos muy precisos.",
+            "visual": "Tierra con satélites en órbita; partículas de estrellas."
+          },
+          {
+            "narration": "Cada satélite transmite sin parar su posición y la hora exacta en que mandó la señal.",
+            "visual": "Señales saliendo con relojitos."
+          },
+          {
+            "narration": "Tu celular mide cuánto tardó cada señal en llegar y calcula a qué distancia está cada satélite.",
+            "visual": "Círculos de distancia creciendo desde cada satélite."
+          },
+          {
+            "narration": "Con al menos cuatro satélites, esos círculos se cruzan en un solo punto: tú.",
+            "visual": "Círculos cruzándose y un pin rebotando en el punto."
+          },
+          {
+            "narration": "Hasta corrige la relatividad de Einstein, porque allá arriba el tiempo corre distinto. Síguenos para más Factos Didácticos.",
+            "visual": "Einstein-reloj guiñando; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-gps"
+    },
+    {
+      "day": 5,
+      "date": "2026-11-13",
+      "time": "20:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el código QR",
+      "category": "tecnología",
+      "hook": "Puedes rayar un QR y aun así funciona.",
+      "title": "Por qué un QR roto todavía funciona 🔳",
+      "ig_caption": "Puedes rayar un QR y aun así funciona. 🤯\n\nLos cuadritos son unos y ceros, y el código guarda copias de respaldo: hasta un 30 % puede dañarse.\n\n¿Qué es lo más raro que has escaneado? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #codigoqr #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "Los inventaron en 1994 para rastrear piezas de autos 🚗 ¿Lo sabías?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#codigoqr",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el código QR",
+        "title": "Por qué un QR roto todavía funciona 🔳",
+        "description": "Puedes rayar un QR y aun así funciona. Los cuadritos son unos y ceros, y el código guarda copias de respaldo: hasta un 30 % puede dañarse.\n\n#FactosDidacticos #codigoqr #tecnologia #ciencia",
+        "tags": [
+          "cómo funciona el código qr",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Puedes rayar o tapar parte de un código QR y aun así funciona. Te explico por qué.",
+            "visual": "QR con carita y una mancha encima."
+          },
+          {
+            "narration": "Cada cuadrito negro o blanco es un uno o un cero. Juntos forman un mensaje, como un enlace.",
+            "visual": "Cuadritos que se voltean a 1 y 0."
+          },
+          {
+            "narration": "Los tres cuadros grandes de las esquinas le dicen a la cámara dónde está el código y cómo está girado.",
+            "visual": "Las tres esquinas brillan; cámara alineándose."
+          },
+          {
+            "narration": "Además, el código guarda información repetida de forma matemática, como un respaldo.",
+            "visual": "Bloques duplicados con orbitas de partículas."
+          },
+          {
+            "narration": "Así, aunque hasta un treinta por ciento esté dañado, la cámara puede reconstruir el mensaje.",
+            "visual": "Parte tachada se reconstruye con chispas."
+          },
+          {
+            "narration": "Se inventaron en Japón en 1994 para rastrear piezas de autos. Síguenos para más Factos Didácticos.",
+            "visual": "Pieza de auto con QR; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-codigo-qr"
+    },
+    {
+      "day": 6,
+      "date": "2026-11-14",
+      "time": "11:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el jabón",
+      "category": "salud",
+      "hook": "El jabón no mata los virus: los desarma.",
+      "title": "El jabón no mata virus: los rompe 🧼",
+      "ig_caption": "El jabón no mata los virus: los desarma. 🤯\n\nCada molécula de jabón tiene una punta que ama el agua y otra que ama la grasa; así rompe la grasa y la capa de muchos virus.\n\n¿Cuántos segundos te lavas las manos? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #jabon #salud #ciencia #datoscuriosos",
+      "pinned_comment": "¿Jabón o gel antibacterial? Debate en los comentarios 👇",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#jabon",
+        "#salud",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el jabón",
+        "title": "El jabón no mata virus: los rompe 🧼",
+        "description": "El jabón no mata los virus: los desarma. Cada molécula de jabón tiene una punta que ama el agua y otra que ama la grasa; así rompe la grasa y la capa de muchos virus.\n\n#FactosDidacticos #jabon #salud #ciencia",
+        "tags": [
+          "cómo funciona el jabón",
+          "salud",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "El jabón no mata a los virus: los desarma. Y todo depende de una molécula con dos personalidades.",
+            "visual": "Molécula de jabón con carita; virus asustado."
+          },
+          {
+            "narration": "Una punta de la molécula ama el agua. La otra la odia, pero se pega a la grasa.",
+            "visual": "Cabeza azul hacia el agua, cola amarilla hacia la grasa."
+          },
+          {
+            "narration": "Muchos virus están envueltos en una capa de grasa. Las colas del jabón se meten en ella.",
+            "visual": "Virus con capa; colas de jabón insertándose."
+          },
+          {
+            "narration": "La capa se rompe y el virus queda inservible. Lo mismo pasa con la grasa de tus manos.",
+            "visual": "Virus se desarma en pedazos con chispas."
+          },
+          {
+            "narration": "Las moléculas forman bolitas que atrapan la suciedad, y el agua se las lleva al enjuagar.",
+            "visual": "Micelas atrapando suciedad; burbujas y agua."
+          },
+          {
+            "narration": "Por eso hay que frotar unos veinte segundos. Síguenos para más Factos Didácticos.",
+            "visual": "Manos frotando con espuma; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-jabon"
+    },
+    {
+      "day": 7,
+      "date": "2026-11-15",
+      "time": "12:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo vuela un avión",
+      "category": "transporte",
+      "hook": "Un avión de setenta toneladas se sostiene en el aire.",
+      "title": "¿Cómo vuela algo tan pesado? ✈️",
+      "ig_caption": "Un avión de setenta toneladas se sostiene en el aire. 🤯\n\nLas alas empujan el aire hacia abajo y crean menos presión arriba que abajo: eso sostiene al avión.\n\n¿Ventanilla o pasillo? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #aviones #fisica #ciencia #datoscuriosos",
+      "pinned_comment": "¿Te da miedo volar? El avión es de los transportes más seguros 📊",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#aviones",
+        "#fisica",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo vuela un avión",
+        "title": "¿Cómo vuela algo tan pesado? ✈️",
+        "description": "Un avión de setenta toneladas se sostiene en el aire. Las alas empujan el aire hacia abajo y crean menos presión arriba que abajo: eso sostiene al avión.\n\n#FactosDidacticos #aviones #fisica #ciencia",
+        "tags": [
+          "cómo vuela un avión",
+          "transporte",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Un avión de pasajeros puede pesar más de setenta toneladas. ¿Cómo se queda en el aire?",
+            "visual": "Avión con carita sobre una báscula enorme."
+          },
+          {
+            "narration": "Los motores lo empujan hacia adelante a gran velocidad, y el aire choca con las alas.",
+            "visual": "Motores con chispas; líneas de aire."
+          },
+          {
+            "narration": "El ala está inclinada y curvada, así que desvía muchísimo aire hacia abajo.",
+            "visual": "Corte del ala; flujo de partículas bajando."
+          },
+          {
+            "narration": "Al empujar el aire hacia abajo, el aire empuja el ala hacia arriba. Acción y reacción.",
+            "visual": "Flechas opuestas; ala subiendo."
+          },
+          {
+            "narration": "Además, arriba del ala la presión baja y abajo es mayor. Esa diferencia también la sostiene.",
+            "visual": "Zona azul arriba y roja abajo; mood frío/calor."
+          },
+          {
+            "narration": "A esa fuerza se le llama sustentación. Síguenos para más Factos Didácticos.",
+            "visual": "Avión despegando; cierre."
+          }
+        ]
+      },
+      "id": "como-vuela-un-avion"
+    },
+    {
+      "day": 8,
+      "date": "2026-11-16",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la olla de presión",
+      "category": "cocina",
+      "hook": "En esta olla el agua hierve a ciento veinte grados.",
+      "title": "La olla que cocina el doble de rápido 🍲",
+      "ig_caption": "En esta olla el agua hierve a ciento veinte grados. 🤯\n\nAl estar sellada, el vapor sube la presión y el agua hierve más caliente: unos 120 °C en vez de 100.\n\n¿Qué cocinas en olla exprés? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #cocina #ollaexpres #ciencia #datoscuriosos",
+      "pinned_comment": "¿Por qué crees que silba la válvula? 🔔",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#cocina",
+        "#ollaexpres",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la olla de presión",
+        "title": "La olla que cocina el doble de rápido 🍲",
+        "description": "En esta olla el agua hierve a ciento veinte grados. Al estar sellada, el vapor sube la presión y el agua hierve más caliente: unos 120 °C en vez de 100.\n\n#FactosDidacticos #cocina #ollaexpres #ciencia",
+        "tags": [
+          "cómo funciona la olla de presión",
+          "cocina",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "En esta olla el agua hierve a unos ciento veinte grados, no a cien. Por eso cocina tan rápido.",
+            "visual": "Olla con carita y termómetro en 120."
+          },
+          {
+            "narration": "Normalmente el agua hierve a cien grados porque el vapor escapa libremente.",
+            "visual": "Olla abierta con vapor saliendo."
+          },
+          {
+            "narration": "La olla de presión está sellada, así que el vapor se queda adentro y empuja.",
+            "visual": "Tapa cerrada, burbujas empujando."
+          },
+          {
+            "narration": "Con más presión, a las moléculas les cuesta más escapar, y el agua necesita más calor para hervir.",
+            "visual": "Moléculas apretadas; termómetro subiendo; mood calor."
+          },
+          {
+            "narration": "A más temperatura, los alimentos se cocinan hasta en la mitad del tiempo.",
+            "visual": "Frijoles con reloj acelerado."
+          },
+          {
+            "narration": "La válvula deja salir el exceso de vapor para que nada explote. Síguenos para más Factos Didácticos.",
+            "visual": "Válvula silbando con chispas; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-olla-de-presion"
+    },
+    {
+      "day": 9,
+      "date": "2026-11-17",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el inodoro",
+      "category": "hogar",
+      "hook": "Tu baño usa un truco de física de hace siglos.",
+      "title": "El truco de física de tu baño 🚽",
+      "ig_caption": "Tu baño usa un truco de física de hace siglos. 🤯\n\nEl inodoro usa un sifón: cuando el agua llena el tubo curvo, la gravedad jala todo de golpe.\n\n¿Sabías que el ‘gluglú’ final es aire entrando? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #hogar #fisica #ciencia #datoscuriosos",
+      "pinned_comment": "¿Qué objeto de tu casa quieres que expliquemos? 🏠",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#hogar",
+        "#fisica",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el inodoro",
+        "title": "El truco de física de tu baño 🚽",
+        "description": "Tu baño usa un truco de física de hace siglos. El inodoro usa un sifón: cuando el agua llena el tubo curvo, la gravedad jala todo de golpe.\n\n#FactosDidacticos #hogar #fisica #ciencia",
+        "tags": [
+          "cómo funciona el inodoro",
+          "hogar",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu inodoro usa un truco de física de hace siglos: el sifón.",
+            "visual": "Inodoro con carita guiñando."
+          },
+          {
+            "narration": "Detrás de la taza hay un tubo curvo que siempre guarda un poco de agua.",
+            "visual": "Corte con tubo en S y agua."
+          },
+          {
+            "narration": "Esa agua bloquea los malos olores que vienen del drenaje.",
+            "visual": "Olores verdes rebotando en el agua."
+          },
+          {
+            "narration": "Al jalar la palanca, el tanque suelta mucha agua de golpe y llena el tubo curvo.",
+            "visual": "Agua cayendo rápido con burbujas."
+          },
+          {
+            "narration": "Con el tubo lleno, la gravedad jala toda el agua hacia abajo, como cuando succionas un popote.",
+            "visual": "Flujo acelerando hacia el drenaje."
+          },
+          {
+            "narration": "El gluglú del final es aire entrando, que corta el sifón. Síguenos para más Factos Didácticos.",
+            "visual": "Burbujas de aire; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-inodoro"
+    },
+    {
+      "day": 10,
+      "date": "2026-11-18",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la carga inalámbrica",
+      "category": "tecnología",
+      "hook": "Tu celular se carga sin que nada lo toque.",
+      "title": "¿Cómo se carga sin cable? 🔋",
+      "ig_caption": "Tu celular se carga sin que nada lo toque. 🤯\n\nDos bobinas: la de la base crea un campo magnético que cambia y la del celular lo convierte en corriente.\n\n¿Cable o inalámbrico? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #tecnologia #carga #ciencia #datoscuriosos",
+      "pinned_comment": "¿Sabías que el cepillo de dientes eléctrico se carga igual? 🪥",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#tecnologia",
+        "#carga",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la carga inalámbrica",
+        "title": "¿Cómo se carga sin cable? 🔋",
+        "description": "Tu celular se carga sin que nada lo toque. Dos bobinas: la de la base crea un campo magnético que cambia y la del celular lo convierte en corriente.\n\n#FactosDidacticos #tecnologia #carga #ciencia",
+        "tags": [
+          "cómo funciona la carga inalámbrica",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu celular se carga sin que ningún cable lo toque. El secreto: dos bobinas de alambre.",
+            "visual": "Celular sobre base con carita."
+          },
+          {
+            "narration": "Dentro de la base hay una bobina por la que pasa una corriente que cambia de sentido muy rápido.",
+            "visual": "Bobina con corriente brillando."
+          },
+          {
+            "narration": "Esa corriente crea un campo magnético que también cambia, una y otra vez.",
+            "visual": "Líneas de campo pulsando; mood energía."
+          },
+          {
+            "narration": "En el celular hay otra bobina. El campo que cambia empuja sus electrones y genera corriente.",
+            "visual": "Bobina del celular encendiéndose; chispas."
+          },
+          {
+            "narration": "A eso se le llama inducción. Por eso hay que poner el celular centrado y muy cerca.",
+            "visual": "Celular desalineado: barra baja."
+          },
+          {
+            "narration": "Tu cepillo de dientes eléctrico se carga igual. Síguenos para más Factos Didácticos.",
+            "visual": "Cepillo con carita; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-carga-inalambrica"
+    },
+    {
+      "day": 11,
+      "date": "2026-11-19",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funcionan las vacunas",
+      "category": "salud",
+      "hook": "Una vacuna es un simulacro para tus defensas.",
+      "title": "Las vacunas son un simulacro 💉",
+      "ig_caption": "Una vacuna es un simulacro para tus defensas. 🤯\n\nLe muestran a tu sistema inmune una parte inofensiva del germen para que aprenda a reconocerlo antes de la infección real.\n\n¿Cuál fue la última vacuna que te pusiste? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #vacunas #salud #ciencia #datoscuriosos",
+      "pinned_comment": "Las defensas tienen memoria 🧠 ¿Qué más quieres saber del cuerpo humano?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#vacunas",
+        "#salud",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funcionan las vacunas",
+        "title": "Las vacunas son un simulacro 💉",
+        "description": "Una vacuna es un simulacro para tus defensas. Le muestran a tu sistema inmune una parte inofensiva del germen para que aprenda a reconocerlo antes de la infección real.\n\n#FactosDidacticos #vacunas #salud #ciencia",
+        "tags": [
+          "cómo funcionan las vacunas",
+          "salud",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Una vacuna es como un simulacro de incendio, pero para tus defensas.",
+            "visual": "Glóbulo blanco con casco y carita."
+          },
+          {
+            "narration": "Contiene una parte inofensiva del germen, o las instrucciones para que tu cuerpo la fabrique.",
+            "visual": "Pieza del virus sin peligro brillando."
+          },
+          {
+            "narration": "Tus defensas la detectan y la estudian, aunque no puede enfermarte.",
+            "visual": "Células rodeando la pieza con lupa."
+          },
+          {
+            "narration": "Fabrican anticuerpos que encajan justo con esa forma, como llaves en una cerradura.",
+            "visual": "Anticuerpos en forma de Y encajando; chispas."
+          },
+          {
+            "narration": "Y lo más importante: guardan células de memoria que recuerdan al germen por años.",
+            "visual": "Célula con libreta de memoria; estrellas."
+          },
+          {
+            "narration": "Si llega el germen de verdad, responden rapidísimo. Síguenos para más Factos Didácticos.",
+            "visual": "Defensas ganando; cierre."
+          }
+        ]
+      },
+      "id": "como-funcionan-las-vacunas"
+    },
+    {
+      "day": 12,
+      "date": "2026-11-20",
+      "time": "20:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona pagar sin contacto",
+      "category": "tecnología",
+      "hook": "Tu tarjeta no tiene batería y aun así transmite.",
+      "title": "¿Cómo paga tu tarjeta sin tocar? 💳",
+      "ig_caption": "Tu tarjeta no tiene batería y aun así transmite. 🤯\n\nLa terminal crea un campo magnético que alimenta el chip de la tarjeta, y esta responde con un código que solo sirve una vez.\n\n¿Pagas con tarjeta, celular o efectivo? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #finanzas #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "¿Es seguro? Spoiler: cada pago usa un código diferente 🔐",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#finanzas",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona pagar sin contacto",
+        "title": "¿Cómo paga tu tarjeta sin tocar? 💳",
+        "description": "Tu tarjeta no tiene batería y aun así transmite. La terminal crea un campo magnético que alimenta el chip de la tarjeta, y esta responde con un código que solo sirve una vez.\n\n#FactosDidacticos #finanzas #tecnologia #ciencia",
+        "tags": [
+          "cómo funciona pagar sin contacto",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu tarjeta no tiene batería, pero aun así transmite datos por el aire. ¿Cómo?",
+            "visual": "Tarjeta con carita flotando."
+          },
+          {
+            "narration": "Dentro tiene un chip y una antena: un alambre enrollado alrededor de toda la tarjeta.",
+            "visual": "Rayos X de la tarjeta mostrando la antena."
+          },
+          {
+            "narration": "La terminal crea un campo magnético. Al acercar la tarjeta, ese campo genera corriente en su antena.",
+            "visual": "Ondas de la terminal; antena se enciende."
+          },
+          {
+            "narration": "Con esa energía prestada, el chip despierta y responde en milésimas de segundo.",
+            "visual": "Chip despertando con chispas."
+          },
+          {
+            "narration": "Solo funciona a unos cuatro centímetros, y cada pago usa un código cifrado que no se repite.",
+            "visual": "Candado y código cambiante."
+          },
+          {
+            "narration": "Así, aunque alguien copie el código, ya no le sirve. Síguenos para más Factos Didácticos.",
+            "visual": "Ladrón confundido; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-pagar-sin-contacto"
+    },
+    {
+      "day": 13,
+      "date": "2026-11-21",
+      "time": "11:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la estufa de inducción",
+      "category": "cocina",
+      "hook": "Esta estufa calienta la olla, pero no el vidrio.",
+      "title": "La estufa que no se calienta 🔥",
+      "ig_caption": "Esta estufa calienta la olla, pero no el vidrio. 🤯\n\nUna bobina crea un campo magnético que genera corrientes dentro de la olla: el calor nace en el metal.\n\n¿Ya probaste cocinar con inducción? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #cocina #induccion #ciencia #datoscuriosos",
+      "pinned_comment": "Truco: si un imán se pega a tu olla, sirve para inducción 🧲",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#cocina",
+        "#induccion",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la estufa de inducción",
+        "title": "La estufa que no se calienta 🔥",
+        "description": "Esta estufa calienta la olla, pero no el vidrio. Una bobina crea un campo magnético que genera corrientes dentro de la olla: el calor nace en el metal.\n\n#FactosDidacticos #cocina #induccion #ciencia",
+        "tags": [
+          "cómo funciona la estufa de inducción",
+          "cocina",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Esta estufa calienta la olla, pero casi no calienta el vidrio. Y no tiene fuego.",
+            "visual": "Estufa con carita y olla encima."
+          },
+          {
+            "narration": "Bajo el vidrio hay una bobina de cobre con corriente que cambia de sentido miles de veces por segundo.",
+            "visual": "Bobina brillando bajo el vidrio."
+          },
+          {
+            "narration": "Eso crea un campo magnético que sube hasta la base de la olla.",
+            "visual": "Líneas de campo subiendo; mood energía."
+          },
+          {
+            "narration": "En el metal de la olla aparecen corrientes eléctricas en remolino, y el metal se calienta solo.",
+            "visual": "Remolinos rojos en la base; calor."
+          },
+          {
+            "narration": "El vidrio solo se entibia por el contacto con la olla caliente.",
+            "visual": "Mano cerca del vidrio tibio."
+          },
+          {
+            "narration": "Necesitas ollas magnéticas: si un imán se pega, sirven. Síguenos para más Factos Didácticos.",
+            "visual": "Imán pegándose; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-estufa-de-induccion"
+    },
+    {
+      "day": 14,
+      "date": "2026-11-22",
+      "time": "12:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funcionan los fuegos artificiales",
+      "category": "química",
+      "hook": "Cada color de los fuegos artificiales es un metal diferente.",
+      "title": "El secreto de los colores 🎆",
+      "ig_caption": "Cada color de los fuegos artificiales es un metal diferente. 🤯\n\nSales de metales, al calentarse, emiten luz de un color propio: estroncio rojo, bario verde, cobre azul.\n\n¿Cuál es tu color favorito en los fuegos? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #quimica #fuegosartificiales #ciencia #datoscuriosos",
+      "pinned_comment": "El azul es el más difícil de lograr 💙 ¿Sabías por qué?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#quimica",
+        "#fuegosartificiales",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funcionan los fuegos artificiales",
+        "title": "El secreto de los colores 🎆",
+        "description": "Cada color de los fuegos artificiales es un metal diferente. Sales de metales, al calentarse, emiten luz de un color propio: estroncio rojo, bario verde, cobre azul.\n\n#FactosDidacticos #quimica #fuegosartificiales #ciencia",
+        "tags": [
+          "cómo funcionan los fuegos artificiales",
+          "química",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Cada color de los fuegos artificiales sale de un metal diferente.",
+            "visual": "Cohete con carita listo para despegar."
+          },
+          {
+            "narration": "La pólvora en la base lanza el cohete, y una mecha retrasa la explosión hasta que está en el cielo.",
+            "visual": "Despegue con chispas y mecha."
+          },
+          {
+            "narration": "Arriba estallan bolitas llenas de sales de metales.",
+            "visual": "Explosión con bolitas de colores."
+          },
+          {
+            "narration": "El calor les da energía a los electrones de esos metales. Al calmarse, sueltan esa energía como luz.",
+            "visual": "Electrón saltando y volviendo con destello."
+          },
+          {
+            "narration": "Cada metal suelta un color: estroncio rojo, bario verde, cobre azul y sodio amarillo.",
+            "visual": "Tabla de colores con confeti."
+          },
+          {
+            "narration": "El azul es el más difícil, porque el calor excesivo lo arruina. Síguenos para más Factos Didácticos.",
+            "visual": "Chispa azul tímida; cierre."
+          }
+        ]
+      },
+      "id": "como-funcionan-los-fuegos-artificiales"
+    },
+    {
+      "day": 15,
+      "date": "2026-11-23",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el wifi",
+      "category": "tecnología",
+      "hook": "El wifi es luz que tus ojos no pueden ver.",
+      "title": "El wifi es luz invisible 📶",
+      "ig_caption": "El wifi es luz que tus ojos no pueden ver. 🤯\n\nEl router convierte datos en ondas de radio que cambian muy rápido; tu celular las capta y las vuelve unos y ceros.\n\n¿Dónde tienes el router? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #wifi #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "Las paredes y el agua absorben el wifi 💧 ¿Ya lo cambiaste de lugar?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#wifi",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el wifi",
+        "title": "El wifi es luz invisible 📶",
+        "description": "El wifi es luz que tus ojos no pueden ver. El router convierte datos en ondas de radio que cambian muy rápido; tu celular las capta y las vuelve unos y ceros.\n\n#FactosDidacticos #wifi #tecnologia #ciencia",
+        "tags": [
+          "cómo funciona el wifi",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "El wifi es un tipo de luz que tus ojos no pueden ver: ondas de radio.",
+            "visual": "Router con carita emitiendo ondas."
+          },
+          {
+            "narration": "El router recibe internet por cable y lo convierte en ondas que vibran miles de millones de veces por segundo.",
+            "visual": "Cable a router y ondas saliendo."
+          },
+          {
+            "narration": "Para mandar datos, cambia ligeramente la forma de la onda. Cada cambio significa unos y ceros.",
+            "visual": "Onda cambiando y bits saliendo."
+          },
+          {
+            "narration": "La antena de tu celular capta esas ondas y las traduce de vuelta en videos, mensajes y fotos.",
+            "visual": "Celular recibiendo; chispas."
+          },
+          {
+            "narration": "Las paredes gruesas, el metal y hasta el agua absorben parte de la señal.",
+            "visual": "Pared y pecera bloqueando ondas."
+          },
+          {
+            "narration": "Por eso conviene poner el router alto y al centro de la casa. Síguenos para más Factos Didácticos.",
+            "visual": "Router en lugar alto; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-wifi"
+    },
+    {
+      "day": 16,
+      "date": "2026-11-24",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la cámara del celular",
+      "category": "tecnología",
+      "hook": "Tu cámara solo ve en blanco y negro.",
+      "title": "Tu cámara no ve colores 📸",
+      "ig_caption": "Tu cámara solo ve en blanco y negro. 🤯\n\nEl sensor solo mide cuánta luz llega; un filtro de colores y el procesador reconstruyen la foto en color.\n\n¿Celular o cámara profesional? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #fotografia #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "¿Sabías que hay el doble de píxeles verdes que rojos o azules? 🟩",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#fotografia",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la cámara del celular",
+        "title": "Tu cámara no ve colores 📸",
+        "description": "Tu cámara solo ve en blanco y negro. El sensor solo mide cuánta luz llega; un filtro de colores y el procesador reconstruyen la foto en color.\n\n#FactosDidacticos #fotografia #tecnologia #ciencia",
+        "tags": [
+          "cómo funciona la cámara del celular",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "El sensor de tu cámara solo mide luz, no colores. Ve en blanco y negro.",
+            "visual": "Cámara con carita y lentes."
+          },
+          {
+            "narration": "La lente junta la luz y la enfoca sobre un sensor con millones de cuadritos diminutos.",
+            "visual": "Rayos de luz enfocándose en rejilla."
+          },
+          {
+            "narration": "Cada cuadrito cuenta cuánta luz le llega, pero no de qué color es.",
+            "visual": "Cuadritos encendiéndose en grises."
+          },
+          {
+            "narration": "Encima tiene un filtro de mosaico: rojo, verde y azul, con el doble de verdes porque el ojo los nota más.",
+            "visual": "Mosaico de colores sobre la rejilla."
+          },
+          {
+            "narration": "El procesador combina los vecinos para adivinar el color de cada punto, y une varias fotos en una.",
+            "visual": "Colores mezclándose con chispas."
+          },
+          {
+            "narration": "Tu foto es mitad óptica y mitad cálculo. Síguenos para más Factos Didácticos.",
+            "visual": "Foto final perfecta; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-camara-del-celular"
+    },
+    {
+      "day": 17,
+      "date": "2026-11-25",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el freno de los elevadores",
+      "category": "ingeniería",
+      "hook": "Si se rompe el cable, el elevador no cae.",
+      "title": "¿Y si se rompe el cable del elevador? 🛗",
+      "ig_caption": "Si se rompe el cable, el elevador no cae. 🤯\n\nLos elevadores cuelgan de varios cables y tienen un freno que se aferra a los rieles si la cabina va demasiado rápido.\n\n¿Te dan miedo los elevadores? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #ingenieria #elevador #ciencia #datoscuriosos",
+      "pinned_comment": "El freno de seguridad se inventó en 1852 🏙️ ¿Lo conocías?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#ingenieria",
+        "#elevador",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el freno de los elevadores",
+        "title": "¿Y si se rompe el cable del elevador? 🛗",
+        "description": "Si se rompe el cable, el elevador no cae. Los elevadores cuelgan de varios cables y tienen un freno que se aferra a los rieles si la cabina va demasiado rápido.\n\n#FactosDidacticos #ingenieria #elevador #ciencia",
+        "tags": [
+          "cómo funciona el freno de los elevadores",
+          "ingeniería",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Si se rompe el cable de un elevador, no se cae. Te explico por qué.",
+            "visual": "Elevador con carita nerviosa."
+          },
+          {
+            "narration": "Para empezar, no cuelga de un cable sino de varios, y cada uno podría sostenerlo solo.",
+            "visual": "Varios cables brillando."
+          },
+          {
+            "narration": "Del otro lado hay un contrapeso que equilibra la cabina y ayuda al motor.",
+            "visual": "Contrapeso bajando cuando la cabina sube."
+          },
+          {
+            "narration": "Además, un regulador mide la velocidad todo el tiempo.",
+            "visual": "Rueda giratoria vigilando."
+          },
+          {
+            "narration": "Si la cabina baja demasiado rápido, activa unas mordazas que se aferran a los rieles y la detienen.",
+            "visual": "Mordazas cerrándose con chispas."
+          },
+          {
+            "narration": "Ese freno se inventó en 1852 y cambió las ciudades. Síguenos para más Factos Didácticos.",
+            "visual": "Rascacielos creciendo; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-freno-de-los-elevadores"
+    },
+    {
+      "day": 18,
+      "date": "2026-11-26",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la batería de litio",
+      "category": "tecnología",
+      "hook": "Cargar tu celular es empujar átomos de un lado a otro.",
+      "title": "Qué pasa cuando cargas el celular 🔋",
+      "ig_caption": "Cargar tu celular es empujar átomos de un lado a otro. 🤯\n\nLos iones de litio viajan entre dos capas: al usar el celular van de un lado al otro y al cargarlo los empujas de regreso.\n\n¿A qué porcentaje cargas tu celular? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #bateria #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "Tip: entre 20 % y 80 % tu batería dura más años 🔋",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#bateria",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la batería de litio",
+        "title": "Qué pasa cuando cargas el celular 🔋",
+        "description": "Cargar tu celular es empujar átomos de un lado a otro. Los iones de litio viajan entre dos capas: al usar el celular van de un lado al otro y al cargarlo los empujas de regreso.\n\n#FactosDidacticos #bateria #tecnologia #ciencia",
+        "tags": [
+          "cómo funciona la batería de litio",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Cargar tu celular es empujar átomos de litio de un lado a otro. Literalmente.",
+            "visual": "Batería con carita."
+          },
+          {
+            "narration": "La batería tiene dos capas separadas por un líquido especial: grafito de un lado y óxido metálico del otro.",
+            "visual": "Corte de la batería: dos capas."
+          },
+          {
+            "narration": "Al usar el celular, los iones de litio cruzan el líquido, y sus electrones viajan por el circuito dándole energía.",
+            "visual": "Iones cruzando; electrones por cable."
+          },
+          {
+            "narration": "Al cargar, el cargador los empuja de regreso al grafito, donde quedan listos otra vez.",
+            "visual": "Iones regresando; mood energía."
+          },
+          {
+            "narration": "Con cada ciclo, algunas piezas se desgastan un poco, sobre todo con calor o al llenarla al cien.",
+            "visual": "Grietas pequeñas; termómetro."
+          },
+          {
+            "narration": "Por eso dura más entre veinte y ochenta por ciento. Síguenos para más Factos Didácticos.",
+            "visual": "Barra de carga 20-80; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-bateria-de-litio"
+    },
+    {
+      "day": 19,
+      "date": "2026-11-27",
+      "time": "20:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el protector solar",
+      "category": "salud",
+      "hook": "El protector solar es un escudo contra luz invisible.",
+      "title": "Lo que hace tu bloqueador ☀️",
+      "ig_caption": "El protector solar es un escudo contra luz invisible. 🤯\n\nSus filtros absorben los rayos ultravioleta antes de que dañen tu piel, y algunos también los dispersan.\n\n¿Te pones protector aunque esté nublado? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #cuidadodelapiel #salud #ciencia #datoscuriosos",
+      "pinned_comment": "El FPS 30 bloquea cerca del 97 % de los rayos UVB 😎 ¿Cuál usas?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#cuidadodelapiel",
+        "#salud",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el protector solar",
+        "title": "Lo que hace tu bloqueador ☀️",
+        "description": "El protector solar es un escudo contra luz invisible. Sus filtros absorben los rayos ultravioleta antes de que dañen tu piel, y algunos también los dispersan.\n\n#FactosDidacticos #cuidadodelapiel #salud #ciencia",
+        "tags": [
+          "cómo funciona el protector solar",
+          "salud",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu protector solar es un escudo contra una luz que no ves: la ultravioleta.",
+            "visual": "Sol con lentes y gota de protector con carita."
+          },
+          {
+            "narration": "Los rayos UVB te queman, y los UVA penetran más hondo y envejecen la piel.",
+            "visual": "Rayos de dos colores atravesando capas."
+          },
+          {
+            "narration": "Los filtros del protector absorben esa luz antes de que llegue a tus células.",
+            "visual": "Moléculas atrapando rayos; chispas."
+          },
+          {
+            "narration": "Luego sueltan esa energía como un poquito de calor, sin dañarte.",
+            "visual": "Calor suave saliendo."
+          },
+          {
+            "narration": "Los minerales, como el óxido de zinc, además dispersan parte de la luz.",
+            "visual": "Partículas blancas rebotando rayos."
+          },
+          {
+            "narration": "Con sudor y agua se va, así que hay que volver a ponerlo. Síguenos para más Factos Didácticos.",
+            "visual": "Reloj de dos horas; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-protector-solar"
+    },
+    {
+      "day": 20,
+      "date": "2026-11-28",
+      "time": "11:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funcionan los imanes",
+      "category": "física",
+      "hook": "Un imán es un ejército de electrones apuntando al mismo lado.",
+      "title": "El secreto de los imanes 🧲",
+      "ig_caption": "Un imán es un ejército de electrones apuntando al mismo lado. 🤯\n\nCada electrón se comporta como un imán diminuto; en un imán millones de ellos apuntan en la misma dirección.\n\n¿Cuántos imanes tienes en el refri? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #fisica #imanes #ciencia #datoscuriosos",
+      "pinned_comment": "Si calientas un imán lo suficiente, deja de serlo 🔥 ¿Lo sabías?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#fisica",
+        "#imanes",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funcionan los imanes",
+        "title": "El secreto de los imanes 🧲",
+        "description": "Un imán es un ejército de electrones apuntando al mismo lado. Cada electrón se comporta como un imán diminuto; en un imán millones de ellos apuntan en la misma dirección.\n\n#FactosDidacticos #fisica #imanes #ciencia",
+        "tags": [
+          "cómo funcionan los imanes",
+          "física",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Un imán es un ejército de diminutos imanes apuntando al mismo lado.",
+            "visual": "Imán con carita y soldaditos."
+          },
+          {
+            "narration": "Cada electrón se comporta como un imán microscópico.",
+            "visual": "Electrón con flechita girando."
+          },
+          {
+            "narration": "En casi todos los materiales apuntan en direcciones al azar, y se cancelan.",
+            "visual": "Flechas desordenadas; mood frío."
+          },
+          {
+            "narration": "En el hierro se agrupan en zonas, y en un imán esas zonas apuntan en la misma dirección.",
+            "visual": "Flechas alineándose; chispas."
+          },
+          {
+            "narration": "Sus fuerzas se suman y crean un campo que atrae al hierro o empuja a otro imán.",
+            "visual": "Líneas de campo y clip saltando."
+          },
+          {
+            "narration": "Si lo calientas mucho, se desordenan y deja de ser imán. Síguenos para más Factos Didácticos.",
+            "visual": "Imán derritiéndose triste; cierre."
+          }
+        ]
+      },
+      "id": "como-funcionan-los-imanes"
+    },
+    {
+      "day": 21,
+      "date": "2026-11-29",
+      "time": "12:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo se hace el café descafeinado",
+      "category": "cocina",
+      "hook": "Al café descafeinado se le quita la cafeína antes de tostarlo.",
+      "title": "¿Cómo le quitan la cafeína al café? ☕",
+      "ig_caption": "Al café descafeinado se le quita la cafeína antes de tostarlo. 🤯\n\nLos granos verdes se remojan y la cafeína se extrae con agua, solventes o CO₂, antes de tostarlos.\n\n¿Café normal o descafeinado? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #cafe #cienciaencasa #ciencia #datoscuriosos",
+      "pinned_comment": "El descafeinado todavía tiene un poquito de cafeína ☕ ¿Te sorprendió?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#cafe",
+        "#cienciaencasa",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo se hace el café descafeinado",
+        "title": "¿Cómo le quitan la cafeína al café? ☕",
+        "description": "Al café descafeinado se le quita la cafeína antes de tostarlo. Los granos verdes se remojan y la cafeína se extrae con agua, solventes o CO₂, antes de tostarlos.\n\n#FactosDidacticos #cafe #cienciaencasa #ciencia",
+        "tags": [
+          "cómo se hace el café descafeinado",
+          "cocina",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Al café descafeinado le quitan la cafeína antes de tostarlo, cuando el grano todavía es verde.",
+            "visual": "Grano verde con carita."
+          },
+          {
+            "narration": "Primero remojan los granos con agua o vapor para que se abran sus poros.",
+            "visual": "Granos en baño de vapor."
+          },
+          {
+            "narration": "Luego pasan un líquido que atrapa la cafeína: agua especial, un solvente o dióxido de carbono a presión.",
+            "visual": "Moléculas de cafeína saliendo atrapadas."
+          },
+          {
+            "narration": "El sabor se queda casi intacto, y la cafeína sale en un noventa y siete por ciento.",
+            "visual": "Barra 97 % y sabor protegido."
+          },
+          {
+            "narration": "Después se secan y se tuestan como cualquier café.",
+            "visual": "Tostador con chispas; mood calor."
+          },
+          {
+            "narration": "Ojo: todavía queda un poquito de cafeína. Síguenos para más Factos Didácticos.",
+            "visual": "Taza guiñando; cierre."
+          }
+        ]
+      },
+      "id": "como-se-hace-el-cafe-descafeinado"
+    },
+    {
+      "day": 22,
+      "date": "2026-11-30",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el centrifugado de la lavadora",
+      "category": "hogar",
+      "hook": "Tu lavadora seca la ropa girando más de mil veces por minuto.",
+      "title": "Cómo exprime la lavadora 🌀",
+      "ig_caption": "Tu lavadora seca la ropa girando más de mil veces por minuto. 🤯\n\nEl tambor gira tan rápido que la ropa se pega a la pared y el agua sale por los agujeros.\n\n¿Cada cuánto lavas tu ropa? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #hogar #fisica #ciencia #datoscuriosos",
+      "pinned_comment": "Es la misma física que en las atracciones que giran en la feria 🎡",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#hogar",
+        "#fisica",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el centrifugado de la lavadora",
+        "title": "Cómo exprime la lavadora 🌀",
+        "description": "Tu lavadora seca la ropa girando más de mil veces por minuto. El tambor gira tan rápido que la ropa se pega a la pared y el agua sale por los agujeros.\n\n#FactosDidacticos #hogar #fisica #ciencia",
+        "tags": [
+          "cómo funciona el centrifugado de la lavadora",
+          "hogar",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu lavadora exprime la ropa girando más de mil veces por minuto.",
+            "visual": "Lavadora con carita mareada."
+          },
+          {
+            "narration": "El tambor tiene cientos de agujeritos y está lleno de ropa empapada.",
+            "visual": "Tambor con agujeros y gotas."
+          },
+          {
+            "narration": "Al girar rápido, la ropa intenta seguir en línea recta, pero la pared del tambor la detiene.",
+            "visual": "Ropa pegada a la pared; flechas rectas."
+          },
+          {
+            "narration": "El agua también quiere seguir derecho, y como nada la detiene, sale disparada por los agujeros.",
+            "visual": "Gotas saliendo con partículas."
+          },
+          {
+            "narration": "Es la misma física que en las atracciones que giran en las ferias.",
+            "visual": "Rueda de feria con personas pegadas."
+          },
+          {
+            "narration": "Por eso la ropa sale casi seca. Síguenos para más Factos Didácticos.",
+            "visual": "Ropa feliz; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-centrifugado-de-la-lava"
+    },
+    {
+      "day": 23,
+      "date": "2026-12-01",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo se forma el arcoíris",
+      "category": "naturaleza",
+      "hook": "Cada persona ve un arcoíris diferente.",
+      "title": "Nadie ve el mismo arcoíris 🌈",
+      "ig_caption": "Cada persona ve un arcoíris diferente. 🤯\n\nLa luz del sol entra en cada gota, se desvía, se refleja y sale separada en colores; tu ojo recibe solo una parte.\n\n¿Has visto un arcoíris doble? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #arcoiris #naturaleza #ciencia #datoscuriosos",
+      "pinned_comment": "Para verlo, el sol tiene que estar a tu espalda ☀️🌧️",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#arcoiris",
+        "#naturaleza",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo se forma el arcoíris",
+        "title": "Nadie ve el mismo arcoíris 🌈",
+        "description": "Cada persona ve un arcoíris diferente. La luz del sol entra en cada gota, se desvía, se refleja y sale separada en colores; tu ojo recibe solo una parte.\n\n#FactosDidacticos #arcoiris #naturaleza #ciencia",
+        "tags": [
+          "cómo se forma el arcoíris",
+          "naturaleza",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Cada persona ve un arcoíris diferente, aunque estén juntas. Te explico por qué.",
+            "visual": "Dos personitas mirando arcoíris."
+          },
+          {
+            "narration": "La luz del sol parece blanca, pero mezcla todos los colores.",
+            "visual": "Rayo blanco con colores escondidos."
+          },
+          {
+            "narration": "Al entrar en una gota de lluvia, la luz se desvía, rebota dentro y vuelve a salir.",
+            "visual": "Gota gigante con rayo rebotando."
+          },
+          {
+            "narration": "Cada color se desvía un poquito distinto, así que salen separados en ángulos diferentes.",
+            "visual": "Abanico de colores saliendo."
+          },
+          {
+            "narration": "Tu ojo recibe el rojo de unas gotas y el violeta de otras. El arcoíris depende de dónde estás.",
+            "visual": "Gotas a distintas alturas enviando colores."
+          },
+          {
+            "narration": "Por eso solo lo ves con el sol a tu espalda. Síguenos para más Factos Didácticos.",
+            "visual": "Sol detrás, lluvia enfrente; cierre."
+          }
+        ]
+      },
+      "id": "como-se-forma-el-arcoiris"
+    },
+    {
+      "day": 24,
+      "date": "2026-12-02",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funcionan los paneles solares",
+      "category": "energía",
+      "hook": "Un panel solar convierte luz en electricidad sin mover ni una pieza.",
+      "title": "Cómo un panel convierte luz en luz ⚡",
+      "ig_caption": "Un panel solar convierte luz en electricidad sin mover ni una pieza. 🤯\n\nLa luz golpea el silicio y suelta electrones; un campo eléctrico interno los empuja y se forma corriente.\n\n¿Pondrías paneles en tu casa? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #energiasolar #energia #ciencia #datoscuriosos",
+      "pinned_comment": "Un panel común aprovecha cerca del 20 % de la luz ☀️ ¿Crees que es poco?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#energiasolar",
+        "#energia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funcionan los paneles solares",
+        "title": "Cómo un panel convierte luz en luz ⚡",
+        "description": "Un panel solar convierte luz en electricidad sin mover ni una pieza. La luz golpea el silicio y suelta electrones; un campo eléctrico interno los empuja y se forma corriente.\n\n#FactosDidacticos #energiasolar #energia #ciencia",
+        "tags": [
+          "cómo funcionan los paneles solares",
+          "energía",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Un panel solar convierte luz en electricidad sin mover ni una pieza.",
+            "visual": "Panel con carita bajo el sol."
+          },
+          {
+            "narration": "Está hecho de silicio en dos capas, preparadas para que entre ellas haya un campo eléctrico.",
+            "visual": "Dos capas de colores con campo."
+          },
+          {
+            "narration": "Cuando la luz golpea el silicio, arranca electrones de sus átomos.",
+            "visual": "Fotones chocando y electrones saltando."
+          },
+          {
+            "narration": "El campo eléctrico empuja esos electrones en una sola dirección, y eso es corriente.",
+            "visual": "Electrones fluyendo por el cable."
+          },
+          {
+            "narration": "Un inversor la convierte en la corriente que usan los aparatos de tu casa.",
+            "visual": "Caja inversora y foco encendiéndose."
+          },
+          {
+            "narration": "Un panel común aprovecha alrededor del veinte por ciento de la luz. Síguenos para más Factos Didácticos.",
+            "visual": "Barra 20 %; cierre."
+          }
+        ]
+      },
+      "id": "como-funcionan-los-paneles-solares"
+    },
+    {
+      "day": 25,
+      "date": "2026-12-03",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el control remoto",
+      "category": "tecnología",
+      "hook": "Tu control remoto lanza una luz que no puedes ver.",
+      "title": "Tu control lanza luz invisible 📺",
+      "ig_caption": "Tu control remoto lanza una luz que no puedes ver. 🤯\n\nUn LED infrarrojo parpadea en un código; la tele lo traduce. La cámara de muchos celulares sí puede verla.\n\nHaz la prueba: apunta el control a la cámara del celular. ¿Viste la luz? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #tecnologia #experimentos #ciencia #datoscuriosos",
+      "pinned_comment": "Pruébalo y cuéntanos qué cámara la detectó 📸👇",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#tecnologia",
+        "#experimentos",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el control remoto",
+        "title": "Tu control lanza luz invisible 📺",
+        "description": "Tu control remoto lanza una luz que no puedes ver. Un LED infrarrojo parpadea en un código; la tele lo traduce. La cámara de muchos celulares sí puede verla.\n\n#FactosDidacticos #tecnologia #experimentos #ciencia",
+        "tags": [
+          "cómo funciona el control remoto",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu control remoto dispara una luz que tus ojos no pueden ver.",
+            "visual": "Control con carita apuntando."
+          },
+          {
+            "narration": "En la punta tiene un pequeño foco LED infrarrojo.",
+            "visual": "LED brillando en rojo oscuro."
+          },
+          {
+            "narration": "Cada botón lo hace parpadear en un código distinto, muy rápido, como un mensaje en morse.",
+            "visual": "Pulsos de luz formando unos y ceros."
+          },
+          {
+            "narration": "La televisión tiene un sensor que capta esos parpadeos y los traduce: subir volumen, cambiar canal.",
+            "visual": "Tele recibiendo; chispas."
+          },
+          {
+            "narration": "La cámara de muchos celulares sí detecta esa luz. Apúntalo y presiona un botón.",
+            "visual": "Celular mostrando destello violeta."
+          },
+          {
+            "narration": "Pruébalo y nos cuentas. Síguenos para más Factos Didácticos.",
+            "visual": "Personita sorprendida; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-control-remoto"
+    },
+    {
+      "day": 26,
+      "date": "2026-12-04",
+      "time": "20:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el termo",
+      "category": "hogar",
+      "hook": "El termo mantiene tu café caliente gracias a la nada.",
+      "title": "El secreto del termo es… nada ☕",
+      "ig_caption": "El termo mantiene tu café caliente gracias a la nada. 🤯\n\nEntre sus dos paredes hay vacío: sin aire, el calor casi no puede escapar; además, las paredes reflejan el calor.\n\n¿Café caliente o agua fría en tu termo? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #hogar #fisica #ciencia #datoscuriosos",
+      "pinned_comment": "Funciona igual para mantener lo frío frío 🧊",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#hogar",
+        "#fisica",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el termo",
+        "title": "El secreto del termo es… nada ☕",
+        "description": "El termo mantiene tu café caliente gracias a la nada. Entre sus dos paredes hay vacío: sin aire, el calor casi no puede escapar; además, las paredes reflejan el calor.\n\n#FactosDidacticos #hogar #fisica #ciencia",
+        "tags": [
+          "cómo funciona el termo",
+          "hogar",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "El termo mantiene tu café caliente gracias a la nada. Literal: al vacío.",
+            "visual": "Termo con carita y taza humeante."
+          },
+          {
+            "narration": "El calor escapa de tres formas: por contacto, por el aire que circula y como radiación.",
+            "visual": "Tres flechas de calor saliendo."
+          },
+          {
+            "narration": "El termo tiene dos paredes, y entre ellas sacaron casi todo el aire.",
+            "visual": "Corte con hueco vacío; mood frío."
+          },
+          {
+            "narration": "Sin aire, el calor no tiene por dónde viajar ni cómo circular.",
+            "visual": "Moléculas de calor sin poder cruzar."
+          },
+          {
+            "narration": "Además, las paredes son brillantes y reflejan el calor de regreso.",
+            "visual": "Rayos rebotando en la pared."
+          },
+          {
+            "narration": "Y funciona igual para mantener frío lo frío. Síguenos para más Factos Didácticos.",
+            "visual": "Hielos felices; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-termo"
+    },
+    {
+      "day": 27,
+      "date": "2026-12-05",
+      "time": "11:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la alerta sísmica",
+      "category": "México",
+      "hook": "La alerta sísmica le gana la carrera al temblor.",
+      "title": "Cómo la alerta le gana al sismo 🚨",
+      "ig_caption": "La alerta sísmica le gana la carrera al temblor. 🤯\n\nSensores cerca del epicentro detectan el sismo y mandan la señal por radio, que viaja muchísimo más rápido que las ondas sísmicas.\n\n¿Dónde estabas en el último simulacro? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #alertasismica #mexico #ciencia #datoscuriosos",
+      "pinned_comment": "Si el sismo es muy cerca, la alerta puede no llegar a tiempo ⚠️ ¿Tienes tu plan?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#alertasismica",
+        "#mexico",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la alerta sísmica",
+        "title": "Cómo la alerta le gana al sismo 🚨",
+        "description": "La alerta sísmica le gana la carrera al temblor. Sensores cerca del epicentro detectan el sismo y mandan la señal por radio, que viaja muchísimo más rápido que las ondas sísmicas.\n\n#FactosDidacticos #alertasismica #mexico #ciencia",
+        "tags": [
+          "cómo funciona la alerta sísmica",
+          "México",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "La alerta sísmica le gana la carrera al temblor. Y lo logra con física.",
+            "visual": "Sirena con carita y tenis."
+          },
+          {
+            "narration": "Hay sensores repartidos por la costa del Pacífico, donde ocurren muchos sismos fuertes.",
+            "visual": "Mapa con sensores brillando."
+          },
+          {
+            "narration": "Cuando uno detecta el inicio de un sismo fuerte, avisa al instante.",
+            "visual": "Sensor temblando con chispas."
+          },
+          {
+            "narration": "Las ondas del sismo viajan a unos kilómetros por segundo, pero la señal de radio viaja casi a la velocidad de la luz.",
+            "visual": "Carrera: onda café vs rayo de radio."
+          },
+          {
+            "narration": "Así, la Ciudad de México puede recibir la alerta decenas de segundos antes de sentir el temblor.",
+            "visual": "Ciudad con cronómetro; mood energía."
+          },
+          {
+            "narration": "Si el sismo es muy cercano, el aviso llega justo o tarde. Síguenos para más Factos Didácticos.",
+            "visual": "Familia en zona segura; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-alerta-sismica"
+    },
+    {
+      "day": 28,
+      "date": "2026-12-06",
+      "time": "12:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona el velcro",
+      "category": "inventos",
+      "hook": "El velcro se inventó gracias a un perro lleno de cadillos.",
+      "title": "El velcro lo inventó un perro 🐕",
+      "ig_caption": "El velcro se inventó gracias a un perro lleno de cadillos. 🤯\n\nUn ingeniero vio cómo los cadillos se pegaban al pelo de su perro y copió sus ganchos diminutos.\n\n¿Qué otro invento copiado de la naturaleza conoces? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #inventos #ciencia #ciencia #datoscuriosos",
+      "pinned_comment": "Se llama biomimética 🌿 ¿Quieres más inventos inspirados en la naturaleza?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#inventos",
+        "#ciencia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona el velcro",
+        "title": "El velcro lo inventó un perro 🐕",
+        "description": "El velcro se inventó gracias a un perro lleno de cadillos. Un ingeniero vio cómo los cadillos se pegaban al pelo de su perro y copió sus ganchos diminutos.\n\n#FactosDidacticos #inventos #ciencia #ciencia",
+        "tags": [
+          "cómo funciona el velcro",
+          "inventos",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "El velcro se inventó gracias a un perro lleno de cadillos.",
+            "visual": "Perro con carita y bolitas pegadas."
+          },
+          {
+            "narration": "En 1941, un ingeniero suizo vio al microscopio cómo esas semillas se pegaban al pelo.",
+            "visual": "Microscopio y semilla gigante."
+          },
+          {
+            "narration": "Descubrió miles de ganchitos que se atoraban en cualquier bucle.",
+            "visual": "Ganchos atrapando pelos; chispas."
+          },
+          {
+            "narration": "Así creó dos cintas: una con ganchos de plástico y otra con bucles suaves.",
+            "visual": "Dos cintas con carita."
+          },
+          {
+            "narration": "Cada gancho aguanta poco, pero miles juntos sostienen muchísimo.",
+            "visual": "Miles de ganchos levantando peso."
+          },
+          {
+            "narration": "Al despegarlo, el ruido son los ganchos soltándose. Síguenos para más Factos Didácticos.",
+            "visual": "Ondas de sonido; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-el-velcro"
+    },
+    {
+      "day": 29,
+      "date": "2026-12-07",
+      "time": "19:30",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo se forman los rayos",
+      "category": "naturaleza",
+      "hook": "Un rayo es cinco veces más caliente que la superficie del Sol.",
+      "title": "Un rayo es más caliente que el Sol ⚡",
+      "ig_caption": "Un rayo es cinco veces más caliente que la superficie del Sol. 🤯\n\nChoques de hielo en las nubes separan cargas eléctricas; cuando la diferencia es enorme, se descarga en un rayo.\n\n¿Cuentas los segundos entre el rayo y el trueno? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #rayos #naturaleza #ciencia #datoscuriosos",
+      "pinned_comment": "Truco: cada 3 segundos entre el rayo y el trueno ≈ 1 km de distancia ⛈️",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#rayos",
+        "#naturaleza",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo se forman los rayos",
+        "title": "Un rayo es más caliente que el Sol ⚡",
+        "description": "Un rayo es cinco veces más caliente que la superficie del Sol. Choques de hielo en las nubes separan cargas eléctricas; cuando la diferencia es enorme, se descarga en un rayo.\n\n#FactosDidacticos #rayos #naturaleza #ciencia",
+        "tags": [
+          "cómo se forman los rayos",
+          "naturaleza",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Un rayo calienta el aire a unos treinta mil grados: cinco veces más que la superficie del Sol.",
+            "visual": "Rayo con carita y termómetro gigante."
+          },
+          {
+            "narration": "Dentro de las nubes de tormenta, cristales de hielo y granizo chocan sin parar.",
+            "visual": "Hielos chocando con chispas; mood frío."
+          },
+          {
+            "narration": "Esos choques separan las cargas: arriba quedan las positivas y abajo las negativas.",
+            "visual": "Signos más arriba y menos abajo."
+          },
+          {
+            "narration": "Cuando la diferencia es enorme, una chispa baja en zigzag y otra sube desde el suelo.",
+            "visual": "Líderes en zigzag acercándose."
+          },
+          {
+            "narration": "Al tocarse, una corriente gigante cruza en un instante y el aire explota: eso es el trueno.",
+            "visual": "Destello y onda expansiva; mood energía."
+          },
+          {
+            "narration": "Cada tres segundos entre la luz y el trueno es un kilómetro. Síguenos para más Factos Didácticos.",
+            "visual": "Cronómetro contando; cierre."
+          }
+        ]
+      },
+      "id": "como-se-forman-los-rayos"
+    },
+    {
+      "day": 30,
+      "date": "2026-12-08",
+      "time": "13:00",
+      "tz": "America/Mexico_City",
+      "topic": "Cómo funciona la fibra óptica",
+      "category": "tecnología",
+      "hook": "Tu internet viaja como luz atrapada en un hilo de vidrio.",
+      "title": "Tu internet viaja como luz 💡",
+      "ig_caption": "Tu internet viaja como luz atrapada en un hilo de vidrio. 🤯\n\nPulsos de luz codifican los datos y rebotan dentro de un hilo de vidrio más delgado que un cabello, sin poder escapar.\n\n¿Tienes fibra en casa? 👇\n\n💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n#FactosDidacticos #internet #tecnologia #ciencia #datoscuriosos",
+      "pinned_comment": "Hay cables de fibra cruzando el fondo del océano 🌊 ¿Lo sabías?",
+      "hashtags": [
+        "#FactosDidacticos",
+        "#internet",
+        "#tecnologia",
+        "#ciencia",
+        "#datoscuriosos"
+      ],
+      "status": "pendiente",
+      "video_id": null,
+      "notes": "",
+      "storyboard": {
+        "topic": "Cómo funciona la fibra óptica",
+        "title": "Tu internet viaja como luz 💡",
+        "description": "Tu internet viaja como luz atrapada en un hilo de vidrio. Pulsos de luz codifican los datos y rebotan dentro de un hilo de vidrio más delgado que un cabello, sin poder escapar.\n\n#FactosDidacticos #internet #tecnologia #ciencia",
+        "tags": [
+          "cómo funciona la fibra óptica",
+          "tecnología",
+          "ciencia",
+          "como funciona",
+          "datos curiosos",
+          "shorts"
+        ],
+        "segments": [
+          {
+            "narration": "Tu internet viaja como luz atrapada dentro de un hilo de vidrio.",
+            "visual": "Hilo brillante con carita."
+          },
+          {
+            "narration": "Cada fibra es más delgada que un cabello, y por ella viajan pulsos de luz.",
+            "visual": "Comparación cabello y fibra."
+          },
+          {
+            "narration": "Luz encendida es un uno; apagada, un cero. Millones de pulsos por segundo.",
+            "visual": "Pulsos de luz y bits."
+          },
+          {
+            "narration": "La luz rebota en las paredes del vidrio sin poder escapar, por un efecto llamado reflexión total interna.",
+            "visual": "Rayo rebotando en zigzag; chispas."
+          },
+          {
+            "narration": "Así recorre kilómetros, y hay cables que cruzan el fondo del océano entre continentes.",
+            "visual": "Mapa con cable submarino; mood frío."
+          },
+          {
+            "narration": "Por eso la fibra es tan rápida y estable. Síguenos para más Factos Didácticos.",
+            "visual": "Router feliz; cierre."
+          }
+        ]
+      },
+      "id": "como-funciona-la-fibra-optica"
+    }
+  ]
+}

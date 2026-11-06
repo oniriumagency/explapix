@@ -117,3 +117,21 @@ dialog .row { justify-content: flex-end; margin-top: 1rem; }
   h1 { font-size: 1.4rem; }
   .brand { font-size: 1.25rem; }
 }
+
+.switch { display: flex; gap: .5rem; align-items: center; font-weight: 700; cursor: pointer; }
+.switch input { width: 1.3rem; height: 1.3rem; margin: 0; accent-color: var(--mint); }
+.cal .head { align-items: flex-start; }
+.cal .day { font-family: Fredoka; color: var(--sun); font-size: 1.1rem; min-width: 7.5rem; }
+.cal .day small { display: block; color: var(--muted); font-family: Nunito; font-size: .8rem; }
+.cal .t { flex: 1; min-width: 200px; }
+.cal .t b { display: block; }
+.cal .ctrl { display: flex; gap: .3rem; flex-wrap: wrap; align-items: center; }
+.cal .ctrl button { padding: .3rem .7rem; font-size: .9rem; }
+.cal .ctrl select { width: auto; margin: 0; padding: .3rem .5rem; }
+.cal details { margin-top: .4rem; }
+.cal .seg { padding: .4rem 0; }
+.st-pendiente { background: var(--muted); } .st-manual { background: var(--violet); color: #fff; }
+.st-en_cola { background: var(--cyan); } .st-generado { background: var(--sun); }
+.st-publicado { background: #FF3B3B; color: #fff; } .st-omitido { background: var(--line); color: var(--ink); }
+.ig { background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF); color: #fff; box-shadow: 0 4px 0 #6A1F5C; }
+code { background: #070818; padding: .1rem .35rem; border-radius: 6px; }

@@ -33,6 +33,13 @@ def client(tmp_path, monkeypatch):
     monkeypatch.setenv("EXPLAPIX_SECRETS_DIR", str(sec))
     monkeypatch.setenv("EXPLAPIX_ENV_FILE", str(tmp_path / ".env"))
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setenv("EXPLAPIX_LLM", "api")
+    cal = {"version": 1, "auto_generate": False, "items": [
+        {"day": i + 1, "date": f"2026-11-0{i + 1}", "time": "13:00", "topic": f"Tema {i}", "hook": "h",
+         "title": f"Título {i}", "ig_caption": "c", "pinned_comment": "p", "status": "pendiente",
+         "video_id": None, "storyboard": {"topic": f"Tema {i}", "segments": []}} for i in range(3)]}
+    (tmp_path / "cal.json").write_text(json.dumps(cal))
+    monkeypatch.setenv("EXPLAPIX_CALENDAR", str(tmp_path / "cal.json"))
     import web.app as appmod
     appmod = importlib.reload(appmod)
     c = TestClient(appmod.app)  # sin "with": no arranca el worker de la cola
@@ -117,3 +124,22 @@ def test_comments_flow(client):
 def test_delete_moves_to_trash(client):
     assert client.delete(f"/api/videos/{VID}").status_code == 200
     assert (client.out / "_papelera" / VID).exists()
+
+
+def test_llm_engine_claude_code_needs_no_key(client, monkeypatch):
+    monkeypatch.setenv("EXPLAPIX_LLM", "claude-code")
+    st = client.get("/api/status").json()
+    assert st["llm"] == "claude-code" and st["anthropic_key"] is False
+
+
+def test_calendar_edit_reorder(client):
+    cal = client.get("/api/calendar").json()
+    ids = [it["id"] for it in cal["items"]]
+    assert ids == ["tema-0", "tema-1", "tema-2"]
+    r = client.put("/api/calendar/tema-1", json={"title": "Nuevo título", "status": "aprobado"})
+    assert r.json()["title"] == "Nuevo título"
+    assert client.put("/api/calendar/tema-1", json={"status": "inventado"}).status_code == 422
+    r = client.post("/api/calendar/reorder", json={"order": ["tema-2", "tema-0", "tema-1"]}).json()
+    assert [(i["id"], i["day"], i["date"]) for i in r["items"]][0] == ("tema-2", 1, "2026-11-01")
+    assert client.post("/api/calendar/reorder", json={"order": ["tema-2"]}).status_code == 422
+    assert client.put("/api/calendar/settings", json={"auto_generate": True}).json()["auto_generate"]

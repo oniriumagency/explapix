@@ -5,6 +5,7 @@ const STATUS = {
   generado: "Por revisar", aprobado: "Aprobado", rechazado: "Rechazado", error: "Error", incompleto: "Incompleto",
   subido_privado: "YouTube · privado", no_listado: "YouTube · no listado", publico: "YouTube · público",
   queued: "En cola", running: "Generando", done: "Listo", cancelled: "Cancelado",
+  pendiente: "Pendiente", manual: "Escena a mano", en_cola: "En cola", omitido: "Omitido", publicado: "Publicado",
 };
 const ENGINES = { chatterbox: "Chatterbox (natural)", kokoro: "Kokoro (rápida)", piper: "Piper (robótica)" };
 const PRIV = { private: "Privado", unlisted: "No listado", public: "Público" };
@@ -45,7 +46,7 @@ function show(tab, push = true) {
   document.querySelectorAll(".tab").forEach((s) => s.classList.toggle("on", s.id === tab));
   document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === tab || (tab === "detalle" && b.dataset.tab === "biblioteca")));
   if (push && location.hash !== "#" + tab && tab !== "detalle") history.replaceState(null, "", "#" + tab);
-  ({ biblioteca: loadLibrary, cola: loadJobs, comentarios: loadComments, voces: loadVoices, sistema: loadSystem, crear: loadCreate }[tab] || (() => {}))();
+  ({ calendario: loadCalendar, biblioteca: loadLibrary, cola: loadJobs, comentarios: loadComments, voces: loadVoices, sistema: loadSystem, crear: loadCreate }[tab] || (() => {}))();
 }
 document.querySelectorAll("#tabs button").forEach((b) => (b.onclick = () => show(b.dataset.tab)));
 window.addEventListener("hashchange", () => route());
@@ -79,7 +80,13 @@ async function openVideo(id) {
   const v = await act(() => api("/api/videos/" + encodeURIComponent(id)));
   if (!v) return show("biblioteca");
   show("detalle", false);
-  const yt = v.youtube_id ? `<a href="https://youtube.com/shorts/${esc(v.youtube_id)}" target="_blank" rel="noopener">Ver en YouTube ↗</a>` : "";
+  const yt = (v.youtube_id ? `<a href="https://youtube.com/shorts/${esc(v.youtube_id)}" target="_blank" rel="noopener">YouTube ↗</a> ` : "")
+    + (v.instagram_permalink ? `<a href="${esc(v.instagram_permalink)}" target="_blank" rel="noopener">Instagram ↗</a>` : "");
+  const st = v.stats || {}, sy = st.youtube || {}, si = st.instagram || {};
+  const statsHtml = (st.youtube || st.instagram) ? `<div class="tiles" style="margin:.6rem 0">
+      ${st.youtube ? `<div class="tile"><div class="k">YouTube</div><div class="v">${(sy.views ?? 0).toLocaleString("es")} vistas</div><small>${sy.avg_view_pct != null ? `${sy.avg_view_pct}% visto · ${sy.avg_view_s}s promedio · ` : ""}${sy.likes ?? 0} ❤ · ${sy.comments ?? 0} 💬</small></div>` : ""}
+      ${st.instagram ? `<div class="tile"><div class="k">Instagram</div><div class="v">${(si.views ?? 0).toLocaleString("es")} reproducciones</div><small>alcance ${si.reach ?? "—"} · ${si.saved ?? 0} guardados · ${si.shares ?? 0} compartidos</small></div>` : ""}
+    </div><small class="hint">Actualizado ${fmtDate(st.updated)}</small>` : "";
   const locked = !!v.youtube_id;
   const ready = v.has_video;
   $("#detalle").innerHTML = `
@@ -91,11 +98,14 @@ async function openVideo(id) {
           ${ready && !locked ? `<button class="ok" id="bApprove">Aprobar</button><button class="danger" id="bReject">Rechazar…</button>` : ""}
           <button class="ghost" id="bRegen">Regenerar…</button>
           ${ready && !locked ? `<button class="yt" id="bUpload">Subir a YouTube…</button>` : ""}
+          ${ready && !v.instagram_id ? `<button class="ig" id="bIg">Subir a Instagram…</button>` : ""}
           <button class="ghost" id="bDelete">Mover a papelera</button>
         </div>
       </div>
       <div>
         <div class="bar" style="margin-bottom:.4rem">${pill(v.status)} <small>${fmtDate(v.created)} · ${fmtDur(v.duration)} · voz ${esc(v.engine)}</small> ${yt}</div>
+        ${v.scheduled ? `<p class="hint">📅 Programado en el calendario: ${esc(v.scheduled)}</p>` : ""}
+        ${statsHtml}
         ${v.review?.note ? `<p class="warn">Nota de revisión: ${esc(v.review.note)}</p>` : ""}
         ${v.review?.replaced_by ? `<p class="hint">Regenerado como <a href="#v/${esc(v.review.replaced_by)}">${esc(v.review.replaced_by)}</a></p>` : ""}
         ${v.replaces ? `<p class="hint">Versión nueva de <a href="#v/${esc(v.replaces)}">${esc(v.replaces)}</a></p>` : ""}
@@ -103,7 +113,9 @@ async function openVideo(id) {
           <label>Título <input id="mTitle" maxlength="100" value="${esc(v.title)}" ${locked || !ready ? "disabled" : ""}></label>
           <label>Descripción <textarea id="mDesc" rows="5" ${locked || !ready ? "disabled" : ""}>${esc(v.description)}</textarea></label>
           <label>Tags <small>(separados por coma)</small><input id="mTags" value="${esc((v.tags || []).join(", "))}" ${locked || !ready ? "disabled" : ""}></label>
-          ${locked || !ready ? "" : `<button class="primary" id="bSaveMeta">Guardar cambios</button>`}
+          <label>Caption de Instagram <textarea id="mIg" rows="6" ${v.instagram_id || !ready ? "disabled" : ""}>${esc(v.ig_caption || "")}</textarea></label>
+          <label>Comentario fijado <small>(publícalo y fíjalo a mano: las APIs no permiten fijar)</small><input id="mPin" value="${esc(v.pinned_comment || "")}" ${!ready ? "disabled" : ""}></label>
+          ${!ready ? "" : `<button class="primary" id="bSaveMeta">Guardar cambios</button>`}
         </div>
         <h2>Guion</h2>
         <div class="card">${(v.segments || []).map((s, i) => `
@@ -140,17 +152,85 @@ async function openVideo(id) {
       <label><input type="checkbox" name="sure" required style="width:auto"> Sí, quiero subir este video</label>
       <p class="hint">Gasta ~1600 unidades de cuota (unas 6 subidas al día).</p>`, "Subir", "yt");
     if (!f) return;
-    await act(() => api(`/api/videos/${id}/meta`, { method: "PUT", body: { title: $("#mTitle").value, description: $("#mDesc").value, tags: $("#mTags").value } }));
+    await act(() => api(`/api/videos/${id}/meta`, { method: "PUT", body: metaBody() }));
     await act(() => api(`/api/videos/${id}/upload`, { method: "POST", body: { privacy: f.get("privacy"), confirm: true } }), "Subida en cola ✓");
     refreshRunning();
   });
-  $("#bSaveMeta") && ($("#bSaveMeta").onclick = () => act(() => api(`/api/videos/${id}/meta`, { method: "PUT", body: { title: $("#mTitle").value, description: $("#mDesc").value, tags: $("#mTags").value } }), "Guardado ✓"));
+  const metaBody = () => ({ title: $("#mTitle").value, description: $("#mDesc").value, tags: $("#mTags").value, ig_caption: $("#mIg").value, pinned_comment: $("#mPin").value });
+  $("#bSaveMeta") && ($("#bSaveMeta").onclick = () => act(() => api(`/api/videos/${id}/meta`, { method: "PUT", body: metaBody() }), "Guardado ✓"));
+  $("#bIg") && ($("#bIg").onclick = async () => {
+    const f = await dialog("Subir a Instagram", `
+      <p>Se publicará como <b>Reel</b> en tu cuenta, con el caption de abajo. Instagram no tiene modo privado: <b>será público</b>.</p>
+      <pre style="max-height:160px">${esc($("#mIg").value)}</pre>
+      <label><input type="checkbox" name="sure" required style="width:auto"> Sí, publicar este Reel</label>
+      <p class="hint">Se abre un enlace público temporal (Tailscale Funnel) solo mientras Meta descarga el video.</p>`, "Publicar", "ig");
+    if (!f) return;
+    await act(() => api(`/api/videos/${id}/meta`, { method: "PUT", body: metaBody() }));
+    await act(() => api(`/api/videos/${id}/instagram`, { method: "POST", body: { confirm: true } }), "Publicación en cola ✓");
+    refreshRunning();
+  });
   $("#bDelete").onclick = async () => {
     if (!(await dialog("Mover a papelera", "<p>El video se moverá a out/_papelera (no se borra de YouTube si ya estaba subido).</p>", "Mover", "danger"))) return;
     await act(() => api(`/api/videos/${id}`, { method: "DELETE" }), "Movido a papelera");
     location.hash = "biblioteca";
   };
 }
+
+// ---------------- calendario
+const CAL_ST = ["pendiente", "manual", "en_cola", "generado", "aprobado", "publicado", "error", "omitido"];
+let cal = null;
+async function loadCalendar() {
+  cal = await act(() => api("/api/calendar"));
+  if (!cal) return;
+  $("#calAuto").checked = !!cal.auto_generate;
+  const n = (st) => cal.items.filter((i) => i.status === st).length;
+  $("#calInfo").textContent = `${n("generado") + n("aprobado") + n("publicado")} listos · ${n("pendiente")} pendientes · ${n("en_cola")} en cola. Horas en hora de CDMX. Las flechas cambian el orden (las fechas se quedan).`;
+  $("#cal").innerHTML = cal.items.map((it, k) => `
+    <div class="item cal" data-id="${esc(it.id)}">
+      <div class="head">
+        <div class="day">Día ${it.day}<small>${new Date(it.date + "T12:00").toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short" })} · ${esc(it.time)}</small></div>
+        <div class="t"><b>${esc(it.title)}</b><small>🎣 ${esc(it.hook)}</small></div>
+        <div class="ctrl">
+          <span class="pill st-${esc(it.status)}">${esc(STATUS[it.status] || it.status)}</span>
+          <button class="ghost" data-up ${k === 0 ? "disabled" : ""} title="Subir">↑</button>
+          <button class="ghost" data-down ${k === cal.items.length - 1 ? "disabled" : ""} title="Bajar">↓</button>
+          ${it.video ? `<a class="pill st-done" href="#v/${esc(it.video.id)}">Ver video →</a>` : ""}
+          ${["pendiente", "error", "manual"].includes(it.status) ? `<button class="primary" data-gen>${it.has_scene ? "Generar" : "Generar con IA"}</button>` : ""}
+        </div>
+      </div>
+      <details><summary>Editar textos y guion</summary>
+        <div class="form" style="margin-top:.5rem">
+          <div class="row"><label>Tema <input data-f="topic" value="${esc(it.topic)}"></label><label style="flex:0 1 120px">Hora <input data-f="time" value="${esc(it.time)}"></label>
+            <label style="flex:0 1 160px">Estado <select data-f="status">${CAL_ST.map((x) => `<option value="${x}" ${x === it.status ? "selected" : ""}>${esc(STATUS[x] || x)}</option>`).join("")}</select></label></div>
+          <label>Gancho (primer 1,5 s) <input data-f="hook" value="${esc(it.hook)}"></label>
+          <label>Título YouTube Shorts <small>(&lt; 60)</small><input data-f="title" maxlength="100" value="${esc(it.title)}"></label>
+          <label>Caption de Instagram <textarea data-f="ig_caption" rows="7">${esc(it.ig_caption)}</textarea></label>
+          <label>Comentario fijado <input data-f="pinned_comment" value="${esc(it.pinned_comment)}"></label>
+          <label>Notas <input data-f="notes" value="${esc(it.notes || "")}"></label>
+          <button class="primary" data-save>Guardar</button>
+          <h3 style="margin-top:1rem">Guion</h3>
+          ${(it.storyboard?.segments || []).map((sg, i) => `<div class="seg"><div class="n">${i + 1}</div><div><p>${esc(sg.narration)}</p><small>🎬 ${esc(sg.visual)}</small></div></div>`).join("")}
+        </div>
+      </details>
+    </div>`).join("");
+  document.querySelectorAll("#cal .item").forEach((el, k) => {
+    const id = el.dataset.id;
+    const move = async (d) => {
+      const order = cal.items.map((i) => i.id); const j = k + d;
+      [order[k], order[j]] = [order[j], order[k]];
+      await act(() => api("/api/calendar/reorder", { method: "POST", body: { order } }));
+      loadCalendar();
+    };
+    $("[data-up]", el).onclick = () => move(-1);
+    $("[data-down]", el).onclick = () => move(1);
+    $("[data-gen]", el) && ($("[data-gen]", el).onclick = () => act(() => api(`/api/calendar/${id}/generate`, { method: "POST" }), "En cola ✓").then(() => { loadCalendar(); refreshRunning(); }));
+    $("[data-save]", el).onclick = () => {
+      const body = {}; el.querySelectorAll("[data-f]").forEach((f) => (body[f.dataset.f] = f.value));
+      act(() => api(`/api/calendar/${id}`, { method: "PUT", body }), "Guardado ✓").then(loadCalendar);
+    };
+  });
+}
+$("#calAuto").onchange = (e) => act(() => api("/api/calendar/settings", { method: "PUT", body: { auto_generate: e.target.checked } }), e.target.checked ? "Generación automática activada" : "Generación automática pausada");
 
 // ---------------- nuevo
 let sysTts = "chatterbox";
@@ -162,8 +242,8 @@ async function loadCreate() {
   if (!s) return;
   sysTts = s.tts;
   engineOptions($("#engine"), s.tts);
-  $("#nokey").hidden = s.anthropic_key;
-  $("#btnCreate").disabled = !s.anthropic_key;
+  $("#nokey").hidden = s.llm_ready;
+  $("#btnCreate").disabled = !s.llm_ready;
 }
 $("#btnCreate").onclick = async () => {
   const r = await act(() => api("/api/jobs", { method: "POST", body: { kind: "video", topics: $("#topics").value, notes: $("#notes").value, engine: $("#engine").value, quality: $("#quality").value } }));
@@ -300,17 +380,31 @@ $("#btnRefReset").onclick = () => act(() => api("/api/voices/ref/reset", { metho
 async function loadSystem() {
   const s = await act(() => api("/api/status"));
   if (!s) return;
+  const ig = await api("/api/instagram").catch(() => ({}));
+  $("#igState").innerHTML = ig.connected ? `<span class="yes">✓ Conectado como @${esc(ig.username)}</span> · token hasta ${new Date(ig.expires_at * 1000).toLocaleDateString("es-MX")} (se renueva solo)` : (ig.app ? `<span class="no">App guardada, falta autorizar</span>` : `<span class="no">Sin configurar</span>`);
+  $("#igRedirect").value = ig.redirect_uri || "https://localhost/";
+  const stt = await api("/api/stats").catch(() => ({ videos: [], by_category: [] }));
+  $("#statsBox").innerHTML = stt.videos.length ? `
+    <h3>Por categoría</h3><div class="list">${stt.by_category.map((c) => `<div class="item"><div class="head"><b>${esc(c.category)}</b><small>${c.videos} video(s) · ${c.avg_views.toLocaleString("es")} vistas prom.${c.avg_pct != null ? ` · ${c.avg_pct}% visto` : ""}</small></div></div>`).join("")}</div>
+    <h3>Mejores videos</h3><div class="list">${stt.videos.slice(0, 8).map((r) => `<div class="item"><div class="head"><a href="#v/${esc(r.id)}">${esc(r.title)}</a><small>YT ${r.yt_views ?? "—"}${r.yt_pct != null ? ` (${r.yt_pct}% visto)` : ""} · IG ${r.ig_views ?? "—"} · 💾 ${r.ig_saved ?? "—"}</small></div></div>`).join("")}</div>`
+    : `<p class="hint">Aún no hay videos publicados con métricas.</p>`;
   const g = s.gpu, q = s.quota;
   const yn = (b, y = "Configurada", n = "Falta") => `<span class="${b ? "yes" : "no"}">${b ? "✓ " + y : "✗ " + n}</span>`;
   $("#sys").innerHTML = `
-    <div class="tile"><div class="k">Clave de Anthropic</div><div class="v">${yn(s.anthropic_key)}</div></div>
+    <div class="tile"><div class="k">Motor de IA (guiones y escenas)</div><div class="v">${yn(s.llm_ready, esc(s.llm === "claude-code" ? "Suscripción Claude" : "API Anthropic"), s.llm === "api" ? "Falta clave" : "Falta CLI")}</div><small>${esc(s.llm)}${s.llm === "api" ? "" : " · sin costo aparte, con pausas para no agotar límites"}</small></div>
+    <div class="tile"><div class="k">Calendario</div><div class="v">${s.calendar.total} temas</div><small>${Object.entries(s.calendar.by_status).map(([k, n]) => `${esc(STATUS[k] || k)}: ${n}`).join(" · ")}${s.calendar.auto ? " · auto ON" : ""}</small></div>
     <div class="tile"><div class="k">YouTube</div><div class="v">${yn(s.youtube_token, "Conectado", s.youtube_client ? "Sin conectar" : "Falta client_secret")}</div></div>
+    <div class="tile"><div class="k">Instagram</div><div class="v">${yn(s.instagram, "Conectado", "Sin conectar")}</div></div>
     <div class="tile"><div class="k">Cuota YouTube hoy (${esc(q.day)}, hora del Pacífico)</div><div class="v">${q.used.toLocaleString("es")} / ${q.limit.toLocaleString("es")}</div>
       <div class="meter"><i style="width:${Math.min(100, q.used / q.limit * 100)}%;${q.used > 8000 ? "background:var(--coral)" : ""}"></i></div><small>Quedan ~${q.uploads_left} subidas</small></div>
     <div class="tile"><div class="k">GPU</div><div class="v">${g ? `${g.util}% · ${g.temp}°C` : "—"}</div>${g ? `<small>${esc(g.name)} · ${(g.mem_used / 1024).toFixed(1)}/${(g.mem_total / 1024).toFixed(1)} GB VRAM</small><div class="meter"><i style="width:${g.mem_used / g.mem_total * 100}%"></i></div>` : ""}</div>
     <div class="tile"><div class="k">Disco libre</div><div class="v">${s.disk.free_gb} GB</div><small>de ${s.disk.total_gb} GB · videos: ${s.disk.out_gb} GB</small></div>
     <div class="tile"><div class="k">Videos / cola</div><div class="v">${s.videos} · ${s.queue.queued + (s.queue.running ? 1 : 0)}</div><small>voz por defecto: ${esc(ENGINES[s.tts] || s.tts)}</small></div>`;
 }
+$("#btnIgApp").onclick = () => act(() => api("/api/instagram/app", { method: "PUT", body: { app_id: $("#igAppId").value, app_secret: $("#igSecret").value, redirect_uri: $("#igRedirect").value } }), "App de Instagram guardada ✓").then(() => { $("#igSecret").value = ""; loadSystem(); });
+$("#btnIgUrl").onclick = async () => { const r = await act(() => api("/api/instagram/auth-url", { method: "POST" })); if (r) window.open(r.url, "_blank", "noopener"); };
+$("#btnIgCode").onclick = () => act(() => api("/api/instagram/auth-code", { method: "POST", body: { url: $("#igCode").value } }), "Instagram conectado ✓").then(() => { $("#igCode").value = ""; loadSystem(); });
+$("#btnStats").onclick = () => act(() => api("/api/stats/update", { method: "POST" }), "Actualizando métricas… (mira la Cola)").then(refreshRunning);
 $("#btnKey").onclick = () => act(() => api("/api/settings/anthropic", { method: "PUT", body: { key: $("#akey").value } }), "Clave guardada ✓").then(() => { $("#akey").value = ""; loadSystem(); });
 $("#btnYtUrl").onclick = async () => {
   const r = await act(() => api("/api/youtube/auth-url", { method: "POST" }));

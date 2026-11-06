@@ -1,0 +1,51 @@
+# Estándar de Factos Didácticos (aprobado con el video del microondas, 2026-11-06).
+# Las variables de entorno / .env tienen prioridad sobre estos valores.
+
+canal: Factos Didácticos
+idioma: español latino neutro (México)
+
+formato:
+  vertical: true            # 1080x1920
+  calidad: hd               # hd | draft
+  fps: 30
+  duracion_objetivo_s: [40, 50]
+  segmentos: [6, 8]
+  palabras_por_segmento: [12, 24]
+  gancho_s: 1.5             # el gancho debe entenderse en el primer 1,5 s
+
+voz:
+  motor: chatterbox         # chatterbox | kokoro | piper
+  referencia: voices/ref.wav
+  emocion: 0.6              # EXPLAPIX_CB_EXAGGERATION
+  ritmo: 0.4                # EXPLAPIX_CB_CFG (menor = más pausado)
+  kokoro_voz: em_alex
+  pausa_entre_segmentos_s: 0.35
+
+visual:
+  ejemplo_referencia: examples/microondas/scene.py
+  moods: [noche, energia, calor, frio, naturaleza, sol, magia]
+  cambios_de_mood_min: 3
+  camara:
+    sway_grados: 1.2
+    sway_periodo_s: 7
+    giro_max_grados: 10
+    zoom: [1.3, 1.8]
+    movimientos_clave: [3, 4]
+  particulas:
+    por_segmento_min: 1
+    tipos: [chispas, burbujas, calor, estrellas, confeti, frio, orbita, polvo]
+    densidad: [15, 40]      # partículas por sistema
+  cierre: outro con confeti y "Síguenos para más Factos Didácticos"
+
+reglas:
+  - Cada segmento lleva mood acorde a la idea (calor, frío, energía...).
+  - Nada quieto: cada objeto tiene vida constante (alive, idle_wiggle, idle_pulse, idle_spin).
+  - Los objetos entran con pop_in o cascade y salen con exit_out; nunca FadeIn/FadeOut a secas.
+  - En 3-4 momentos clave la cámara se acerca y gira suave con cam_to y luego cam_reset.
+  - Protagonistas con carita (face + auto_blink); etiquetas cortas con pill.
+  - Exactitud científica: si se simplifica, que no sea falso.
+
+llm:
+  motor: claude-code        # claude-code (suscripción, sin costo aparte) | api (ANTHROPIC_API_KEY)
+  esfuerzo: medium
+  pausa_entre_videos_min: 20   # para no agotar los límites de la suscripción

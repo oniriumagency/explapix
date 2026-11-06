@@ -12,6 +12,7 @@
   <div class="brand"><span>FACTOS</span> <b>DIDÁCTICOS</b> <small>Studio</small></div>
   <nav id="tabs">
     <button data-tab="biblioteca" class="on">Biblioteca</button>
+    <button data-tab="calendario">Calendario</button>
     <button data-tab="crear">Nuevo</button>
     <button data-tab="cola">Cola <i id="qbadge" class="badge" hidden></i></button>
     <button data-tab="comentarios">Comentarios</button>
@@ -41,6 +42,16 @@
   <!-- DETALLE -->
   <section id="detalle" class="tab"></section>
 
+  <!-- CALENDARIO -->
+  <section id="calendario" class="tab">
+    <div class="bar">
+      <h1>Calendario · 30 días</h1>
+      <label class="switch"><input type="checkbox" id="calAuto"> Generar pendientes solo (uno a la vez)</label>
+    </div>
+    <p class="hint" id="calInfo"></p>
+    <div id="cal" class="list"></div>
+  </section>
+
   <!-- NUEVO -->
   <section id="crear" class="tab">
     <h1>Nuevo video</h1>
@@ -57,7 +68,7 @@
           <select id="quality"><option value="hd">HD 1080×1920</option><option value="draft">Borrador rápido 540×960</option></select>
         </label>
       </div>
-      <p id="nokey" class="warn" hidden>Falta la clave de Anthropic: sin ella solo puedes generar el ejemplo. Ponla en <a href="#sistema">Sistema</a>.</p>
+      <p id="nokey" class="warn" hidden>El motor de IA no está listo. Revísalo en <a href="#sistema">Sistema</a>.</p>
       <div class="row">
         <button id="btnCreate" class="primary">Generar</button>
         <button id="btnExample" class="ghost">Probar con el ejemplo del refri (sin IA, gratis)</button>
@@ -127,9 +138,30 @@
     <h1>Sistema</h1>
     <div id="sys" class="tiles"></div>
     <div class="card form">
-      <h2>Clave de Anthropic</h2>
-      <p class="hint">Se usa para escribir guiones, animaciones y respuestas. Se guarda en el servidor (.env, permisos 600) y nunca se muestra.</p>
+      <h2>Clave de Anthropic <small>(solo si usas el motor «api»)</small></h2>
+      <p class="hint">Con el motor «claude-code» (por defecto) se usa tu suscripción de Claude del servidor y no hace falta clave. Si cambias a «api», se guarda en el servidor (.env, permisos 600) y nunca se muestra.</p>
       <div class="row"><input id="akey" type="password" placeholder="sk-ant-..." autocomplete="off"><button id="btnKey" class="primary">Guardar</button></div>
+    </div>
+    <div class="card form">
+      <div class="bar" style="margin:0"><h2>Métricas</h2><button id="btnStats" class="ghost">Actualizar métricas</button></div>
+      <p class="hint">Vistas y % visto (YouTube Analytics) · alcance, reproducciones, guardados y compartidos (Instagram). Úsalas para elegir los próximos temas.</p>
+      <div id="statsBox"></div>
+    </div>
+    <div class="card form">
+      <h2>Conectar Instagram</h2>
+      <p id="igState"></p>
+      <details><summary>1. Datos de tu app de Meta</summary>
+        <p class="hint">En developers.facebook.com crea una app con el producto «Instagram» → «API setup with Instagram login». Copia el <b>Instagram App ID</b> y el <b>Instagram App Secret</b>, y en «Business login settings» agrega la URL de redirección de abajo.</p>
+        <div class="row"><label>Instagram App ID <input id="igAppId" autocomplete="off"></label><label>Instagram App Secret <input id="igSecret" type="password" autocomplete="off"></label></div>
+        <label>URL de redirección <input id="igRedirect"></label>
+        <button id="btnIgApp" class="primary">Guardar app</button>
+      </details>
+      <ol class="steps" style="margin-top:.8rem">
+        <li><button id="btnIgUrl" class="ghost">2. Autorizar con Instagram</button> (cuenta profesional del canal).</li>
+        <li>Te llevará a una página que no carga (https://localhost/?code=…). Copia la dirección completa.</li>
+        <li><div class="row"><input id="igCode" placeholder="https://localhost/?code=...&state=..."><button id="btnIgCode" class="primary">3. Conectar</button></div></li>
+      </ol>
+      <p class="hint">Para publicar Reels, Meta descarga el video desde un enlace público temporal con Tailscale Funnel. Actívalo una vez: en login.tailscale.com → DNS habilita HTTPS, en Access controls agrega el atributo «funnel» a este servidor, y en el servidor ejecuta <code>sudo tailscale set --operator=magne</code>.</p>
     </div>
     <div class="card form">
       <h2>Conectar YouTube</h2>

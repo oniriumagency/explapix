@@ -24,7 +24,8 @@ DEFAULT_ENGINE = "chatterbox"
 
 
 def engine_name() -> str:
-    return os.environ.get("EXPLAPIX_TTS", DEFAULT_ENGINE)
+    from explapix import config
+    return config.env_or("EXPLAPIX_TTS", "voz.motor", DEFAULT_ENGINE)
 
 
 def _duration(path: Path) -> float:
@@ -52,7 +53,11 @@ def synth_many(texts: list[str], outs: list[Path], engine: str | None = None) ->
         jobs = [{"text": t, "out": str(o.resolve())} for t, o in zip(texts, outs)]
         jf = outs[0].parent / f"jobs_{engine}.json"
         jf.write_text(json.dumps(jobs, ensure_ascii=False), encoding="utf-8")
+        from explapix import config
         env = dict(os.environ)
+        env["EXPLAPIX_CB_EXAGGERATION"] = config.env_or("EXPLAPIX_CB_EXAGGERATION", "voz.emocion", "0.6")
+        env["EXPLAPIX_CB_CFG"] = config.env_or("EXPLAPIX_CB_CFG", "voz.ritmo", "0.4")
+        env["EXPLAPIX_KOKORO_VOICE"] = config.env_or("EXPLAPIX_KOKORO_VOICE", "voz.kokoro_voz", "em_alex")
         if engine == "chatterbox":
             env["EXPLAPIX_VOICE_REF"] = _ref_default()
         p = subprocess.run([VENVS[engine], str(WORKER), engine, str(jf)], env=env,

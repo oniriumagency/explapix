@@ -1,0 +1,43 @@
+{
+  "topic": "Cómo funciona la pantalla táctil",
+  "title": "¿Cómo sabe tu celular dónde lo tocas? 📱",
+  "description": "Tu dedo es parte del circuito de tu celular. La pantalla tiene una rejilla invisible de electrodos y tu dedo, que conduce electricidad, cambia la carga justo donde tocas.\n\n#FactosDidacticos #tecnologia #celular #ciencia",
+  "tags": [
+    "cómo funciona la pantalla táctil",
+    "tecnología",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Tu dedo es parte del circuito de tu celular. Sin él, la pantalla no sabría qué tocaste.",
+      "visual": "Celular con carita y dedo gigante acercándose."
+    },
+    {
+      "narration": "Bajo el vidrio hay una rejilla de líneas transparentes que forman miles de cruces invisibles.",
+      "visual": "Zoom bajo el vidrio: rejilla de líneas cian y violeta."
+    },
+    {
+      "narration": "Por esa rejilla corre una pequeña carga eléctrica, y cada cruce guarda un poquito, como un mini depósito.",
+      "visual": "Cargas brillando en los cruces; mood energía."
+    },
+    {
+      "narration": "Tu cuerpo conduce electricidad. Cuando acercas el dedo, roba parte de esa carga justo en ese punto.",
+      "visual": "Dedo se acerca y los cruces debajo se apagan; chispas."
+    },
+    {
+      "narration": "Un chip revisa toda la rejilla más de cien veces por segundo y calcula dónde cambió la carga.",
+      "visual": "Barrido rápido de la rejilla, punto rojo marcando la posición."
+    },
+    {
+      "narration": "Con varios dedos detecta varios puntos a la vez, y así sabe si haces zoom o deslizas.",
+      "visual": "Dos dedos separándose; flechas de zoom."
+    },
+    {
+      "narration": "Por eso no funciona con guantes normales: la tela no conduce. Síguenos para más Factos Didácticos.",
+      "visual": "Guante triste sin efecto; cierre."
+    }
+  ]
+}

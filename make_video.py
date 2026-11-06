@@ -90,7 +90,8 @@ def main():
     g.add_argument("--storyboard", type=Path)
     ap.add_argument("--scene", type=Path, help="usar esta escena en vez de generarla")
     ap.add_argument("--notes", default="", help="indicaciones extra para el guion (p. ej. nota de revisión)")
-    ap.add_argument("--quality", choices=list(render.QUALITY), default="hd")
+    from explapix import config
+    ap.add_argument("--quality", choices=list(render.QUALITY), default=config.get("formato.calidad", "hd"))
     ap.add_argument("--retries", type=int, default=3)
     ap.add_argument("--music", type=Path, help="música de fondo libre de derechos (mp3/wav)")
     ap.add_argument("--upload", action="store_true", help="subir a YouTube al terminar")

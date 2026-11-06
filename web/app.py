@@ -119,6 +119,8 @@ def video_summary(d: Path) -> dict:
         "engine": meta.get("engine") or timing.get("engine") or "piper",
         "status": video_status(meta, d),
         "youtube_id": meta.get("youtube_id"),
+        "instagram_id": meta.get("instagram_id"),
+        "views": ((meta.get("stats") or {}).get("youtube") or {}).get("views"),
         "privacy": meta.get("privacy"),
         "review": meta.get("review"),
         "has_video": (d / "final.mp4").exists(),
@@ -247,7 +249,22 @@ class Jobs:
 
     @staticmethod
     def after(j: dict):
-        """Efectos al terminar: enlazar el video regenerado con el original."""
+        """Efectos al terminar: enlazar el video regenerado con el original y con el calendario."""
+        cid = j["meta"].get("calendar_id")
+        if cid and j["status"] == "done" and j.get("result"):
+            it = next((x for x in calendar_load()["items"] if x["id"] == cid), None)
+            mf = OUT / j["result"] / "meta.json"
+            meta = read_json(mf, None)
+            if it and meta is not None:   # textos del calendario -> metadatos del video
+                meta.update(title=it["title"], ig_caption=it["ig_caption"],
+                            pinned_comment=it["pinned_comment"], calendar_id=cid,
+                            scheduled=f"{it['date']} {it['time']} (CDMX)")
+                write_json(mf, meta)
+        if cid:
+            calendar_mark(cid, video_id=j.get("result"),
+                          status="generado" if j["status"] == "done" and j.get("result") else
+                          ("pendiente" if j["status"] == "cancelled" else "error"),
+                          finished=datetime.now().isoformat(timespec="seconds"))
         src = j["meta"].get("replaces")
         if j["status"] == "done" and src and j.get("result") and (OUT / src).is_dir():
             mf = OUT / src / "meta.json"
@@ -262,12 +279,123 @@ class Jobs:
 
 jobs = Jobs()
 
+# ---------------------------------------------------------------- calendario
+
+CAL = Path(os.environ.get("EXPLAPIX_CALENDAR", ROOT / "data" / "calendario.json"))
+CAL_LOCK = threading.RLock()
+CAL_STATUS = ("pendiente", "manual", "en_cola", "generado", "aprobado", "publicado", "error", "omitido")
+CAL_FIELDS = ("time", "topic", "hook", "title", "ig_caption", "pinned_comment", "notes", "status")
+
+
+def _slug(s: str) -> str:
+    import unicodedata  # noqa: PLC0415
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:40]
+
+
+def calendar_load() -> dict:
+    with CAL_LOCK:
+        data = read_json(CAL, None) or {"version": 1, "auto_generate": False, "items": []}
+        for it in data["items"]:
+            it.setdefault("id", _slug(it["topic"]))
+        return data
+
+
+def calendar_save(data: dict) -> None:
+    with CAL_LOCK:
+        write_json(CAL, data)
+
+
+def calendar_mark(cid: str, **fields) -> None:
+    with CAL_LOCK:
+        data = calendar_load()
+        for it in data["items"]:
+            if it["id"] == cid:
+                it.update({k: v for k, v in fields.items() if v is not None or k == "video_id"})
+        calendar_save(data)
+
+
+def calendar_summary() -> dict:
+    items = calendar_load()["items"]
+    out = {}
+    for it in items:
+        out[it["status"]] = out.get(it["status"], 0) + 1
+    return {"total": len(items), "by_status": out, "auto": calendar_load().get("auto_generate", False)}
+
+
+def _scene_for(it: dict) -> Path | None:
+    p = ROOT / "data" / "escenas" / f"{it['id']}.py"
+    return p if p.exists() else None
+
+
+def calendar_enqueue(it: dict, auto: bool = False) -> dict:
+    sbdir = ROOT / "data" / "storyboards"
+    sbdir.mkdir(parents=True, exist_ok=True)
+    sbf = sbdir / f"{it['id']}.json"
+    write_json(sbf, it["storyboard"])
+    cmd = [PY, "make_video.py", "--storyboard", str(sbf)]
+    scene = _scene_for(it)
+    if scene:
+        cmd += ["--scene", str(scene)]
+    elif not llm_ready():
+        raise HTTPException(409, "No hay escena escrita para este tema y el motor de IA no está listo")
+    j = jobs.add("video", f"Día {it['day']}: {it['topic']}" + (" (auto)" if auto else ""), cmd,
+                 meta={"calendar_id": it["id"]})
+    calendar_mark(it["id"], status="en_cola")
+    return j
+
+
+class CalendarWatcher:
+    """Genera solo los temas pendientes del calendario, de uno en uno, con pausa entre videos
+    para no agotar los límites de la suscripción de Claude (llm.pausa_entre_videos_min)."""
+
+    def __init__(self):
+        self.thread = None
+
+    def start(self):
+        if not self.thread:
+            self.thread = threading.Thread(target=self.loop, daemon=True)
+            self.thread.start()
+
+    def pause_s(self) -> int:
+        from explapix import config  # noqa: PLC0415
+        return int(float(config.get("llm.pausa_entre_videos_min", 20)) * 60)
+
+    def tick(self):
+        data = calendar_load()
+        if not data.get("auto_generate") or not llm_ready():
+            return
+        cal_jobs = [j for j in jobs.jobs if j["meta"].get("calendar_id")]
+        if any(j["status"] in ("queued", "running") for j in cal_jobs):
+            return
+        if any(j["status"] in ("queued", "running") for j in jobs.jobs):
+            return  # deja pasar primero lo que Magne pidió a mano
+        last = max((j.get("finished") or "" for j in cal_jobs), default="")
+        if last and (datetime.now() - datetime.fromisoformat(last)).total_seconds() < self.pause_s():
+            return
+        nxt = next((it for it in sorted(data["items"], key=lambda x: x["day"])
+                    if it["status"] == "pendiente"), None)
+        if nxt:
+            calendar_enqueue(nxt, auto=True)
+
+    def loop(self):
+        while True:
+            try:
+                self.tick()
+            except Exception as e:  # noqa: BLE001
+                print("calendario:", e, flush=True)
+            time.sleep(60)
+
+
+watcher = CalendarWatcher()
+
 # ---------------------------------------------------------------- app y seguridad
 
 @asynccontextmanager
 async def lifespan(_app):
     panel_password()
     jobs.start()
+    watcher.start()
     yield
 
 
@@ -316,6 +444,9 @@ def api_video(vid: str):
     return {**video_summary(d), "description": meta.get("description") or sb.get("description", ""),
             "tags": meta.get("tags") or sb.get("tags", []), "segments": segs,
             "notes": meta.get("notes"), "replaces": meta.get("replaces"),
+            "ig_caption": meta.get("ig_caption", ""), "pinned_comment": meta.get("pinned_comment", ""),
+            "scheduled": meta.get("scheduled"), "instagram_id": meta.get("instagram_id"),
+            "instagram_permalink": meta.get("instagram_permalink"), "stats": meta.get("stats"),
             "scene": scene.read_text(encoding="utf-8") if scene.exists() else "",
             "error_log": err.read_text(encoding="utf-8")[-6000:] if err.exists() else ""}
 
@@ -326,8 +457,11 @@ def api_video_meta(vid: str, body: dict = Body(...)):
     meta = read_json(d / "meta.json", None)
     if meta is None:
         raise HTTPException(409, "Este video no terminó de generarse")
-    if meta.get("youtube_id"):
-        raise HTTPException(409, "Ya está en YouTube: edítalo desde YouTube Studio")
+    if meta.get("youtube_id") and any(k in body for k in ("title", "description", "tags")):
+        if (body.get("title", meta["title"]) != meta["title"] or
+                body.get("description", meta["description"]) != meta["description"]):
+            raise HTTPException(409, "Ya está en YouTube: edítalo desde YouTube Studio")
+        body = {k: v for k, v in body.items() if k not in ("title", "description", "tags")}
     title = str(body.get("title", meta["title"])).strip()
     if not title or len(title) > 100:
         raise HTTPException(422, "El título debe tener entre 1 y 100 caracteres")
@@ -336,6 +470,10 @@ def api_video_meta(vid: str, body: dict = Body(...)):
         tags = [t.strip() for t in tags.split(",") if t.strip()]
     meta.update(title=title, description=str(body.get("description", meta["description"]))[:5000],
                 tags=tags[:30])
+    if "ig_caption" in body and not meta.get("instagram_id"):
+        meta["ig_caption"] = str(body["ig_caption"])[:2200]
+    if "pinned_comment" in body:
+        meta["pinned_comment"] = str(body["pinned_comment"])[:500]
     write_json(d / "meta.json", meta)
     return video_summary(d)
 
@@ -441,9 +579,22 @@ def media_thumb(vid: str):
 
 # ---------------------------------------------------------------- nuevos videos y trabajos
 
+def llm_engine() -> str:
+    from explapix import config  # noqa: PLC0415
+    return read_env().get("EXPLAPIX_LLM") or os.environ.get("EXPLAPIX_LLM") or \
+        config.get("llm.motor", "claude-code")
+
+
+def llm_ready() -> bool:
+    if llm_engine() == "claude-code":
+        return bool(shutil.which("claude") or (Path.home() / ".local/bin/claude").exists())
+    return bool(read_env().get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY"))
+
+
 def _need_anthropic():
-    if not (read_env().get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")):
-        raise HTTPException(409, "Falta ANTHROPIC_API_KEY (ponla en Sistema)")
+    if not llm_ready():
+        raise HTTPException(409, "El motor de IA no está listo: con 'api' falta ANTHROPIC_API_KEY; "
+                                 "con 'claude-code' falta el CLI claude")
 
 
 def _tts_env(body: dict) -> dict:
@@ -505,6 +656,79 @@ def api_job_cancel(jid: str):
     return {k: v for k, v in j.items() if k not in ("cmd", "env")}
 
 
+# ---------------------------------------------------------------- calendario (API)
+
+@app.get("/api/calendar")
+def api_calendar():
+    data = calendar_load()
+    vids = {v["id"]: v for v in list_videos()}
+    for it in data["items"]:
+        it["video"] = vids.get(it.get("video_id"))
+        it["has_scene"] = _scene_for(it) is not None
+    return data
+
+
+@app.put("/api/calendar/settings")
+def api_calendar_settings(body: dict = Body(...)):
+    data = calendar_load()
+    if "auto_generate" in body:
+        data["auto_generate"] = bool(body["auto_generate"])
+    calendar_save(data)
+    return {"auto_generate": data["auto_generate"]}
+
+
+@app.put("/api/calendar/{cid}")
+def api_calendar_edit(cid: str, body: dict = Body(...)):
+    data = calendar_load()
+    it = next((x for x in data["items"] if x["id"] == cid), None)
+    if not it:
+        raise HTTPException(404, "Tema no encontrado")
+    for k in CAL_FIELDS:
+        if k in body:
+            v = str(body[k]).strip()
+            if k == "status" and v not in CAL_STATUS:
+                raise HTTPException(422, "Estado inválido")
+            if k == "time" and not re.match(r"^\d{2}:\d{2}$", v):
+                raise HTTPException(422, "Hora inválida (HH:MM)")
+            if k == "title" and not 1 <= len(v) <= 100:
+                raise HTTPException(422, "Título inválido")
+            it[k] = v[:3000]
+    if "topic" in body and body.get("reset_storyboard"):
+        it["storyboard"] = {**it["storyboard"], "topic": it["topic"]}
+    calendar_save(data)
+    return it
+
+
+@app.post("/api/calendar/reorder")
+def api_calendar_reorder(body: dict = Body(...)):
+    """order: lista de ids en el nuevo orden. Las fechas/horas se quedan en su lugar (día 1, 2...)."""
+    data = calendar_load()
+    order = body.get("order") or []
+    by_id = {it["id"]: it for it in data["items"]}
+    if sorted(order) != sorted(by_id):
+        raise HTTPException(422, "El orden debe incluir todos los temas una vez")
+    slots = [(it["day"], it["date"], it["time"]) for it in sorted(data["items"], key=lambda x: x["day"])]
+    new = []
+    for (day, date_, time_), cid in zip(slots, order):
+        it = by_id[cid]
+        it.update(day=day, date=date_, time=time_)
+        new.append(it)
+    data["items"] = new
+    calendar_save(data)
+    return api_calendar()
+
+
+@app.post("/api/calendar/{cid}/generate")
+def api_calendar_generate(cid: str):
+    data = calendar_load()
+    it = next((x for x in data["items"] if x["id"] == cid), None)
+    if not it:
+        raise HTTPException(404, "Tema no encontrado")
+    if it["status"] == "en_cola":
+        raise HTTPException(409, "Ya está en la cola")
+    return calendar_enqueue(it)
+
+
 # ---------------------------------------------------------------- comentarios
 
 DRAFTS = OUT / "comment_drafts.json"
@@ -538,8 +762,9 @@ def api_comment_edit(cid: str, body: dict = Body(...)):
 @app.post("/api/comments/fetch")
 def api_comments_fetch():
     _need_anthropic()
-    if not (SECRETS / "token.json").exists():
-        raise HTTPException(409, "Primero conecta YouTube en Sistema")
+    from explapix import instagram  # noqa: PLC0415
+    if not ((SECRETS / "token.json").exists() or instagram.connected()):
+        raise HTTPException(409, "Primero conecta YouTube o Instagram en Sistema")
     return jobs.add("comments", "Buscar comentarios nuevos", [PY, "reply_comments.py"])
 
 
@@ -701,8 +926,12 @@ def api_status():
     running = next((j for j in jobs.jobs if j["status"] == "running"), None)
     return {
         "anthropic_key": bool(env.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")),
+        "llm": llm_engine(),
+        "llm_ready": llm_ready(),
+        "calendar": calendar_summary(),
         "youtube_client": (SECRETS / "client_secret.json").exists(),
         "youtube_token": (SECRETS / "token.json").exists(),
+        "instagram": _ig().connected(),
         "tts": env.get("EXPLAPIX_TTS") or "chatterbox",
         "gpu": _gpu(),
         "disk": {"free_gb": round(du.free / 1e9, 1), "total_gb": round(du.total / 1e9, 1),
@@ -761,6 +990,123 @@ def api_yt_auth_code(body: dict = Body(...)):
     tok.chmod(0o600)
     _flows.clear()
     return {"ok": True}
+
+
+# ---------------------------------------------------------------- Instagram
+
+def _ig():
+    from explapix import instagram  # noqa: PLC0415
+    instagram.CREDS = SECRETS / "instagram.json"
+    return instagram
+
+
+@app.get("/api/instagram")
+def api_ig_status():
+    ig = _ig()
+    c = ig.load()
+    return {"app": bool(c.get("app_id") and c.get("app_secret")), "connected": ig.connected(),
+            "username": c.get("username"), "expires_at": c.get("expires_at"),
+            "redirect_uri": c.get("redirect_uri") or "https://localhost/"}
+
+
+@app.put("/api/instagram/app")
+def api_ig_app(body: dict = Body(...)):
+    ig = _ig()
+    app_id = str(body.get("app_id", "")).strip()
+    secret = str(body.get("app_secret", "")).strip()
+    redirect = str(body.get("redirect_uri", "")).strip() or "https://localhost/"
+    if not re.match(r"^\d{6,25}$", app_id) or not re.match(r"^[0-9a-f]{16,64}$", secret):
+        raise HTTPException(422, "Revisa el App ID (solo números) y el App Secret (hexadecimal)")
+    if not redirect.startswith("https://"):
+        raise HTTPException(422, "La URL de redirección debe empezar por https://")
+    c = ig.load()
+    c.update(app_id=app_id, app_secret=secret, redirect_uri=redirect)
+    ig.save(c)
+    return api_ig_status()
+
+
+_ig_states: set[str] = set()
+
+
+@app.post("/api/instagram/auth-url")
+def api_ig_auth_url():
+    ig = _ig()
+    st = pysecrets.token_urlsafe(16)
+    _ig_states.clear()
+    _ig_states.add(st)
+    try:
+        return {"url": ig.auth_url(st)}
+    except RuntimeError as e:
+        raise HTTPException(409, str(e)) from e
+
+
+@app.post("/api/instagram/auth-code")
+def api_ig_auth_code(body: dict = Body(...)):
+    from urllib.parse import parse_qs, urlparse  # noqa: PLC0415
+    qs = parse_qs(urlparse(str(body.get("url", "")).strip()).query)
+    if (qs.get("state") or [""])[0] not in _ig_states or "code" not in qs:
+        raise HTTPException(422, "Pega la dirección completa a la que te llevó Instagram (con ?code=...)")
+    try:
+        r = _ig().exchange_code(qs["code"][0])
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(422, f"Instagram rechazó el código: {str(e)[:300]}") from e
+    _ig_states.clear()
+    return r
+
+
+@app.post("/api/videos/{vid}/instagram")
+def api_upload_ig(vid: str, body: dict = Body(...)):
+    d = video_dir(vid)
+    if body.get("confirm") is not True:
+        raise HTTPException(422, "Falta la confirmación explícita")
+    meta = read_json(d / "meta.json", None)
+    if meta is None or not (d / "final.mp4").exists():
+        raise HTTPException(409, "El video no está listo")
+    if meta.get("instagram_id"):
+        raise HTTPException(409, "Ya está en Instagram")
+    if not _ig().connected():
+        raise HTTPException(409, "Primero conecta Instagram en Sistema")
+    if any(j["kind"] == "upload_ig" and j["meta"].get("video") == vid and j["status"] in
+           ("queued", "running") for j in jobs.jobs):
+        raise HTTPException(409, "Ya hay una subida a Instagram en cola para este video")
+    return jobs.add("upload_ig", f"Instagram: {meta['title']}", [PY, "upload_instagram.py", str(d)],
+                    meta={"video": vid})
+
+
+# ---------------------------------------------------------------- métricas
+
+@app.post("/api/stats/update")
+def api_stats_update():
+    return jobs.add("stats", "Actualizar métricas", [PY, "update_stats.py"])
+
+
+@app.get("/api/stats")
+def api_stats():
+    """Resumen para elegir temas: métricas por video y promedio por categoría."""
+    cal = {it["id"]: it for it in calendar_load()["items"]}
+    rows, cats = [], {}
+    for v in list_videos():
+        meta = read_json(OUT / v["id"] / "meta.json", {}) or {}
+        st = meta.get("stats") or {}
+        if not st:
+            continue
+        yt, ig = st.get("youtube") or {}, st.get("instagram") or {}
+        cat = cal.get(meta.get("calendar_id"), {}).get("category", "otro")
+        row = {"id": v["id"], "title": v["title"], "category": cat, "yt_views": yt.get("views"),
+               "yt_pct": yt.get("avg_view_pct"), "yt_avg_s": yt.get("avg_view_s"),
+               "ig_reach": ig.get("reach"), "ig_views": ig.get("views"), "ig_saved": ig.get("saved"),
+               "ig_shares": ig.get("shares"), "updated": st.get("updated")}
+        rows.append(row)
+        c = cats.setdefault(cat, {"n": 0, "views": 0, "pct": []})
+        c["n"] += 1
+        c["views"] += (row["yt_views"] or 0) + (row["ig_views"] or 0)
+        if row["yt_pct"] is not None:
+            c["pct"].append(row["yt_pct"])
+    by_cat = sorted(({"category": k, "videos": c["n"], "avg_views": round(c["views"] / c["n"]),
+                      "avg_pct": round(sum(c["pct"]) / len(c["pct"]), 1) if c["pct"] else None}
+                     for k, c in cats.items()), key=lambda x: -x["avg_views"])
+    rows.sort(key=lambda r: -((r["yt_views"] or 0) + (r["ig_views"] or 0)))
+    return {"videos": rows, "by_category": by_cat}
 
 
 # ---------------------------------------------------------------- frontend

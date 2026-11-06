@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Responde comentarios de YouTube con Claude.
+"""Responde comentarios de YouTube e Instagram con Claude.
 
 Modo por defecto (seguro): genera borradores en out/comment_drafts.json para revisarlos.
   python reply_comments.py                 # crea/actualiza borradores
@@ -12,7 +12,7 @@ import argparse
 import json
 from pathlib import Path
 
-from explapix import llm, youtube
+from explapix import instagram, llm, youtube
 
 DRAFTS = Path(__file__).resolve().parent / "out" / "comment_drafts.json"
 
@@ -31,8 +31,9 @@ def main():
     drafts = load()
     if a.send_approved:
         for d in drafts:
-            if d.get("approved") and not d.get("sent"):
-                d["reply_id"] = youtube.reply(d["comment_id"], d["reply"])
+            if d.get("approved") and not d.get("sent") and not d.get("discarded"):
+                plat = instagram if d.get("platform") == "instagram" else youtube
+                d["reply_id"] = plat.reply(d["comment_id"], d["reply"])
                 d["sent"] = True
                 print(f"✓ {d['author']}: {d['reply']}")
         youtube.save_json(DRAFTS, drafts)
@@ -40,14 +41,23 @@ def main():
 
     known = {d["comment_id"] for d in drafts}
     videos: dict[str, dict] = {}
-    for c in youtube.unanswered_comments(a.max):
+    found = []
+    if youtube.TOKEN.exists():
+        found += [{**c, "platform": "youtube"} for c in youtube.unanswered_comments(a.max)]
+    if instagram.connected():
+        found += instagram.unanswered_comments()
+    for c in found:
         if c["comment_id"] in known:
             continue
-        v = videos.setdefault(c["video_id"], youtube.video_info(c["video_id"]))
+        if c["platform"] == "instagram":
+            v = {"title": c.pop("video_title", ""), "description": c.pop("video_description", "")}
+        else:
+            v = videos.setdefault(c["video_id"], youtube.video_info(c["video_id"]))
         r = llm.reply_to_comment(v["title"], v["description"], c["text"])
         d = {**c, **r, "approved": False, "sent": False}
         if a.auto and not r["skip"]:
-            d["reply_id"] = youtube.reply(c["comment_id"], r["reply"])
+            d["reply_id"] = (instagram if c["platform"] == "instagram" else youtube).reply(
+                c["comment_id"], r["reply"])
             d["approved"] = d["sent"] = True
         drafts.append(d)
         print(("SKIP " if r["skip"] else "") + f"{c['author']}: {c['text'][:60]} -> {r['reply']}")

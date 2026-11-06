@@ -1,0 +1,43 @@
+{
+  "topic": "Por qué explotan las palomitas",
+  "title": "¿Por qué explotan las palomitas? 🍿",
+  "description": "Cada palomita es una mini olla de presión. Dentro de cada grano hay una gotita de agua que, al calentarse, se vuelve vapor y revienta la cáscara.\n\n#FactosDidacticos #palomitas #cienciaencasa #ciencia",
+  "tags": [
+    "por qué explotan las palomitas",
+    "cocina",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Cada palomita es una mini olla de presión. Y cuando revienta, se voltea por completo.",
+      "visual": "Grano de maíz con carita; rótulo 'mini olla'."
+    },
+    {
+      "narration": "Dentro del grano hay almidón y una gotita de agua, encerrados en una cáscara dura y casi impermeable.",
+      "visual": "Corte del grano: cáscara, almidón, gotita de agua con carita."
+    },
+    {
+      "narration": "Al calentarlo, esa agua se convierte en vapor, pero la cáscara no lo deja escapar.",
+      "visual": "Fuego abajo, gotita se vuelve burbujas de vapor que empujan; mood calor."
+    },
+    {
+      "narration": "La presión sube hasta unas nueve veces la del aire, mientras el almidón se ablanda como masa caliente.",
+      "visual": "Manómetro subiendo a 9x, grano inflándose y temblando."
+    },
+    {
+      "narration": "Cerca de los ciento ochenta grados, la cáscara revienta y el almidón se infla en una espuma blanca.",
+      "visual": "¡Pop! explosión con chispas y confeti blanco; palomita aparece."
+    },
+    {
+      "narration": "El almidón se enfría en segundos y se queda así: crujiente y hasta cuarenta veces más grande.",
+      "visual": "Palomita gigante con carita feliz, comparación de tamaño."
+    },
+    {
+      "narration": "Por eso los granos que se secan demasiado ya no truenan. Síguenos para más Factos Didácticos.",
+      "visual": "Grano seco triste sin explotar; cierre."
+    }
+  ]
+}

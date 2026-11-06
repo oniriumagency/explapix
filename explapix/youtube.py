@@ -22,7 +22,8 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
-          "https://www.googleapis.com/auth/youtube.force-ssl"]
+          "https://www.googleapis.com/auth/youtube.force-ssl",
+          "https://www.googleapis.com/auth/yt-analytics.readonly"]
 ROOT = Path(__file__).resolve().parent.parent
 QUOTA_FILE = Path(os.environ.get("EXPLAPIX_OUT", ROOT / "out")) / "_studio" / "quota.json"
 COST = {"upload": 1600, "list": 1, "reply": 50}
@@ -50,6 +51,14 @@ def spend(units: int) -> None:
 
 SECRETS = Path(os.environ.get("EXPLAPIX_YT_SECRETS", "secrets/client_secret.json"))
 TOKEN = Path(os.environ.get("EXPLAPIX_YT_TOKEN", "secrets/token.json"))
+
+
+def credentials():
+    creds = Credentials.from_authorized_user_file(str(TOKEN), SCOPES) if TOKEN.exists() else None
+    if creds and not creds.valid and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        TOKEN.write_text(creds.to_json())
+    return creds
 
 
 def service():
