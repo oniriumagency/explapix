@@ -1,0 +1,7 @@
+.venv/
+out/
+secrets/
+voices/
+.env
+__pycache__/
+*.mp4

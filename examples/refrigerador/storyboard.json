@@ -1,0 +1,22 @@
+{
+  "topic": "Cómo funciona un refrigerador",
+  "title": "¿Cómo enfría tu refri si no tiene hielo? 🧊",
+  "description": "Tu refrigerador no fabrica frío: saca el calor de adentro y lo tira afuera. Te explicamos en 40 segundos el ciclo del refrigerante: compresor, condensador, válvula de expansión y evaporador.\n\n#Explapix #ComoFunciona #Ciencia #Refrigerador",
+  "tags": ["como funciona", "refrigerador", "ciencia", "explicacion", "fisica", "shorts"],
+  "segments": [
+    {"narration": "¿Tu refri fabrica frío? En realidad no. Lo que hace es sacar el calor de adentro y tirarlo afuera.",
+     "visual": "Refri con interior azul, flechas rojas de calor saliendo hacia atrás."},
+    {"narration": "Todo gracias a un líquido especial, el refrigerante, que viaja en circuito cerrado por unos tubos.",
+     "visual": "Aparece circuito de tubos con puntos que fluyen."},
+    {"narration": "Primero, el compresor lo aprieta. El gas se calienta muchísimo.",
+     "visual": "Compresor pulsando; puntos se vuelven rojos."},
+    {"narration": "Luego pasa por la parrilla negra de atrás, el condensador, donde suelta ese calor y se vuelve líquido.",
+     "visual": "Serpentín atrás, ondas de calor salen, puntos pasan a naranja."},
+    {"narration": "Después cruza una válvula diminuta. De golpe baja la presión y el líquido se enfría bajo cero.",
+     "visual": "Válvula estrecha, puntos se vuelven azules."},
+    {"narration": "Dentro del refri, en el evaporador, absorbe el calor de tu comida y se evapora. Y el ciclo vuelve a empezar.",
+     "visual": "Evaporador adentro, comida emite calor que entra a los tubos, todo el circuito gira."},
+    {"narration": "Por eso la parte de atrás de tu refri está calientita. Síguenos para más Explapix.",
+     "visual": "Termómetros: atrás caliente, adentro frío; logo Explapix."}
+  ]
+}

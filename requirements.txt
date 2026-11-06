@@ -1,0 +1,5 @@
+manim>=0.19
+piper-tts>=1.2
+anthropic>=1.0
+google-api-python-client>=2.150
+google-auth-oauthlib>=1.2
