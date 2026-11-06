@@ -42,12 +42,14 @@ Reglas:
 - El segmento 1 es un gancho con una pregunta o dato sorprendente. El último cierra con una \
 consecuencia práctica y "Síguenos para más Explapix".
 - Exactitud científica ante todo; si algo se simplifica, que no sea falso.
-- Cada 'visual' describe un diagrama 2D sencillo de formas planas (cajas, flechas, puntos que \
-fluyen, etiquetas) que se pueda animar con Manim, sin fotos ni personajes.
+- Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen (estilo \
+ilustración vectorial sobre fondo oscuro con brillos), animable con Manim, sin fotos. Los objetos \
+protagonistas pueden tener carita (ojos, mejillas) y reaccionar: saltar, temblar, sorprenderse. \
+Indica qué debe brillar, qué entra rebotando y dónde conviene acercar la cámara.
 - title: <= 70 caracteres con un emoji. description: 2-3 frases + 3-5 hashtags (#Explapix primero).
 - tags: 5-10 palabras clave en minúsculas."""
 
-SCENE_SYSTEM = f"""Escribes escenas de Manim Community (v0.19+) para el canal Explapix.
+SCENE_SYSTEM = f"""Escribes escenas de Manim Community (v0.22+) para el canal Explapix.
 Usa SOLO el kit de estilo siguiente (importa con `from explapix.kit import *`). Lienzo vertical \
 9x16 unidades: x∈[-4.5,4.5], y∈[-8,8]. Deja libre y<-5.6 (subtítulos) y usa y>6 para el título.
 Reglas duras:
@@ -58,6 +60,33 @@ por segmento, en orden, i=0..N-1. Dentro de cada bloque la suma de run_time debe
 ni archivos externos. numpy disponible como np.
 - Mantén todo dentro del cuadro; no dejes texto encimado. Reutiliza objetos entre segmentos para \
 que el diagrama se vaya construyendo.
+
+ESTILO VISUAL (obligatorio):
+- El fondo vivo ya lo pone ExplapixScene; no pongas fondos propios ni uses background_color.
+- Formas con volumen: blob(), ball(), toon(shape, color), tube() para tuberías/cables. Nada de \
+contornos blancos ni Rectangle/Circle planos sueltos para objetos principales.
+- Colores de la paleta: BLUE, CYAN, VIOLET, PINK, CORAL, SUN, MINT, INK (texto), MUTED. HOT=CORAL, \
+COLD=CYAN. Lo importante brilla: glow(obj, color) detrás; rays() para presentar un protagonista.
+- Títulos con title_text(), etiquetas con pill(). Textos cortos (máx. 3-4 palabras por etiqueta).
+- Personajes: los protagonistas llevan face() encima (mood feliz/sorpresa/serio/dormido) y \
+auto_blink(); pon idle_breathe/idle_float a 1-3 objetos para que nada se vea congelado.
+
+PRINCIPIOS DE ANIMACIÓN (aplícalos siempre):
+1. Squash & stretch y follow-through: los objetos ENTRAN con pop_in (nunca FadeIn/Create para \
+objetos sólidos); golpes y llegadas terminan con jelly().
+2. Anticipación: los desplazamientos importantes usan anticipate_move; las salidas usan exit_out \
+(nunca FadeOut a secas); los saltos usan squash_bounce.
+3. Slow in/slow out: usa rate_func=EASE, POP o SNAP; rate lineal solo para flujos continuos.
+4. Arcos: si algo viaja de A a B, usa move_along_arc.
+5. Overlapping action: varios objetos entran con cascade(...) o LaggedStart con lag_ratio 0.1-0.25.
+6. Staging: en el momento clave de cada idea acerca la cámara con self.play(self.focus(obj, zoom=1.4-1.8)) \
+y vuelve con self.play(self.reset_camera()); o apaga el resto con self.play(self.dim_others(obj)).
+7. Exageración: el dato sorprendente de cada segmento recibe emphasize().
+8. Timing variado: alterna golpes rápidos (0.25-0.45 s) con movimientos lentos (0.8-1.2 s); deja \
+0.3-0.8 s de pausa visual tras cada idea (el segment() ya rellena el final).
+9. Acción secundaria: flow_dots en circuitos, idle_* en personajes, ondas o destellos (sparkle) de apoyo.
+10. Cierre: en el último segmento llama self.clear_stage() y luego self.outro() (≈2 s en total).
+- No combines en el mismo self.play dos animaciones sobre el mismo objeto.
 - Devuelve únicamente el código Python en un bloque ```python.
 
 KIT:

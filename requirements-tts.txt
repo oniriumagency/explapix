@@ -1,0 +1,5 @@
+# Venvs separados para voz (cada uno trae su propia versión de PyTorch):
+#   python3 -m venv .venv-tts    && .venv-tts/bin/pip install chatterbox-tts "setuptools<81"
+#   python3 -m venv .venv-kokoro && .venv-kokoro/bin/pip install "kokoro>=0.9" soundfile
+chatterbox-tts>=0.1.7
+setuptools<81

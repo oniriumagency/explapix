@@ -1,8 +1,11 @@
-"""Voz en off local. Por defecto Piper (gratis, CPU, voces en español).
+"""Voz en off local (gratis, en el servidor).
 
-Motores:
-  piper   -> voces neuronales offline (recomendado). Modelo .onnx en EXPLAPIX_PIPER_MODEL
-  espeak  -> respaldo robótico, solo para pruebas
+Motores (EXPLAPIX_TTS):
+  chatterbox -> Chatterbox Multilingual (MIT, GPU). El más natural y expresivo; puede clonar
+                el timbre de una referencia (EXPLAPIX_VOICE_REF). Venv propio: .venv-tts
+  kokoro     -> Kokoro-82M (Apache-2.0). Rápido, voces em_alex / ef_dora / em_santa. Venv: .venv-kokoro
+  piper      -> Piper (CPU). Muy rápido pero más robótico. Modelo .onnx en EXPLAPIX_PIPER_MODEL
+  espeak     -> respaldo robótico, solo para pruebas
 """
 from __future__ import annotations
 
@@ -10,7 +13,18 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+WORKER = Path(__file__).resolve().parent / "tts_worker.py"
+VENVS = {"chatterbox": os.environ.get("EXPLAPIX_CHATTERBOX_PYTHON", str(ROOT / ".venv-tts/bin/python")),
+         "kokoro": os.environ.get("EXPLAPIX_KOKORO_PYTHON", str(ROOT / ".venv-kokoro/bin/python"))}
+DEFAULT_ENGINE = "chatterbox"
+
+
+def engine_name() -> str:
+    return os.environ.get("EXPLAPIX_TTS", DEFAULT_ENGINE)
 
 
 def _duration(path: Path) -> float:
@@ -20,41 +34,93 @@ def _duration(path: Path) -> float:
     return float(json.loads(out)["format"]["duration"])
 
 
+def _ref_default() -> str:
+    """Referencia de timbre para Chatterbox: EXPLAPIX_VOICE_REF o voices/ref.wav si existe."""
+    ref = os.environ.get("EXPLAPIX_VOICE_REF")
+    if ref:
+        return str((ROOT / ref) if not os.path.isabs(ref) else ref)
+    cand = ROOT / "voices" / "ref.wav"
+    return str(cand) if cand.exists() else ""
+
+
+def synth_many(texts: list[str], outs: list[Path], engine: str | None = None) -> None:
+    """Sintetiza varios textos de una vez (el modelo se carga una sola vez)."""
+    engine = engine or engine_name()
+    for o in outs:
+        o.parent.mkdir(parents=True, exist_ok=True)
+    if engine in VENVS:
+        jobs = [{"text": t, "out": str(o.resolve())} for t, o in zip(texts, outs)]
+        jf = outs[0].parent / f"jobs_{engine}.json"
+        jf.write_text(json.dumps(jobs, ensure_ascii=False), encoding="utf-8")
+        env = dict(os.environ)
+        if engine == "chatterbox":
+            env["EXPLAPIX_VOICE_REF"] = _ref_default()
+        p = subprocess.run([VENVS[engine], str(WORKER), engine, str(jf)], env=env,
+                           capture_output=True, text=True)
+        if p.returncode != 0:
+            raise RuntimeError(f"TTS {engine} falló:\n{p.stderr[-3000:]}")
+        return
+    for t, o in zip(texts, outs):
+        if engine == "piper":
+            model = os.environ.get("EXPLAPIX_PIPER_MODEL", "voices/es_MX-claude-high.onnx")
+            speed = os.environ.get("EXPLAPIX_PIPER_LENGTH", "0.95")  # <1 = más rápido
+            exe = shutil.which("piper") or str(Path(sys.executable).parent / "piper")
+            cmd = [exe, "-m", model, "-f", str(o),
+                   "--length-scale", speed, "--sentence-silence", "0.15"]
+            subprocess.run(cmd, input=t, text=True, check=True, capture_output=True)
+        elif engine == "espeak":
+            voice = os.environ.get("EXPLAPIX_ESPEAK_VOICE", "es-419")
+            subprocess.run(["espeak-ng", "-v", voice, "-s", "165", "-w", str(o), t],
+                           check=True, capture_output=True)
+        else:
+            raise ValueError(f"Motor TTS desconocido: {engine}")
+
+
 def synth(text: str, out_wav: Path, engine: str | None = None) -> float:
-    engine = engine or os.environ.get("EXPLAPIX_TTS", "piper")
-    out_wav.parent.mkdir(parents=True, exist_ok=True)
-    if engine == "piper":
-        model = os.environ.get("EXPLAPIX_PIPER_MODEL", "voices/es_MX-claude-high.onnx")
-        speed = os.environ.get("EXPLAPIX_PIPER_LENGTH", "0.95")  # <1 = más rápido
-        cmd = [shutil.which("piper") or "piper", "-m", model, "-f", str(out_wav),
-               "--length-scale", speed, "--sentence-silence", "0.15"]
-        subprocess.run(cmd, input=text, text=True, check=True, capture_output=True)
-    elif engine == "espeak":
-        voice = os.environ.get("EXPLAPIX_ESPEAK_VOICE", "es-419")
-        subprocess.run(["espeak-ng", "-v", voice, "-s", "165", "-w", str(out_wav), text],
-                       check=True, capture_output=True)
-    else:
-        raise ValueError(f"Motor TTS desconocido: {engine}")
+    synth_many([text], [out_wav], engine)
     return _duration(out_wav)
+
+
+# recorta silencios del principio/final (los modelos neuronales a veces dejan colas)
+_TRIM = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,"
+         "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.08,areverse")
 
 
 def narrate(segments: list[str], workdir: Path, pad: float = 0.35) -> dict:
     """Genera un wav por segmento + narration.wav concatenado + timing.json."""
     workdir.mkdir(parents=True, exist_ok=True)
+    raw = [workdir / f"seg_{i:02d}.wav" for i in range(len(segments))]
+    synth_many(segments, raw)
     timing, parts = [], []
-    for i, text in enumerate(segments):
-        wav = workdir / f"seg_{i:02d}.wav"
-        dur = synth(text, wav)
-        # pequeño silencio al final de cada segmento para respirar
+    for i, (text, wav) in enumerate(zip(segments, raw)):
+        # silencio al final de cada segmento para respirar
         padded = workdir / f"seg_{i:02d}_p.wav"
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wav), "-af",
-                        f"apad=pad_dur={pad}", "-ar", "44100", "-ac", "1", str(padded)], check=True)
-        timing.append({"text": text, "duration": round(dur + pad, 3)})
+                        f"{_TRIM},apad=pad_dur={pad}", "-ar", "44100", "-ac", "1", str(padded)],
+                       check=True)
+        timing.append({"text": text, "duration": round(_duration(padded), 3)})
         parts.append(padded)
     lst = workdir / "concat.txt"
     lst.write_text("".join(f"file '{p.resolve()}'\n" for p in parts))
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(lst),
                     "-c", "copy", str(workdir / "narration.wav")], check=True)
-    data = {"segments": timing, "total": round(sum(t["duration"] for t in timing), 3)}
+    data = {"engine": engine_name(), "segments": timing,
+            "total": round(sum(t["duration"] for t in timing), 3)}
     (workdir / "timing.json").write_text(json.dumps(data, ensure_ascii=False, indent=2))
     return data
+
+
+REF_TEXT = ("Hola, bienvenidos a Explapix. Hoy vamos a descubrir cómo funcionan las cosas que usamos "
+            "todos los días. Es más sorprendente de lo que parece, así que quédate conmigo hasta el final.")
+
+if __name__ == "__main__":
+    # python -m explapix.tts ref  -> crea voices/ref.wav (timbre de referencia con Kokoro em_alex)
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("cmd", choices=["ref", "say"])
+    ap.add_argument("text", nargs="?", default=REF_TEXT)
+    ap.add_argument("-o", "--out", type=Path, default=ROOT / "voices" / "ref.wav")
+    ap.add_argument("-e", "--engine", default=None)
+    a = ap.parse_args()
+    eng = "kokoro" if a.cmd == "ref" and not a.engine else a.engine
+    print(f"{a.out}: {synth(a.text, a.out, eng):.1f} s")

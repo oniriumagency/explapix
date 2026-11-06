@@ -16,5 +16,9 @@ for ext in onnx onnx.json; do
   [ -f "voices/$(basename $V).$ext" ] || curl -sSL -o "voices/$(basename $V).$ext" \
     "https://huggingface.co/rhasspy/piper-voices/resolve/main/$V.$ext"
 done
+# Voces neuronales (GPU NVIDIA recomendada): Chatterbox (MIT) y Kokoro (Apache-2.0)
+[ -d .venv-tts ] || { python3 -m venv .venv-tts && .venv-tts/bin/pip install -q -U pip && .venv-tts/bin/pip install -q -r requirements-tts.txt; }
+[ -d .venv-kokoro ] || { python3 -m venv .venv-kokoro && .venv-kokoro/bin/pip install -q -U pip && .venv-kokoro/bin/pip install -q "kokoro>=0.9" soundfile; }
+[ -f voices/ref.wav ] || python -m explapix.tts ref
 echo "Listo. Prueba sin costo:"
 echo "  . .venv/bin/activate && python make_video.py --storyboard examples/refrigerador/storyboard.json --scene examples/refrigerador/scene.py"
