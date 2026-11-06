@@ -82,6 +82,14 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
         n_sfx = sfx.build_track(events, render._dur(silent), sfx_wav)
         print(f"   efectos: {n_sfx} · música: {music.name if music else 'ninguna'}", flush=True)
     final = render.mux(silent, work / "audio" / "narration.wav", work / "final.mp4", music, sfx_wav)
+    from explapix import config as _cfg  # noqa: PLC0415
+    real = render._dur(final)
+    tope = float(_cfg.get("formato.duracion_maxima_s", 175))
+    if real >= 180 or real > tope + 3:
+        bad = final.with_name("final_demasiado_largo.mp4")
+        final.replace(bad)
+        raise SystemExit(f"El video dura {real:.1f} s: pasa el límite de 3 min de Shorts/Reels "
+                         f"(tope {tope:.0f} s). Quedó en {bad}; acorta el guion y regenera.")
     meta = {"title": sb["title"], "description": sb["description"], "tags": sb["tags"],
             "topic": sb.get("topic", ""), "file": str(final), "engine": timing.get("engine"),
             "duration": timing.get("total"), "quality": quality,

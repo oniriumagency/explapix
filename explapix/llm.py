@@ -129,8 +129,8 @@ STORYBOARD_SCHEMA = {
         "segments": {"type": "array", "items": {
             "type": "object",
             "properties": {"narration": {"type": "string"}, "visual": {"type": "string"},
-                           "beat": {"type": "string"}},
-            "required": ["narration", "visual", "beat"], "additionalProperties": False}},
+                           "beat": {"type": "string"}, "chapter": {"type": "string"}},
+            "required": ["narration", "visual", "beat", "chapter"], "additionalProperties": False}},
     },
     "required": ["topic", "title", "description", "tags", "duracion_objetivo_s",
                  "justificacion_duracion", "segments"],
@@ -141,10 +141,13 @@ STORYBOARD_SYSTEM = """Eres guionista del canal Factos Didácticos: videos verti
 cómo funcionan las cosas, en español latino neutro, tono curioso y cercano.
 
 DURACIÓN (variable, la decides tú según el tema):
-- Entre 61 y 90 segundos; mínimo 61 s (los videos de más de 1 minuto califican para el programa de
-  recompensas de TikTok). Hasta ~100 s solo si el tema lo exige. NUNCA rellenes: cada frase debe
-  aportar algo nuevo. Temas simples ~61-70 s; con varios pasos o mecanismos ~75-90 s.
-- La voz dice unas 2,6 palabras por segundo: 61 s ≈ 160 palabras, 75 s ≈ 195, 90 s ≈ 235.
+- Mínimo 61 s (más de 1 minuto califica para el programa de recompensas de TikTok) y máximo 175 s
+  (tope duro: Shorts y Reels aceptan hasta 3 min). NUNCA rellenes: cada frase debe aportar algo
+  nuevo. Temas simples ~61-75 s; con varios pasos ~80-110 s; solo temas muy ricos llegan a 120-175 s.
+- La voz dice unas 2,6 palabras por segundo: 61 s ≈ 160 palabras, 90 s ≈ 235, 120 s ≈ 310,
+  175 s ≈ 450 (máximo absoluto).
+- Si pasas de 90 s: un re-gancho cada ~12-15 s y divide el video en 2-4 capítulos internos con un
+  mini-título corto (campo chapter del primer segmento de cada capítulo; vacío en los demás).
 - Pon en duracion_objetivo_s los segundos que buscas y en justificacion_duracion por qué (1 frase).
 
 ESTRUCTURA (campo beat de cada segmento):
@@ -157,7 +160,7 @@ ESTRUCTURA (campo beat de cada segmento):
   inicio (para que el video se sienta en loop), + CTA corto: "Síguenos para más Factos Didácticos".
 
 REGLAS:
-- 8 a 14 segmentos; cada narración de 12 a 26 palabras, frases cortas, fáciles de decir en voz alta.
+- 8 a 14 segmentos hasta 90 s; hasta 28 segmentos en videos largos; cada narración de 12 a 26 palabras, frases cortas, fáciles de decir en voz alta.
 - Exactitud científica ante todo; si algo se simplifica, que no sea falso. Sin cifras inventadas.
 - Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen (estilo ilustración
   vectorial sobre fondo oscuro con brillos), animable con Manim, sin fotos. Los protagonistas pueden
@@ -224,6 +227,9 @@ DINAMISMO (kit v3, obligatorio):
   animar ese objeto con Deform/exit_out llama stop_idle(obj).
 - No agregues a un VGroup objetos que ya están en escena (se duplican): anima por separado o
   quítalos con self.remove(...) y añade el grupo.
+CAPÍTULOS (videos de más de 90 s): si un segmento trae CAPÍTULO, empieza ese bloque con
+self.chapter("mini-título") (≈1 s, tarjeta que entra y sale sola) antes de sus animaciones.
+
 ZONA SEGURA (Reels/Shorts/TikTok, obligatorio):
 - Diseña TODO lo importante (título, etiquetas, datos, personajes) dentro de la caja x∈[-4.3, 4.3],
   y∈[-5.0, 7.3]. El kit la encuadra sola dentro de la zona segura (deja libre 12 % arriba, 20 % abajo
@@ -268,8 +274,11 @@ def storyboard(topic: str, notes: str = "") -> dict:
     if ENGINE == "claude-code":
         _, data = _claude_code(STORYBOARD_SYSTEM + "\nResponde SOLO con el JSON pedido.", user,
                                STORYBOARD_SCHEMA)
-        if not 7 <= len(data.get("segments", [])) <= 16:
-            raise RuntimeError("El guion no tiene entre 8 y 14 segmentos")
+        if not 7 <= len(data.get("segments", [])) <= 30:
+            raise RuntimeError("El guion no tiene entre 8 y 28 segmentos")
+        words = sum(len(s_["narration"].split()) for s_ in data["segments"])
+        if words > 470:
+            raise RuntimeError(f"Guion demasiado largo ({words} palabras, máx. ~450 = 175 s)")
         return data
     resp = _api().messages.create(
         model=MODEL, max_tokens=16000, system=STORYBOARD_SYSTEM,
@@ -300,7 +309,8 @@ def expand_storyboard(sb: dict, notes: str = "") -> dict:
 
 def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str | None = None,
                base_scene: str | None = None) -> str:
-    segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}] NARRACIÓN: {s['narration']}\n"
+    segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}]"
+                     f"{(' CAPÍTULO: ' + s['chapter']) if s.get('chapter') else ''} NARRACIÓN: {s['narration']}\n"
                      f"   VISUAL: {s['visual']}"
                      for i, (s, t) in enumerate(zip(sb["segments"], timing["segments"])))
     content = f"Tema: {sb['topic']}\nSegmentos:\n{segs}"

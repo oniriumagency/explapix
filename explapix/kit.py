@@ -942,6 +942,16 @@ class ExplapixScene(MovingCameraScene):
         if ms:
             self.play(LaggedStart(*[exit_out(m) for m in ms], lag_ratio=0.05, run_time=run_time))
 
+    def chapter(self, title: str, color=None):
+        """Mini-título de capítulo (videos largos): entra con pop, se queda ~0.6 s y sale (≈1.1 s)."""
+        kf = self.frame.height / config.frame_height
+        c = self.frame.get_center() + self._content_screen * kf + UP * 2.2 * kf
+        card = pill(title, color or VIOLET, 40, text_color=INK).scale(kf).move_to(c)
+        self.sfx("blip")
+        self.play(pop_in(card, anchor=ORIGIN, run_time=0.45))
+        self.wait(0.35)
+        self.play(exit_out(card, run_time=0.3))
+
     def outro(self):
         """Cierre de marca con confeti (≈1.2 s)."""
         kf = self.frame.height / config.frame_height

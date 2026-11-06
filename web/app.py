@@ -234,6 +234,9 @@ class Jobs:
                     j["status"] = "cancelled"
                 elif rc == 0:
                     j["status"] = "done"
+                elif rc < 0:
+                    j["status"] = "error"
+                    j["error"] = "Interrumpido (el panel se reinició o se detuvo)"
                 else:
                     j["status"] = "error"
                     tail = log.read_text(encoding="utf-8", errors="replace").strip().splitlines()
@@ -409,6 +412,16 @@ watcher = CalendarWatcher()
 @asynccontextmanager
 async def lifespan(_app):
     panel_password()
+    # temas que quedaron "en cola" o con error por un reinicio del panel vuelven a pendiente
+    live = {j["meta"].get("calendar_id") for j in jobs.jobs if j["status"] in ("queued", "running")}
+    interrupted = {j["meta"].get("calendar_id") for j in jobs.jobs
+                   if (j.get("error") or "").startswith("Interrumpido") or "SIGTERM" in (j.get("error") or "")}
+    data = calendar_load()
+    for it in data["items"]:
+        if (it["status"] == "en_cola" and it["id"] not in live) or \
+                (it["status"] == "error" and it["id"] in interrupted):
+            it["status"] = "pendiente"
+    calendar_save(data)
     jobs.start()
     watcher.start()
     yield
