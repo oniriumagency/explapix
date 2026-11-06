@@ -1,0 +1,22 @@
+{
+  "topic": "Cómo calienta la comida un microondas",
+  "title": "¿Cómo calienta tu comida el microondas? 📡",
+  "description": "El microondas no usa fuego: hace girar a las moléculas de agua de tu comida casi cinco mil millones de veces por segundo. Te contamos qué hace el magnetrón, por qué las ondas rebotan y para qué gira el plato.\n\n#FactosDidacticos #Ciencia #Microondas #ComoFunciona",
+  "tags": ["microondas", "como funciona", "ciencia", "fisica", "magnetron", "moleculas de agua", "shorts"],
+  "segments": [
+    {"narration": "¿Tu microondas calienta la comida con fuego? Para nada. Lo que hace es poner a bailar a las moléculas de agua.",
+     "visual": "Horno microondas con carita; una llama aparece y se tacha; moléculas bailando con chispas."},
+    {"narration": "Todo empieza en el magnetrón, una pieza que convierte electricidad en microondas: ondas invisibles, parecidas a las del wifi.",
+     "visual": "Zoom y giro de cámara al magnetrón con chispas y electricidad; ícono de wifi."},
+    {"narration": "Esas ondas viajan por un tubo hasta la caja y rebotan en las paredes de metal, llenándola por completo.",
+     "visual": "Ondas que cruzan el interior y rebotan en las paredes con destellos."},
+    {"narration": "Cada molécula de agua tiene una punta con carga positiva y otra con carga negativa.",
+     "visual": "Molécula de agua gigante con carita, signos más y menos; fondo frío."},
+    {"narration": "El campo de la onda cambia de dirección casi cinco mil millones de veces por segundo, y las moléculas giran para seguirlo.",
+     "visual": "Flecha de campo que se invierte; las moléculas giran de un lado a otro; cámara se inclina."},
+    {"narration": "Al girar empujan y chocan con sus vecinas. Esa agitación es calor, que luego se reparte por toda la comida.",
+     "visual": "Muchas moléculas chocando, partículas de calor, termómetro subiendo; fondo cálido."},
+    {"narration": "Por eso el plato gira: para repartir las ondas y evitar partes frías. Síguenos para más Factos Didácticos.",
+     "visual": "Plato girando, comida humeante; cierre con logo y confeti."}
+  ]
+}

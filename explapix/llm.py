@@ -16,6 +16,7 @@ MODEL = os.environ.get("EXPLAPIX_MODEL", "claude-opus-5-5")
 EFFORT = os.environ.get("EXPLAPIX_EFFORT", "medium")
 KIT = (Path(__file__).parent / "kit.py").read_text(encoding="utf-8")
 EXAMPLE = (Path(__file__).parent.parent / "examples/refrigerador/scene.py").read_text(encoding="utf-8")
+MICRO = (Path(__file__).parent.parent / "examples/microondas/scene.py").read_text(encoding="utf-8")
 
 client = anthropic.Anthropic()
 
@@ -35,21 +36,21 @@ STORYBOARD_SCHEMA = {
     "additionalProperties": False,
 }
 
-STORYBOARD_SYSTEM = """Eres guionista del canal Explapix: videos verticales cortos (35-55 s) que \
+STORYBOARD_SYSTEM = """Eres guionista del canal Factos Didácticos: videos verticales cortos (35-55 s) que \
 explican cómo funcionan las cosas, en español latino neutro, tono curioso y cercano.
 Reglas:
 - 6 a 8 segmentos; cada narración de 12 a 24 palabras, frases cortas y fáciles de decir en voz alta.
 - El segmento 1 es un gancho con una pregunta o dato sorprendente. El último cierra con una \
-consecuencia práctica y "Síguenos para más Explapix".
+consecuencia práctica y "Síguenos para más Factos Didácticos".
 - Exactitud científica ante todo; si algo se simplifica, que no sea falso.
 - Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen (estilo \
 ilustración vectorial sobre fondo oscuro con brillos), animable con Manim, sin fotos. Los objetos \
 protagonistas pueden tener carita (ojos, mejillas) y reaccionar: saltar, temblar, sorprenderse. \
 Indica qué debe brillar, qué entra rebotando y dónde conviene acercar la cámara.
-- title: <= 70 caracteres con un emoji. description: 2-3 frases + 3-5 hashtags (#Explapix primero).
+- title: <= 70 caracteres con un emoji. description: 2-3 frases + 3-5 hashtags (#FactosDidacticos primero).
 - tags: 5-10 palabras clave en minúsculas."""
 
-SCENE_SYSTEM = f"""Escribes escenas de Manim Community (v0.22+) para el canal Explapix.
+SCENE_SYSTEM = f"""Escribes escenas de Manim Community (v0.22+) para el canal Factos Didácticos.
 Usa SOLO el kit de estilo siguiente (importa con `from explapix.kit import *`). Lienzo vertical \
 9x16 unidades: x∈[-4.5,4.5], y∈[-8,8]. Deja libre y<-5.6 (subtítulos) y usa y>6 para el título.
 Reglas duras:
@@ -86,6 +87,28 @@ y vuelve con self.play(self.reset_camera()); o apaga el resto con self.play(self
 0.3-0.8 s de pausa visual tras cada idea (el segment() ya rellena el final).
 9. Acción secundaria: flow_dots en circuitos, idle_* en personajes, ondas o destellos (sparkle) de apoyo.
 10. Cierre: en el último segmento llama self.clear_stage() y luego self.outro() (≈2 s en total).
+
+DINAMISMO (kit v3, obligatorio):
+- Fondo: cada segmento lleva un mood acorde a la idea: `with self.segment(i, mood="calor") as d:`.
+  Moods: noche, energia, calor, frio, naturaleza, sol, magia. Cambia de mood al menos 3 veces por video.
+- Cámara viva: llama self.cam_sway(1.2, 7) al inicio. En 3-4 momentos clave usa
+  self.cam_to(obj_o_punto, zoom=1.3-1.8, angle=-8..8, dur=1.0-1.5) y luego self.cam_reset().
+  cam_to NO va dentro de self.play: corre en paralelo a las animaciones. Giros suaves (máx. ±10°).
+- Partículas en TODOS los segmentos: particles(kind, centro, ancho, alto, n) con kind en
+  chispas, burbujas, calor, estrellas, confeti, frio, orbita, polvo; follow=obj para que sigan a un
+  objeto. Añádelas con self.add(...) y quítalas con exit_out (antes .clear_updaters()).
+- Nada quieto: cada objeto en pantalla tiene vida constante: alive(obj), idle_wiggle (etiquetas),
+  idle_pulse (cosas con energía), idle_spin (engranes, platos, moléculas), idle_float. Antes de
+  animar ese objeto con Deform/exit_out llama stop_idle(obj).
+- No agregues a un VGroup objetos que ya están en escena (se duplican): anima por separado o
+  quítalos con self.remove(...) y añade el grupo.
+- Un objeto que salió con exit_out queda reducido a nada: para que vuelva, créalo de nuevo con una
+  función (p. ej. make_oven()).
+
+EJEMPLO DINÁMICO (kit v3, microondas) — imita su ritmo:
+```python
+{MICRO}
+```
 - No combines en el mismo self.play dos animaciones sobre el mismo objeto.
 - Devuelve únicamente el código Python en un bloque ```python.
 
@@ -143,7 +166,7 @@ def reply_to_comment(video_title: str, video_description: str, comment: str) -> 
               "required": ["skip", "reason", "reply"], "additionalProperties": False}
     resp = client.messages.create(
         model=MODEL, max_tokens=2000,
-        system=("Respondes comentarios del canal Explapix (divulgación). Español, cálido, breve "
+        system=("Respondes comentarios del canal Factos Didácticos (divulgación). Español, cálido, breve "
                 "(máx. 2 frases), sin inventar datos; si no sabes, dilo e invita a sugerir el tema. "
                 "Marca skip=true para spam, insultos, enlaces sospechosos o comentarios que no "
                 "necesitan respuesta."),

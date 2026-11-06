@@ -1,4 +1,5 @@
-"""Explapix kit v2: estilo visual + principios de animación + base sincronizada con la voz.
+"""Kit v3 de Factos Didácticos (paquete interno: explapix): estilo, principios de animación,
+cámara dinámica, partículas y base sincronizada con la voz.
 
 Las escenas (escritas a mano o generadas por Claude) heredan de ExplapixScene y dividen el
 video en segmentos cuya duración viene del audio de narración:
@@ -8,7 +9,7 @@ video en segmentos cuya duración viene del audio de narración:
             with self.segment(0) as d:      # dura exactamente lo que dura el audio 0
                 ...animaciones...
 
-ESTILO (lenguaje visual Explapix)
+ESTILO (lenguaje visual de Factos Didácticos)
   - Fondo oscuro azul-violeta con degradado, brillo radial y polvo de estrellas de colores que
     deriva lento (profundidad por capas: lo lejano es pequeño, tenue y lento).
   - Formas planas redondeadas, SIN contorno blanco: relleno sólido + sombra tonal (media luna
@@ -30,6 +31,15 @@ PRINCIPIOS DE ANIMACIÓN -> AYUDANTES
  10 Exageración ............. emphasize (escala 1.25 con resorte), squash marcado
  11 Dibujo sólido ........... toon(): volumen con sombra tonal + luz de borde + sombra al piso
  12 Appeal .................. caritas, formas redondeadas, paleta coherente
+
+DINAMISMO (v3)
+  - Fondo que cambia de color por segmento: self.mood("calor"|"frio"|"energia"|...) o
+    with self.segment(i, mood="calor"). Transición suave sin bloquear otras animaciones.
+  - Cámara viva: self.cam_to(center, zoom, angle) se mueve EN PARALELO a las animaciones
+    (no usa self.play); self.cam_sway() balanceo suave constante. Los subtítulos quedan fijos.
+  - Partículas: particles("chispas"|"burbujas"|"calor"|"estrellas"|"confeti"|"frio"|"orbita"|
+    "polvo", center, w, h, n). Siempre vivas; follow=obj para que sigan a un objeto.
+  - Vida constante: alive(obj) = flotar + pulso o balanceo; idle_wiggle, idle_pulse, idle_spin.
 """
 from __future__ import annotations
 
@@ -444,13 +454,198 @@ def flow_dots(path: VMobject, n: int = 8, color=COLD, radius: float = 0.07,
     return dots
 
 
+# ---------- Vida constante (acción secundaria) ----------
+def idle_wiggle(mob, deg: float = 4, period: float = 1.8):
+    """Se balancea de lado a lado (rotación pequeña de ida y vuelta)."""
+    st = {"t": random.uniform(0, period), "a": 0.0}
+
+    def upd(m, dt):
+        st["t"] += dt
+        a = np.deg2rad(deg) * np.sin(TAU * st["t"] / period)
+        m.rotate(a - st["a"], about_point=m.get_center())
+        st["a"] = a
+    mob._idle = getattr(mob, "_idle", []) + [upd]
+    mob.add_updater(upd)
+    return mob
+
+
+def idle_pulse(mob, amp: float = 0.05, period: float = 1.4):
+    """Late: crece y se encoge un poquito (cosas con energía)."""
+    st = {"t": random.uniform(0, period), "f": 1.0}
+
+    def upd(m, dt):
+        st["t"] += dt
+        f = 1 + amp * np.sin(TAU * st["t"] / period)
+        m.scale(f / st["f"])
+        st["f"] = f
+    mob._idle = getattr(mob, "_idle", []) + [upd]
+    mob.add_updater(upd)
+    return mob
+
+
+def idle_spin(mob, turns_per_s: float = 0.25):
+    """Gira sin parar (engranes, platos, ventiladores, moléculas)."""
+    def upd(m, dt):
+        m.rotate(TAU * turns_per_s * dt)
+    mob._idle = getattr(mob, "_idle", []) + [upd]
+    mob.add_updater(upd)
+    return mob
+
+
+def alive(mob, style: str = "float"):
+    """Atajo de vida constante. style: float (flota+pulso) | wiggle | breathe | spin."""
+    if style == "wiggle":
+        return idle_wiggle(mob)
+    if style == "breathe":
+        return idle_breathe(mob)
+    if style == "spin":
+        return idle_spin(mob)
+    idle_float(mob, amp=0.07, period=random.uniform(2.6, 3.6))
+    return idle_pulse(mob, amp=0.025, period=random.uniform(1.6, 2.4))
+
+
+# ---------- Partículas ----------
+class Particles(VGroup):
+    """Sistema de partículas vivo (se actualiza solo en cada fotograma).
+
+    kind: chispas | burbujas | calor | estrellas | confeti | frio | orbita | polvo
+    center/w/h: zona donde nacen. follow=obj: la zona sigue a ese objeto.
+    rate: velocidad global (1 = normal). colors: lista de colores opcional.
+    """
+
+    DEFAULT_COLORS = {"chispas": [SUN, CORAL, INK], "burbujas": [CYAN, INK], "calor": [CORAL, SUN, PINK],
+                      "estrellas": [INK, SUN, CYAN], "confeti": PALETTE, "frio": [CYAN, INK, BLUE],
+                      "orbita": [CYAN, VIOLET, MINT], "polvo": [INK, MUTED, VIOLET]}
+
+    def __init__(self, kind: str = "polvo", center=ORIGIN, w: float = 4, h: float = 4, n: int = 30,
+                 colors=None, follow: Mobject | None = None, rate: float = 1.0, size: float = 1.0,
+                 seed: int | None = None):
+        super().__init__()
+        self.kind, self.w, self.h, self.n, self.rate, self.size = kind, w, h, n, rate, size
+        self.center0 = np.array(center, dtype=float)
+        self.follow = follow
+        self.colors = colors or self.DEFAULT_COLORS.get(kind, PALETTE)
+        self.rng = np.random.default_rng(seed if seed is not None else random.randint(0, 10**6))
+        self.pos = np.zeros((n, 2))
+        self.vel = np.zeros((n, 2))
+        self.age = np.zeros(n)
+        self.life = np.ones(n)
+        self.phase = self.rng.uniform(0, TAU, n)
+        for i in range(n):
+            self.add(self._make(i))
+            self._spawn(i, initial=True)
+        self.add_updater(lambda m, dt: m._step(dt))
+        self._step(0)
+
+    def _c(self):
+        return self.colors[self.rng.integers(len(self.colors))]
+
+    def _make(self, i):
+        k, s = self.kind, self.size
+        r = self.rng.uniform
+        if k == "burbujas":
+            return Circle(radius=r(0.06, 0.16) * s, stroke_color=self._c(), stroke_width=3,
+                          fill_color=CYAN, fill_opacity=0.12)
+        if k == "estrellas":
+            return sparkle(r(0.06, 0.16) * s, self._c())
+        if k == "confeti":
+            return Rectangle(width=0.09 * s, height=0.18 * s, fill_color=self._c(), fill_opacity=1,
+                             stroke_width=0).rotate(r(0, PI))
+        rad = {"chispas": (0.03, 0.06), "calor": (0.04, 0.09), "frio": (0.03, 0.07),
+               "orbita": (0.05, 0.09), "polvo": (0.015, 0.04)}.get(k, (0.03, 0.06))
+        return Dot(radius=r(*rad) * s, color=self._c())
+
+    def _origin(self):
+        return self.follow.get_center() if self.follow is not None else self.center0
+
+    def _spawn(self, i, initial=False):
+        k, r = self.kind, self.rng.uniform
+        w, h = self.w / 2, self.h / 2
+        if k == "chispas":
+            ang = r(0, TAU)
+            sp = r(1.8, 4.0)
+            self.pos[i] = [r(-0.15, 0.15), r(-0.15, 0.15)]
+            self.vel[i] = [np.cos(ang) * sp, np.sin(ang) * sp + 1.0]
+            self.life[i] = r(0.4, 0.9)
+        elif k in ("burbujas", "calor"):
+            self.pos[i] = [r(-w, w), -h]
+            self.vel[i] = [0, r(0.6, 1.3) if k == "burbujas" else r(0.8, 1.6)]
+            self.life[i] = self.h / self.vel[i][1]
+        elif k in ("confeti", "frio"):
+            self.pos[i] = [r(-w, w), h]
+            self.vel[i] = [r(-0.4, 0.4), -(r(1.6, 3.0) if k == "confeti" else r(0.4, 0.9))]
+            self.life[i] = self.h / -self.vel[i][1]
+        elif k == "orbita":
+            self.pos[i] = [r(0.5, 1.0), r(0, TAU)]          # (radio relativo, ángulo)
+            self.vel[i] = [0, r(0.8, 2.0) * self.rng.choice([-1, 1])]
+            self.life[i] = 1e9
+        else:  # estrellas, polvo: posiciones fijas o deriva lenta
+            self.pos[i] = [r(-w, w), r(-h, h)]
+            self.vel[i] = [r(-0.1, 0.1), r(0.05, 0.25)] if k == "polvo" else [0, 0]
+            self.life[i] = r(2, 5) if k == "polvo" else 1e9
+        self.age[i] = r(0, self.life[i]) if initial and self.life[i] < 1e8 else 0.0
+
+    def _step(self, dt):
+        dt *= self.rate
+        o = self._origin()
+        k = self.kind
+        for i, m in enumerate(self.submobjects):
+            self.age[i] += dt
+            if self.age[i] >= self.life[i]:
+                self._spawn(i)
+            a, fr = self.age[i], min(self.age[i] / self.life[i], 1.0)
+            if k == "chispas":
+                self.vel[i][1] -= 4.0 * dt
+                self.pos[i] += self.vel[i] * dt
+                op = 1 - fr
+            elif k == "orbita":
+                self.pos[i][1] += self.vel[i][1] * dt
+                rad = self.pos[i][0] * min(self.w, self.h) / 2
+                xy = [rad * np.cos(self.pos[i][1]), rad * np.sin(self.pos[i][1]) * 0.55]
+                m.move_to(o + np.array([*xy, 0]))
+                m.set_opacity(0.9)
+                continue
+            elif k == "estrellas":
+                op = 0.25 + 0.75 * abs(np.sin(a * 1.7 + self.phase[i]))
+            else:
+                self.pos[i] += self.vel[i] * dt
+                if k in ("burbujas", "calor", "frio", "polvo"):
+                    self.pos[i][0] += 0.25 * np.sin(a * 3 + self.phase[i]) * dt
+                op = np.sin(np.pi * fr) if k != "confeti" else (1 if fr < 0.85 else (1 - fr) / 0.15)
+            m.move_to(o + np.array([*self.pos[i], 0]))
+            if k == "confeti":
+                m.rotate(3 * dt * (1 if i % 2 else -1))
+            if k == "burbujas":
+                m.set_stroke(opacity=op).set_fill(opacity=0.12 * op)
+            else:
+                m.set_opacity(max(op, 0))
+
+
+def particles(kind: str = "polvo", center=ORIGIN, w: float = 4, h: float = 4, n: int = 30,
+              **kw) -> Particles:
+    """Atajo: self.add(particles("chispas", obj.get_center(), 1, 1, 25, follow=obj))."""
+    return Particles(kind, center, w, h, n, **kw)
+
+
 # ---------- Fondo vivo ----------
-def backdrop(w: float = 27, h: float = 48, n: int = 90, seed: int = 7) -> VGroup:
+MOODS = {  # (abajo, medio, arriba, halo)
+    "noche": ("#0B0D26", "#0B0D26", "#26145A", VIOLET),
+    "energia": ("#0D0B2E", "#1B0F4D", "#4A1A7A", VIOLET),
+    "calor": ("#1F0A1E", "#3A0F24", "#6B1E2A", CORAL),
+    "frio": ("#06142E", "#0A2450", "#0F3A6E", CYAN),
+    "naturaleza": ("#061F1E", "#0A3330", "#11524A", MINT),
+    "sol": ("#1E1206", "#3A2208", "#6A3A0C", SUN),
+    "magia": ("#1A0726", "#33104A", "#5E1A6E", PINK),
+}
+
+
+def backdrop(w: float = 30, h: float = 48, n: int = 110, seed: int = 7) -> VGroup:
     """Degradado + brillo + polvo de estrellas en 3 capas que derivan (parallax)."""
     rng = random.Random(seed)
     grad = Rectangle(width=w, height=h, stroke_width=0)
-    grad.set_fill(color=[BG, BG, BG2], opacity=1).set_sheen_direction(UP)
-    halo = glow(Dot(), VIOLET, radius=3.5, layers=8, opacity=0.06).shift(UP * 1.5)
+    lo, mid, hi, hc = MOODS["noche"]
+    grad.set_fill(color=[lo, mid, hi], opacity=1).set_sheen_direction(UP)
+    halo = glow(Dot(), hc, radius=3.5, layers=8, opacity=0.07).shift(UP * 1.5)
     layers = VGroup()
     specs = [(n // 2, 0.015, 0.035, 0.35, 0.02), (n // 3, 0.035, 0.06, 0.55, 0.045),
              (n // 6, 0.06, 0.1, 0.8, 0.08)]
@@ -460,20 +655,44 @@ def backdrop(w: float = 27, h: float = 48, n: int = 90, seed: int = 7) -> VGroup
             c = rng.choice(PALETTE + [INK, INK])
             x, y = rng.uniform(-w / 2, w / 2), rng.uniform(-h / 2, h / 2)
             layer.add(Dot([x, y, 0], radius=rng.uniform(rmin, rmax), color=c, fill_opacity=op))
-        for _ in range(1 + depth):
+        for _ in range(2 + depth):
             layer.add(sparkle(rng.uniform(0.07, 0.14), INK).set_opacity(op).move_to(
                 [rng.uniform(-4.2, 4.2), rng.uniform(-7.5, 7.5), 0]))
         layer.add_updater(lambda m, dt, spd=spd: m.shift(UP * spd * dt))
         layers.add(layer)
-    return VGroup(grad, halo, layers)
+    g = VGroup(grad, halo, layers)
+    g.grad, g.halo = grad, halo
+    return g
+
+
+class RotatingCamera(MovingCamera):
+    """MovingCamera que además puede girar: rota todo al dibujar alrededor del centro del cuadro."""
+
+    def transform_points_pre_display(self, mobject, points):
+        points = super().transform_points_pre_display(mobject, points)
+        ang = getattr(self.frame, "cam_angle", 0.0)
+        if not ang or len(points) == 0:
+            return points
+        c = self.frame.get_center()
+        ca, sa = np.cos(-ang), np.sin(-ang)
+        p = points - c
+        x = p[:, 0] * ca - p[:, 1] * sa
+        y = p[:, 0] * sa + p[:, 1] * ca
+        out = np.array(points, dtype=float)
+        out[:, 0], out[:, 1] = x + c[0], y + c[1]
+        return out
 
 
 class ExplapixScene(MovingCameraScene):
-    """Base: fondo vivo, subtítulos por segmento sincronizados con la voz y cámara."""
+    """Base: fondo vivo con moods, cámara que gira/paneo/zoom, subtítulos fijos sincronizados."""
 
     timing_file = os.environ.get("EXPLAPIX_TIMING", "timing.json")
     show_captions = True
     show_backdrop = True
+
+    def __init__(self, **kw):
+        kw.setdefault("camera_class", RotatingCamera)
+        super().__init__(**kw)
 
     def setup(self):
         super().setup()
@@ -482,28 +701,105 @@ class ExplapixScene(MovingCameraScene):
         self.durations = [s["duration"] for s in data["segments"]]
         self.captions = [s["text"] for s in data["segments"]]
         self._caption = None
+        self._tweens: list[dict] = []
+        self._clock = 0.0
+        self._angle = 0.0
+        self._sway = {"amp": 0.0, "period": 7.0}
+        self.frame.cam_angle = 0.0
         self.bg = backdrop() if self.show_backdrop else VGroup()
         self.add(self.bg)
+        ticker = VMobject()          # motor de tweens no bloqueantes (cámara, color de fondo)
+        ticker.add_updater(lambda m, dt: self._tick(dt))
+        self._ticker = ticker
+        self.add(ticker)
+
+    def get_moving_mobjects(self, *animations):
+        # La cámara puede girar/moverse por tweens en cualquier momento: redibujar todo siempre.
+        return list(self.mobjects)
+
+    # ----- tweens no bloqueantes -----
+    def _tick(self, dt):
+        self._clock += dt
+        for tw in list(self._tweens):
+            u = min((self._clock - tw["t0"]) / tw["dur"], 1.0)
+            tw["fn"](tw["rate"](u))
+            if u >= 1:
+                self._tweens.remove(tw)
+        sway = self._sway["amp"] * np.sin(TAU * self._clock / self._sway["period"])
+        self.frame.cam_angle = self._angle + sway
+
+    def tween(self, fn, dur: float = 1.0, rate=EASE):
+        """Ejecuta fn(alpha) durante dur segundos en paralelo a lo que se esté animando."""
+        self._tweens.append({"fn": fn, "t0": self._clock, "dur": max(dur, 1e-3), "rate": rate})
 
     # ----- cámara (staging) -----
     @property
     def frame(self):
         return self.camera.frame
 
+    def cam_to(self, center=None, zoom: float | None = None, angle: float | None = None,
+               dur: float = 1.2, rate=EASE):
+        """Mueve la cámara SIN bloquear: centro (punto u objeto), zoom (1 = normal) y giro en grados
+        (usa giros suaves: entre -12 y 12). Ej.: self.cam_to(motor, zoom=1.5, angle=-6)."""
+        c0 = self.frame.get_center().copy()
+        h0 = self.frame.height
+        a0 = self._angle
+        c1 = (center.get_center() if isinstance(center, Mobject) else np.array(center, dtype=float)) \
+            if center is not None else c0
+        h1 = config.frame_height / zoom if zoom else h0
+        a1 = np.deg2rad(angle) if angle is not None else a0
+
+        def fn(a):
+            self.frame.move_to(c0 + (c1 - c0) * a)
+            self.frame.set(height=h0 + (h1 - h0) * a)
+            self._angle = a0 + (a1 - a0) * a
+        self.tween(fn, dur, rate)
+
+    def cam_reset(self, dur: float = 1.0):
+        self.cam_to(ORIGIN, 1.0, 0.0, dur)
+
+    def cam_sway(self, amp_deg: float = 1.5, period: float = 7.0):
+        """Balanceo suave y constante de la cámara (0 para apagarlo)."""
+        self._sway = {"amp": np.deg2rad(amp_deg), "period": period}
+
     def focus(self, target, zoom: float = 1.5, run_time: float = 1.0, rate_func=EASE):
-        """Acerca la cámara a algo para dirigir la mirada. Úsalo con self.play(...)."""
+        """Acerca la cámara a algo (bloqueante, para usar dentro de self.play)."""
         p = target.get_center() if isinstance(target, Mobject) else np.array(target, dtype=float)
         return self.frame.animate(run_time=run_time, rate_func=rate_func).move_to(p).set(
             height=config.frame_height / zoom)
 
     def reset_camera(self, run_time: float = 0.9, rate_func=EASE):
+        a0 = self._angle
+        self.tween(lambda a: setattr(self, "_angle", a0 * (1 - a)), run_time, rate_func)
         return self.frame.animate(run_time=run_time, rate_func=rate_func).move_to(ORIGIN).set(
             height=config.frame_height)
 
+    # ----- color del fondo -----
+    def mood(self, name="noche", dur: float = 1.2):
+        """Cambia el color del fondo suavemente (sin bloquear). name: clave de MOODS o
+        tupla (abajo, medio, arriba, halo)."""
+        if not self.show_backdrop:
+            return
+        lo, mid, hi, hc = MOODS[name] if isinstance(name, str) else name
+        grad, halo = self.bg.grad, self.bg.halo
+        start = [ManimColor(c) for c in grad.get_fill_colors()][:3]
+        while len(start) < 3:
+            start.append(start[-1])
+        end = [ManimColor(c) for c in (lo, mid, hi)]
+        h0 = ManimColor(halo[0].get_fill_color())
+        h1 = ManimColor(hc)
+
+        def fn(a):
+            grad.set_fill(color=[interpolate_color(s, e, a) for s, e in zip(start, end)], opacity=1)
+            for c in halo:
+                c.set_fill(interpolate_color(h0, h1, a))
+        self.tween(fn, dur, EASE)
+
+    # ----- escenario -----
     def stage(self) -> list:
-        """Todo lo que está en escena excepto fondo y subtítulos."""
+        """Todo lo que está en escena excepto fondo, motor y subtítulos."""
         return [m for m in self.mobjects if isinstance(m, VMobject) and m is not self.bg
-                and m is not self._caption and m is not self.frame]
+                and m is not self._caption and m is not self.frame and m is not self._ticker]
 
     def dim_others(self, *keep, opacity: float = 0.2, run_time: float = 0.5):
         """Apaga todo menos lo que importa (staging). Devuelve una animación."""
@@ -519,17 +815,23 @@ class ExplapixScene(MovingCameraScene):
             self.play(LaggedStart(*[exit_out(m) for m in ms], lag_ratio=0.05, run_time=run_time))
 
     def outro(self):
-        """Cierre de marca: logo con rebote (≈1 s)."""
-        logo = VGroup(T("EXPLA", 84, INK), T("PIX", 84, SUN)).arrange(RIGHT, buff=0.06)
-        sub = T("cómo funcionan las cosas", 30, MUTED, weight=NORMAL).next_to(logo, DOWN)
+        """Cierre de marca con confeti (≈1.2 s)."""
         c = self.frame.get_center() + UP * 0.5
-        halo = glow(logo, VIOLET, radius=3.0, opacity=0.16).move_to(c)
+        l1 = T("FACTOS", 92, INK)
+        l2 = T("DIDÁCTICOS", 64, SUN)
+        logo = VGroup(l1, l2).arrange(DOWN, buff=0.05)
+        sub = T("ciencia de todos los días", 30, MUTED, weight=NORMAL).next_to(logo, DOWN, buff=0.3)
+        halo = glow(logo, VIOLET, radius=3.2, opacity=0.18).move_to(c)
         VGroup(logo, sub).move_to(c)
-        self.play(FadeIn(halo, run_time=0.3), pop_in(logo, run_time=0.8, anchor=ORIGIN),
-                  FadeIn(sub, shift=UP * 0.2, run_time=0.5))
-        return VGroup(halo, logo, sub)
+        conf = particles("confeti", c + UP * 2, 9, 12, 60)
+        self.add(conf)
+        self.play(FadeIn(halo, run_time=0.3), pop_in(l1, run_time=0.8, anchor=ORIGIN),
+                  Succession(Wait(0.15), pop_in(l2, run_time=0.7, anchor=ORIGIN)),
+                  FadeIn(sub, shift=UP * 0.2, run_time=0.6))
+        idle_pulse(logo, amp=0.02, period=1.6)
+        return VGroup(halo, logo, sub, conf)
 
-    # ----- subtítulos estilo reel: bloques cortos, texto con contorno, entrada con pop -----
+    # ----- subtítulos estilo reel (fijos aunque la cámara gire) -----
     @staticmethod
     def _chunks(text: str, per_line: int = 22, lines_per_chunk: int = 2) -> list[list[str]]:
         words, lines, cur = text.split(), [], ""
@@ -572,9 +874,13 @@ class ExplapixScene(MovingCameraScene):
             if idx != state["idx"]:
                 state["idx"], state["since"] = idx, 0.0
             s = 0.88 + 0.12 * POP(min(state["since"] / 0.2, 1))   # pop al cambiar de bloque
-            k = frame.height / config.frame_height                  # sigue a la cámara
-            b = blocks[state["idx"]].copy().scale(s * k)
-            m.become(VGroup(b.move_to(frame.get_center() + DOWN * 6.3 * k)))
+            k = frame.height / config.frame_height                  # sigue al zoom
+            c = frame.get_center()
+            b = blocks[state["idx"]].copy().scale(s * k).move_to(c + DOWN * 6.3 * k)
+            ang = getattr(frame, "cam_angle", 0.0)
+            if ang:
+                b.rotate(ang, about_point=c)                         # compensa el giro de cámara
+            m.become(VGroup(b))
 
         holder.add_updater(upd)
         upd(holder, 0)
@@ -582,8 +888,10 @@ class ExplapixScene(MovingCameraScene):
         self._caption = holder
 
     @contextmanager
-    def segment(self, i: int):
+    def segment(self, i: int, mood: str | None = None):
         start = self.renderer.time
+        if mood:
+            self.mood(mood)
         if self.show_captions:
             self._start_caption(self.captions[i], self.durations[i])
         yield self.durations[i]

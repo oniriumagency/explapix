@@ -1,4 +1,4 @@
-"""Explapix Studio: panel web para revisar y controlar el flujo del canal.
+"""Factos Didácticos Studio (código interno: explapix): panel web para revisar y controlar el flujo del canal.
 
 Arranque:  .venv/bin/python -m uvicorn web.app:app --host 0.0.0.0 --port 8097
 Se usa por Tailscale (http://100.96.241.48:8097). Protegido con usuario/contraseña
@@ -271,7 +271,7 @@ async def lifespan(_app):
     yield
 
 
-app = FastAPI(title="Explapix Studio", docs_url=None, redoc_url=None, openapi_url=None,
+app = FastAPI(title="Factos Didácticos Studio", docs_url=None, redoc_url=None, openapi_url=None,
               lifespan=lifespan)
 
 
@@ -287,7 +287,7 @@ async def basic_auth(request: Request, call_next):
             ok = False
     if not ok:
         return Response("Autenticación requerida", status_code=401,
-                        headers={"WWW-Authenticate": 'Basic realm="Explapix Studio", charset="UTF-8"'})
+                        headers={"WWW-Authenticate": 'Basic realm="Factos Didacticos Studio", charset="UTF-8"'})
     resp = await call_next(request)
     resp.headers["X-Content-Type-Options"] = "nosniff"
     resp.headers["Referrer-Policy"] = "no-referrer"

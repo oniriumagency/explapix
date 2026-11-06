@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Explapix: tema -> guion -> voz -> animación -> video final (+ subida opcional).
+"""Factos Didácticos (código interno: explapix): tema -> guion -> voz -> animación -> video final (+ subida opcional).
 
 Ejemplos:
   python make_video.py --topic "Cómo funciona un microondas"

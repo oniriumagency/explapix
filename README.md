@@ -1,4 +1,6 @@
-# Explapix: pipeline automático de videos explicativos
+# Factos Didácticos: pipeline automático de videos explicativos
+
+> Nombre del canal: **Factos Didácticos**. Internamente el código, la carpeta, el repo y el servicio siguen llamándose `explapix` para no romper nada.
 
 Tema → guion (Claude) → voz (Chatterbox/Kokoro/Piper, local) → animación (Manim, local) → MP4 vertical 1080×1920 → YouTube Shorts → respuestas a comentarios.
 
@@ -42,8 +44,9 @@ cp .env.example .env   # pon tu ANTHROPIC_API_KEY
 . .venv/bin/activate
 set -a; . ./.env; set +a
 
-# Prueba sin IA (usa el ejemplo del refrigerador)
+# Prueba sin IA (ejemplos: refrigerador = kit v2, microondas = kit v3 dinámico)
 python make_video.py --storyboard examples/refrigerador/storyboard.json --scene examples/refrigerador/scene.py
+python make_video.py --storyboard examples/microondas/storyboard.json --scene examples/microondas/scene.py
 
 # Video nuevo 100 % automático
 python make_video.py --topic "Cómo funciona un microondas"
@@ -81,7 +84,7 @@ Cada video queda en `out/<fecha>-<tema>/` con `storyboard.json`, `scene.py`, `fi
 
 ## Estructura
 
-- `explapix/kit.py`: estilo visual v2 (fondo vivo, formas con volumen, brillos, caritas, fuentes Fredoka/Nunito en `fonts/`), ayudantes de los 12 principios de animación (pop_in, squash_bounce, anticipate_move, move_along_arc, jelly, emphasize, exit_out, cascade, idle_*, cámara focus/reset) y la base que sincroniza cada segmento con su audio. La docstring del archivo tiene la tabla principio → ayudante.
+- `explapix/kit.py`: kit v3 — fondo con moods de color por segmento (`segment(i, mood=...)`, `mood()`), cámara que se mueve, acerca y gira en paralelo (`cam_to`, `cam_sway`, `cam_reset`; los subtítulos quedan fijos), sistemas de partículas (`particles`: chispas, burbujas, calor, estrellas, confeti, frío, órbita, polvo) y vida constante (`alive`, `idle_wiggle`, `idle_pulse`, `idle_spin`). Además: estilo visual v2 (fondo vivo, formas con volumen, brillos, caritas, fuentes Fredoka/Nunito en `fonts/`), ayudantes de los 12 principios de animación (pop_in, squash_bounce, anticipate_move, move_along_arc, jelly, emphasize, exit_out, cascade, idle_*, cámara focus/reset) y la base que sincroniza cada segmento con su audio. La docstring del archivo tiene la tabla principio → ayudante.
 - `explapix/llm.py`: prompts de guion, escena y respuestas a comentarios.
 - `explapix/tts.py` + `explapix/tts_worker.py`: voz (los motores con PyTorch corren en `.venv-tts` / `.venv-kokoro`). `python -m explapix.tts say "texto" -o prueba.wav -e kokoro` para probar.
 - `explapix/render.py`: render/mezcla.
@@ -89,7 +92,7 @@ Cada video queda en `out/<fecha>-<tema>/` con `storyboard.json`, `scene.py`, `fi
 
 Fuentes Fredoka y Nunito: SIL Open Font License (`fonts/OFL-*.txt`).
 
-## Explapix Studio (panel web)
+## Factos Didácticos Studio (panel web)
 
 Panel para revisar y controlar todo sin comandos: `http://100.96.241.48:8097` (por Tailscale; también `http://192.168.2.15:8097` en casa). Usuario `magne`, contraseña en `secrets/panel_password` (se genera sola, permisos 600, fuera de git).
 
