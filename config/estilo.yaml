@@ -58,3 +58,19 @@ audio:
   musica_db: -21            # bajo la voz, y baja ~8 dB más cuando hay voz (sidechain)
   efectos_db: -13           # efectos propios (assets/sfx), con ducking suave
   musica_fade_s: [1.5, 2.5]
+
+cta:   # llamados a la acción: regla general de todos los guiones
+  max_hablados: 3
+  max_palabras: 8
+  nunca_antes_de_s: 5
+  guardar: "~25-35 % del video, justo después del primer payoff, ligado al contenido"
+  comentar: "~50-65 %, pregunta fácil ligada al tema (A/B, ¿lo sabías?); prohibido el cebo de interacción"
+  compartir_y_seguir: "cerca del final, ANTES de la última frase (que conecta con el gancho); 'mañana explicamos <siguiente tema>'"
+  like: "solo 'dale like si no lo sabías' pegado a un dato, casi nunca"
+  en_pantalla: "ícono animado (guardar, comentar, compartir, seguir) con pop y sonido, sobre los subtítulos"
+  caption: "CTA en la 1.ª o 2.ª línea y la pregunta del CTA de comentar al final; comentario fijado = esa pregunta"
+  variantes:
+    guardar: ["Guárdalo, te va a servir cuando…", "Guárdalo para la próxima vez que…", "Este dato guárdalo."]
+    comentar: ["¿Tú lo sabías?", "¿Cuál te sorprendió más: A o B?", "¿Qué otro objeto te intriga?"]
+    compartir: ["Mándaselo a quien…", "Compártelo con alguien que…", "Pásaselo a tu amigo que…"]
+    seguir: ["Síguenos: mañana explicamos…", "Síguenos para el próximo dato."]

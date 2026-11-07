@@ -129,8 +129,10 @@ STORYBOARD_SCHEMA = {
         "segments": {"type": "array", "items": {
             "type": "object",
             "properties": {"narration": {"type": "string"}, "visual": {"type": "string"},
-                           "beat": {"type": "string"}, "chapter": {"type": "string"}},
-            "required": ["narration", "visual", "beat", "chapter"], "additionalProperties": False}},
+                           "beat": {"type": "string"}, "chapter": {"type": "string"},
+                           "cta": {"type": "string", "enum": ["", "guardar", "compartir", "comentar",
+                                                               "seguir", "like"]}},
+            "required": ["narration", "visual", "beat", "chapter", "cta"], "additionalProperties": False}},
     },
     "required": ["topic", "title", "description", "tags", "duracion_objetivo_s",
                  "justificacion_duracion", "segments"],
@@ -158,6 +160,24 @@ ESTRUCTURA (campo beat de cada segmento):
 - dato_extra: un dato que casi nadie conoce sobre el tema.
 - cierre: consecuencia práctica en tu vida diaria y una frase final que conecte con el gancho del
   inicio (para que el video se sienta en loop), + CTA corto: "Síguenos para más Factos Didácticos".
+
+LLAMADOS A LA ACCIÓN (CTA, regla general de todos los guiones):
+- NUNCA en los primeros ~5 s: el gancho y la promesa van primero (un CTA ahí mata la retención).
+- guardar (~25-35 % del video): justo después del primer "payoff" (la primera explicación útil),
+  ligado al contenido: "Guárdalo, te va a servir cuando…".
+- comentar (~50-65 %): una pregunta fácil de contestar y ligada al tema (opción A/B, "¿lo sabías?",
+  "¿qué otro objeto te intriga?"). PROHIBIDO el cebo de interacción ("comenta SÍ si…", "dale like si…
+  para…"): YouTube y Meta lo penalizan.
+- compartir + seguir: cerca del final pero ANTES de la última frase, para que el cierre siga
+  conectando con el gancho (loop): "Mándaselo a quien…", "Síguenos: mañana explicamos <siguiente tema>"
+  (usa el siguiente tema que te paso, si te lo paso).
+- like: solo como "dale like si no lo sabías" pegado a un dato sorprendente, y casi nunca.
+- Máximo 3 CTA hablados por video; cada uno de 8 palabras o menos, dentro de la narración del segmento,
+  variados: no repitas frases de la lista "evitar" que te paso.
+- Marca en el campo cta del segmento el tipo que dice (guardar | compartir | comentar | seguir | like);
+  vacío si no lleva. En pantalla aparecerá un ícono animado con ese CTA.
+- La description debe tener un CTA en la primera o segunda línea y terminar con la misma pregunta del
+  CTA de comentar.
 
 REGLAS:
 - 8 a 14 segmentos hasta 90 s; hasta 28 segmentos en videos largos; cada narración de 12 a 26 palabras, frases cortas, fáciles de decir en voz alta.
@@ -230,6 +250,9 @@ DINAMISMO (kit v3, obligatorio):
 CAPÍTULOS (videos de más de 90 s): si un segmento trae CAPÍTULO, empieza ese bloque con
 self.chapter("mini-título") (≈1 s, tarjeta que entra y sale sola) antes de sus animaciones.
 
+CTA EN PANTALLA: si un segmento trae CTA, el kit muestra solo un ícono animado (guardar, compartir,
+comentar, seguir) sobre los subtítulos. No dibujes íconos de CTA tú mismo ni dejes ese espacio ocupado.
+
 ZONA SEGURA (Reels/Shorts/TikTok, obligatorio):
 - Diseña TODO lo importante (título, etiquetas, datos, personajes) dentro de la caja x∈[-4.3, 4.3],
   y∈[-5.0, 7.3]. El kit la encuadra sola dentro de la zona segura (deja libre 12 % arriba, 20 % abajo
@@ -269,8 +292,19 @@ def _text(resp) -> str:
     return "".join(b.text for b in resp.content if b.type == "text")
 
 
+def _cta_context() -> str:
+    nxt = os.environ.get("EXPLAPIX_NEXT_TOPIC", "").strip()
+    avoid = os.environ.get("EXPLAPIX_AVOID_CTA", "").strip()
+    out = []
+    if nxt:
+        out.append(f"Siguiente tema del calendario (para el CTA de seguir): {nxt}")
+    if avoid:
+        out.append(f"Frases de CTA a evitar (usadas en el video anterior): {avoid}")
+    return "\n".join(out)
+
+
 def storyboard(topic: str, notes: str = "") -> dict:
-    user = f"Tema: {topic}\n{notes}".strip()
+    user = f"Tema: {topic}\n{notes}\n{_cta_context()}".strip()
     if ENGINE == "claude-code":
         _, data = _claude_code(STORYBOARD_SYSTEM + "\nResponde SOLO con el JSON pedido.", user,
                                STORYBOARD_SCHEMA)
@@ -293,7 +327,8 @@ def expand_storyboard(sb: dict, notes: str = "") -> dict:
     """Amplía un guion corto a la estructura de 61-90 s (mantiene lo que sirve)."""
     old = json.dumps({k: sb[k] for k in ("topic", "title", "description", "tags", "segments") if k in sb},
                      ensure_ascii=False, indent=1)
-    user = f"Guion anterior:\n{old}\n{('Indicaciones del editor: ' + notes) if notes else ''}".strip()
+    user = (f"Guion anterior:\n{old}\n{('Indicaciones del editor: ' + notes) if notes else ''}\n"
+            f"{_cta_context()}").strip()
     if ENGINE == "claude-code":
         _, data = _claude_code(EXPAND_SYSTEM + "\nResponde SOLO con el JSON pedido.", user, STORYBOARD_SCHEMA)
     else:
@@ -310,6 +345,7 @@ def expand_storyboard(sb: dict, notes: str = "") -> dict:
 def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str | None = None,
                base_scene: str | None = None) -> str:
     segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}]"
+                     f"{(' CTA: ' + s['cta']) if s.get('cta') else ''}"
                      f"{(' CAPÍTULO: ' + s['chapter']) if s.get('chapter') else ''} NARRACIÓN: {s['narration']}\n"
                      f"   VISUAL: {s['visual']}"
                      for i, (s, t) in enumerate(zip(sb["segments"], timing["segments"])))

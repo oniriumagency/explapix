@@ -259,6 +259,20 @@ class Jobs:
             mf = OUT / j["result"] / "meta.json"
             meta = read_json(mf, None)
             nsb = read_json(OUT / j["result"] / "storyboard.json", None)
+            if nsb:
+                ctas = [sg["narration"] for sg in nsb.get("segments", []) if sg.get("cta")]
+                if ctas:
+                    write_json(CTA_STATE, {"last": ctas})
+                q = next((_question(sg["narration"]) for sg in nsb.get("segments", [])
+                          if sg.get("cta") == "comentar" and _question(sg["narration"])), "")
+                if q and it:
+                    data = calendar_load()
+                    for x in data["items"]:
+                        if x["id"] == cid:
+                            x["pinned_comment"] = f"{q} 👇 Te leemos."
+                            x["ig_caption"] = build_caption(x, q)
+                            it = x
+                    calendar_save(data)
             if it and nsb and nsb.get("duracion_objetivo_s") and not it["storyboard"].get("duracion_objetivo_s"):
                 data = calendar_load()        # guarda en el calendario el guion ampliado
                 for x in data["items"]:
@@ -339,6 +353,26 @@ def calendar_summary() -> dict:
     return {"total": len(items), "by_status": out, "auto": calendar_load().get("auto_generate", False)}
 
 
+CTA_STATE = STUDIO / "cta_state.json"
+
+
+def _question(text: str) -> str:
+    m = re.findall(r"¿[^?]+\?", text or "")
+    return m[-1] if m else ""
+
+
+def build_caption(it: dict, question: str | None = None) -> str:
+    """Caption de Instagram: gancho + CTA en la 2.ª línea, valor, pregunta al final, hashtags."""
+    q = question or _question(it.get("ig_caption", "")) or "¿Qué otro objeto quieres que expliquemos?"
+    tags = " ".join(it.get("hashtags") or [])
+    summary = it.get("summary") or ""
+    if not summary:
+        parts = [p_ for p_ in (it.get("ig_caption") or "").split("\n\n") if p_.strip()]
+        summary = parts[1] if len(parts) > 1 and "?" not in parts[1] else ""
+    return (f"{it['hook']} 🤯\n💾 Guárdalo y mándaselo a alguien que no lo sabía.\n\n"
+            f"{summary}\n\n{q} 👇\n\n{tags}").replace("\n\n\n", "\n\n")
+
+
 def _scene_for(it: dict) -> Path | None:
     p = ROOT / "data" / "escenas" / f"{it['id']}.py"
     return p if p.exists() else None
@@ -357,7 +391,11 @@ def calendar_enqueue(it: dict, auto: bool = False) -> dict:
         raise HTTPException(409, "No hay escena escrita para este tema y el motor de IA no está listo")
     elif not it["storyboard"].get("duracion_objetivo_s"):
         cmd += ["--expand"]          # guion viejo de ~40 s: se amplía a 61-90 s dentro del trabajo
+    items = sorted(calendar_load()["items"], key=lambda x: x["day"])
+    nxt = next((x["topic"] for x in items if x["day"] > it["day"]), "")
+    avoid = " | ".join((read_json(CTA_STATE, {}) or {}).get("last", []))
     j = jobs.add("video", f"Día {it['day']}: {it['topic']}" + (" (auto)" if auto else ""), cmd,
+                 env={"EXPLAPIX_NEXT_TOPIC": nxt, "EXPLAPIX_AVOID_CTA": avoid[:600]},
                  meta={"calendar_id": it["id"]})
     calendar_mark(it["id"], status="en_cola")
     return j

@@ -249,6 +249,46 @@ def sparkle(size: float = 0.25, color=INK) -> VMobject:
     return Polygon(*pts, fill_color=color, fill_opacity=1, stroke_width=0)
 
 
+# ---------- Íconos de llamados a la acción ----------
+def cta_icon(kind: str, size: float = 0.9) -> VGroup:
+    s = size
+    if kind in ("save", "guardar"):
+        g = Polygon([-0.32, 0.45, 0], [0.32, 0.45, 0], [0.32, -0.45, 0], [0, -0.2, 0], [-0.32, -0.45, 0],
+                    fill_color=SUN, fill_opacity=1, stroke_width=0)
+    elif kind in ("comment", "comentar"):
+        bub = RoundedRectangle(corner_radius=0.22, width=0.95, height=0.7, fill_color=CYAN, fill_opacity=1,
+                               stroke_width=0)
+        tail = Polygon([-0.25, -0.3, 0], [-0.05, -0.3, 0], [-0.35, -0.55, 0], fill_color=CYAN, fill_opacity=1,
+                       stroke_width=0)
+        dots = VGroup(*[Dot(radius=0.06, color=BG).move_to([x, 0.02, 0]) for x in (-0.22, 0, 0.22)])
+        g = VGroup(bub, tail, dots)
+    elif kind in ("share", "compartir"):
+        g = VGroup(Polygon([-0.45, -0.35, 0], [0.1, 0.05, 0], [0.1, -0.15, 0], fill_color=MINT, fill_opacity=1,
+                           stroke_width=0),
+                   Polygon([0.05, 0.35, 0], [0.5, 0, 0], [0.05, -0.35, 0], fill_color=MINT, fill_opacity=1,
+                           stroke_width=0),
+                   Rectangle(width=0.5, height=0.2, fill_color=MINT, fill_opacity=1, stroke_width=0)
+                   .rotate(0.6).move_to([-0.15, -0.05, 0]))
+    elif kind in ("like",):
+        g = VGroup(Circle(0.22, fill_color=PINK, fill_opacity=1, stroke_width=0).move_to([-0.17, 0.12, 0]),
+                   Circle(0.22, fill_color=PINK, fill_opacity=1, stroke_width=0).move_to([0.17, 0.12, 0]),
+                   Polygon([-0.38, 0.05, 0], [0.38, 0.05, 0], [0, -0.4, 0], fill_color=PINK, fill_opacity=1,
+                           stroke_width=0))
+    else:  # follow / seguir: campana
+        g = VGroup(Arc(radius=0.3, start_angle=0, angle=PI, color=VIOLET, stroke_width=0).set_fill(VIOLET, 1),
+                   Rectangle(width=0.6, height=0.35, fill_color=VIOLET, fill_opacity=1, stroke_width=0)
+                   .move_to([0, -0.15, 0]),
+                   RoundedRectangle(corner_radius=0.06, width=0.85, height=0.13, fill_color=VIOLET,
+                                    fill_opacity=1, stroke_width=0).move_to([0, -0.36, 0]),
+                   Dot(radius=0.09, color=VIOLET).move_to([0, -0.5, 0]))
+    return g.scale(s)
+
+
+CTA_TEXT = {"save": "¡Guárdalo!", "guardar": "¡Guárdalo!", "comment": "Comenta", "comentar": "Comenta",
+            "share": "Compártelo", "compartir": "Compártelo", "follow": "Síguenos", "seguir": "Síguenos",
+            "like": "Dale like"}
+
+
 # ---------- Caritas (appeal) ----------
 def face(width: float = 1.0, mood: str = "feliz", eye_color=BG) -> VGroup:
     """Ojos + boca + mejillas. mood: feliz | sorpresa | dormido | serio.
@@ -738,6 +778,16 @@ class ExplapixScene(MovingCameraScene):
             data = json.load(f)
         self.durations = [s["duration"] for s in data["segments"]]
         self.captions = [s["text"] for s in data["segments"]]
+        self.ctas = [""] * len(self.captions)
+        sbp = os.environ.get("EXPLAPIX_STORYBOARD")
+        if sbp and os.path.exists(sbp):
+            try:
+                with open(sbp, encoding="utf-8") as f:
+                    segs = json.load(f).get("segments", [])
+                self.ctas = [(s_.get("cta") or "") for s_ in segs][:len(self.captions)]
+                self.ctas += [""] * (len(self.captions) - len(self.ctas))
+            except (OSError, ValueError):
+                pass
         self._caption = None
         self._tweens: list[dict] = []
         self._clock = 0.0
@@ -840,6 +890,10 @@ class ExplapixScene(MovingCameraScene):
             tw["fn"](tw["rate"](u))
             if u >= 1:
                 self._tweens.remove(tw)
+        pc = getattr(self, "_pending_cta", None)
+        if pc and self.renderer.time >= pc[0]:
+            self._pending_cta = None
+            self.cta(pc[1], dur=min(2.8, max(1.8, pc[2] * 0.6)))
         sway = self._sway["amp"] * np.sin(TAU * self._clock / self._sway["period"])
         self.frame.cam_angle = self._angle + sway
 
@@ -942,6 +996,43 @@ class ExplapixScene(MovingCameraScene):
         if ms:
             self.play(LaggedStart(*[exit_out(m) for m in ms], lag_ratio=0.05, run_time=run_time))
 
+    def cta(self, kind: str, text: str | None = None, dur: float = 2.6):
+        """Ícono de llamado a la acción (save|comment|share|follow|like) sobre los subtítulos, dentro de la
+        zona segura. No bloquea: corre en paralelo a las animaciones del segmento."""
+        icon = cta_icon(kind)
+        label = T(text or CTA_TEXT.get(kind, kind), 32, INK, weight=HEAVY, font=CAPTION_FONT)
+        label.set_stroke(BLACK, width=7, background=True)
+        badge = VGroup(icon, label).arrange(RIGHT, buff=0.25)
+        bg = RoundedRectangle(corner_radius=0.35, width=badge.width + 0.6, height=badge.height + 0.35,
+                              fill_color=BLACK, fill_opacity=0.45, stroke_width=0)
+        base = VGroup(bg, badge.move_to(bg))
+        holder = VGroup(base.copy())
+        frame, st = self.frame, {"t": 0.0}
+        pos = self._caption_pos + UP * (CAPTION_BAND / 2 + 0.55)
+
+        def upd(m, dt):
+            st["t"] += dt
+            t = st["t"]
+            if t > dur:
+                m.clear_updaters()
+                self.remove(m)
+                return
+            s_in = 1 - np.exp(-7 * t) * np.cos(11 * t)               # pop con rebote
+            s_out = 1 if t < dur - 0.3 else max(0.0, (dur - t) / 0.3)
+            wig = 0.12 * np.sin(t * 9) * np.exp(-t * 2) if t < 1.2 else 0.0
+            k = frame.height / config.frame_height
+            c = frame.get_center()
+            b = base.copy().scale(max(s_in * s_out, 0.01) * k).rotate(wig).move_to(c + pos * k)
+            ang = getattr(frame, "cam_angle", 0.0)
+            if ang:
+                b.rotate(ang, about_point=c)
+            m.become(VGroup(b))
+        holder.add_updater(upd)
+        upd(holder, 0)
+        self.sfx("pop")
+        self.sfx("blip", 0.15)
+        self.add_foreground_mobject(holder)
+
     def chapter(self, title: str, color=None):
         """Mini-título de capítulo (videos largos): entra con pop, se queda ~0.6 s y sale (≈1.1 s)."""
         kf = self.frame.height / config.frame_height
@@ -1039,6 +1130,10 @@ class ExplapixScene(MovingCameraScene):
             self.mood(mood)
         if self.show_captions:
             self._start_caption(self.captions[i], self.durations[i])
+        kind = self.ctas[i] if i < len(getattr(self, "ctas", [])) else ""
+        if kind:   # el ícono aparece cuando se empieza a decir el CTA (aprox. a mitad del segmento)
+            d = self.durations[i]
+            self._pending_cta = (self.renderer.time + max(d * 0.35, 0.3), kind, d)
         yield self.durations[i]
         remaining = start + self.durations[i] - self.renderer.time
         if remaining > 1 / config.frame_rate:

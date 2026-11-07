@@ -17,7 +17,8 @@ def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
                  scene_name: str = "Video") -> tuple[bool, str, Path | None]:
     w, h, fps = QUALITY[quality]
     env = dict(os.environ, EXPLAPIX_TIMING=str((workdir / "timing.json").resolve()),
-               EXPLAPIX_SFX_EVENTS=str((workdir / "sfx_events.json").resolve()))
+               EXPLAPIX_SFX_EVENTS=str((workdir / "sfx_events.json").resolve()),
+               EXPLAPIX_STORYBOARD=str((workdir / "storyboard.json").resolve()))
     root = Path(__file__).resolve().parent.parent
     env["PYTHONPATH"] = f"{root}{os.pathsep}{env.get('PYTHONPATH', '')}"
     media = workdir / "media"
