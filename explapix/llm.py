@@ -48,8 +48,26 @@ class UsageLimit(RuntimeError):
     pass
 
 
-_LIMIT_RE = re.compile(r"usage limit|rate.?limit|limit reached|too many requests|\b429\b|"
-                       r"overloaded|session limit|weekly limit|límite", re.I)
+_LIMIT_RE = re.compile(r"usage limit|rate.?limit|limit reached|hit your .*limit|\d+-hour limit|"
+                       r"too many requests|\b429\b|overloaded|session limit|weekly limit|límite", re.I)
+
+
+def _limit_wait(msg: str) -> int:
+    """Segundos hasta la hora de reinicio que da el mensaje («resets 11:20pm»); si no hay, LIMIT_WAIT."""
+    from datetime import datetime, timedelta  # noqa: PLC0415
+    m = re.search(r"resets\s+(\d{1,2})(?::(\d{2}))?\s*([ap]m)?", msg, re.I)
+    if not m:
+        return LIMIT_WAIT
+    h, mi, ap = int(m.group(1)), int(m.group(2) or 0), (m.group(3) or "").lower()
+    if ap == "pm" and h < 12:
+        h += 12
+    if ap == "am" and h == 12:
+        h = 0
+    now = datetime.now()
+    target = now.replace(hour=h % 24, minute=mi, second=0, microsecond=0)
+    if target <= now:
+        target += timedelta(days=1)
+    return int((target - now).total_seconds()) + 120
 
 
 def _log(msg: str):
@@ -98,10 +116,10 @@ def _claude_code(system: str, user: str, schema: dict | None = None, effort: str
         except UsageLimit as e:
             if waited >= LIMIT_MAX_WAIT:
                 raise
-            _log(f"   límite de uso de la suscripción alcanzado; espero {LIMIT_WAIT // 60} min "
-                 f"y reintento ({e})")
-            time.sleep(LIMIT_WAIT)
-            waited += LIMIT_WAIT
+            wait = min(_limit_wait(str(e)), LIMIT_MAX_WAIT)
+            _log(f"   límite de uso de la suscripción alcanzado; espero {wait // 60} min y reintento ({e})")
+            time.sleep(wait)
+            waited += wait
         except (ValueError, RuntimeError, subprocess.TimeoutExpired) as e:
             err = e
             n += 1

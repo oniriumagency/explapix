@@ -288,9 +288,11 @@ class Jobs:
                 write_json(mf, meta)
                 _qa_refresh(OUT / j["result"])
         if cid:
+            limit = bool(re.search(r"hit your .*limit|\d+-hour limit|usage limit|limit reached|rate.?limit",
+                                   j.get("error") or "", re.I))
             calendar_mark(cid, video_id=j.get("result"),
                           status="generado" if j["status"] == "done" and j.get("result") else
-                          ("pendiente" if j["status"] == "cancelled" else "error"),
+                          ("pendiente" if j["status"] == "cancelled" or limit else "error"),
                           finished=datetime.now().isoformat(timespec="seconds"))
         keep = j["meta"].get("keep_texts")
         if keep and j["status"] == "done" and j.get("result"):
