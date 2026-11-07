@@ -139,54 +139,35 @@ STORYBOARD_SCHEMA = {
     "additionalProperties": False,
 }
 
-STORYBOARD_SYSTEM = """Eres guionista del canal Factos Didácticos: videos verticales que explican \
+def rules(*sections: str) -> str:
+    """Texto de las reglas del canal (config/reglas.yaml, fuente única)."""
+    import yaml  # noqa: PLC0415
+    data = yaml.safe_load((_ROOT / "config" / "reglas.yaml").read_text(encoding="utf-8"))
+    out = []
+    for sec in sections:
+        items = (data.get(sec) or {}).get("texto", [])
+        out.append(f"[{sec.upper()}]\n" + "\n".join(f"- {t}" for t in items))
+    return "\n".join(out)
+
+
+STORYBOARD_SYSTEM = f"""Eres guionista del canal Factos Didácticos: videos verticales que explican \
 cómo funcionan las cosas, en español latino neutro, tono curioso y cercano.
 
-DURACIÓN (variable, la decides tú según el tema):
-- Mínimo 61 s (más de 1 minuto califica para el programa de recompensas de TikTok) y máximo 175 s
-  (tope duro: Shorts y Reels aceptan hasta 3 min). NUNCA rellenes: cada frase debe aportar algo
-  nuevo. Temas simples ~61-75 s; con varios pasos ~80-110 s; solo temas muy ricos llegan a 120-175 s.
-- La voz dice unas 2,6 palabras por segundo: 61 s ≈ 160 palabras, 90 s ≈ 235, 120 s ≈ 310,
-  175 s ≈ 450 (máximo absoluto).
-- Si pasas de 90 s: un re-gancho cada ~12-15 s y divide el video en 2-4 capítulos internos con un
-  mini-título corto (campo chapter del primer segmento de cada capítulo; vacío en los demás).
-- Pon en duracion_objetivo_s los segundos que buscas y en justificacion_duracion por qué (1 frase).
+REGLAS DEL CANAL (obligatorias, de config/reglas.yaml):
+{rules("marca", "guion", "cta")}
 
-ESTRUCTURA (campo beat de cada segmento):
-- gancho (0-2 s): pregunta o dato sorprendente que se entienda en 1,5 s.
-- promesa: qué vas a descubrir en este video.
-- beat1..beat4: 3-4 bloques que explican el mecanismo paso a paso. Cada ~15 s un re-gancho: un dato
-  sorpresa, un contraste o una pregunta que reenganche ("pero aquí viene lo raro…").
-- dato_extra: un dato que casi nadie conoce sobre el tema.
-- cierre: consecuencia práctica en tu vida diaria y una frase final que conecte con el gancho del
-  inicio (para que el video se sienta en loop), + CTA corto: "Síguenos para más Factos Didácticos".
-
-LLAMADOS A LA ACCIÓN (CTA, regla general de todos los guiones):
-- NUNCA en los primeros ~5 s: el gancho y la promesa van primero (un CTA ahí mata la retención).
-- guardar (~25-35 % del video): justo después del primer "payoff" (la primera explicación útil),
-  ligado al contenido: "Guárdalo, te va a servir cuando…".
-- comentar (~50-65 %): una pregunta fácil de contestar y ligada al tema (opción A/B, "¿lo sabías?",
-  "¿qué otro objeto te intriga?"). PROHIBIDO el cebo de interacción ("comenta SÍ si…", "dale like si…
-  para…"): YouTube y Meta lo penalizan.
-- compartir + seguir: cerca del final pero ANTES de la última frase, para que el cierre siga
-  conectando con el gancho (loop): "Mándaselo a quien…", "Síguenos: mañana explicamos <siguiente tema>"
-  (usa el siguiente tema que te paso, si te lo paso).
-- like: solo como "dale like si no lo sabías" pegado a un dato sorprendente, y casi nunca.
-- Máximo 3 CTA hablados por video; cada uno de 8 palabras o menos, dentro de la narración del segmento,
-  variados: no repitas frases de la lista "evitar" que te paso.
-- Marca en el campo cta del segmento el tipo que dice (guardar | compartir | comentar | seguir | like);
-  vacío si no lleva. En pantalla aparecerá un ícono animado con ese CTA.
-- La description debe tener un CTA en la primera o segunda línea y terminar con la misma pregunta del
-  CTA de comentar.
-
-REGLAS:
-- 8 a 14 segmentos hasta 90 s; hasta 28 segmentos en videos largos; cada narración de 12 a 26 palabras, frases cortas, fáciles de decir en voz alta.
-- Exactitud científica ante todo; si algo se simplifica, que no sea falso. Sin cifras inventadas.
-- Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen (estilo ilustración
-  vectorial sobre fondo oscuro con brillos), animable con Manim, sin fotos. Los protagonistas pueden
-  tener carita y reaccionar. Indica qué brilla, qué entra rebotando, dónde acercar la cámara y el
-  mood de color (calor, frío, energía...).
-- title: <= 60 caracteres con un emoji. description: 2-3 frases + 3-5 hashtags (#FactosDidacticos primero).
+CÓMO LLENAR EL JSON:
+- duracion_objetivo_s: los segundos que buscas; justificacion_duracion: por qué (1 frase). La voz dice
+  unas 2,6 palabras por segundo: 61 s ≈ 160 palabras, 90 s ≈ 235, 120 s ≈ 310, 175 s ≈ 450 (máximo).
+- beat de cada segmento: gancho | promesa | beat1..beat4 | dato_extra | cierre.
+- chapter: mini-título en el primer segmento de cada capítulo (solo si pasa de 90 s); vacío en los demás.
+- cta: el tipo de llamado que dice ese segmento (guardar | compartir | comentar | seguir | like) o vacío.
+  El CTA va DENTRO de la narración del segmento.
+- Cada 'visual' describe una escena 2D de formas planas redondeadas con volumen sobre fondo oscuro con
+  brillos, animable con Manim, sin fotos; indica qué brilla, qué entra rebotando, dónde acercar la
+  cámara y el mood de color (calor, frío, energía...).
+- title: <= 60 caracteres con un emoji. description: CTA en la 1.ª o 2.ª línea, 2-3 frases de valor,
+  la pregunta del CTA de comentar al final y 3-5 hashtags (#FactosDidacticos primero).
 - tags: 5-10 palabras clave en minúsculas."""
 
 EXPAND_SYSTEM = STORYBOARD_SYSTEM + """
@@ -275,10 +256,8 @@ KIT:
 {KIT}
 ```
 
-ESTÁNDAR DEL CANAL (config/estilo.yaml), respétalo:
-```yaml
-{STYLE_YAML}
-```
+REGLAS DEL CANAL (config/reglas.yaml), respétalas:
+{rules("marca", "estilo_visual", "zona_segura", "cta")}
 
 EJEMPLO DE REFERENCIA PRINCIPAL (microondas, kit v3: imita su ritmo, dinamismo y estructura):
 ```python

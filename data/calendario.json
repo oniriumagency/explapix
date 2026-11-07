@@ -474,50 +474,136 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "en_cola",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1916-como-funciona-la-olla-de-presion",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funciona la olla de presión",
-        "title": "La olla que cocina el doble de rápido 🍲",
-        "description": "En esta olla el agua hierve a ciento veinte grados. Al estar sellada, el vapor sube la presión y el agua hierve más caliente: unos 120 °C en vez de 100.\n\n#FactosDidacticos #cocina #ollaexpres #ciencia",
+        "title": "La olla donde el agua hierve a 120 °C 🍲",
+        "description": "En la olla de presión el agua hierve a unos 120 °C, no a 100. Guarda este video para tu próximo guiso. Aquí te explicamos el sellado, la válvula que evita accidentes y por qué en la montaña pasa lo contrario. ¿Tú vives en altura o a nivel del mar?\n\n#FactosDidacticos #ollaexpres #ciencia #cocina #comofunciona",
         "tags": [
-          "cómo funciona la olla de presión",
-          "cocina",
-          "ciencia",
-          "como funciona",
-          "datos curiosos",
-          "shorts"
+          "olla de presión",
+          "olla exprés",
+          "punto de ebullición",
+          "presión y temperatura",
+          "ciencia en la cocina",
+          "cómo funciona",
+          "altitud",
+          "denis papin",
+          "datos curiosos"
         ],
+        "duracion_objetivo_s": 115,
+        "justificacion_duracion": "El tema tiene varios pasos (por qué el agua hierve a 100 °C, el sellado, la presión, la altura y la seguridad) y además un buen dato histórico, así que pide unos 115 s sin relleno.",
         "segments": [
           {
-            "narration": "En esta olla el agua hierve a unos ciento veinte grados, no a cien. Por eso cocina tan rápido.",
-            "visual": "Olla con carita y termómetro en 120."
+            "narration": "En esta olla el agua hierve a unos ciento veinte grados, no a cien. ¿Cómo es posible?",
+            "visual": "Fondo oscuro con brillos cálidos. Una olla de presión con carita presumida entra rebotando al centro. Un termómetro sube de golpe hasta 120 y brilla en naranja. La cámara hace un zoom rápido al número. Mood: calor.",
+            "beat": "gancho",
+            "chapter": "",
+            "cta": ""
           },
           {
-            "narration": "Normalmente el agua hierve a cien grados porque el vapor escapa libremente.",
-            "visual": "Olla abierta con vapor saliendo."
+            "narration": "Hoy descubrirás qué truco usa, por qué cocina tan rápido y por qué no explota.",
+            "visual": "Tres íconos redondeados aparecen en fila con un pop: un candado, un reloj veloz y un escudo. Cada uno brilla cuando se nombra. La olla los mira con curiosidad.",
+            "beat": "promesa",
+            "chapter": "",
+            "cta": ""
           },
           {
-            "narration": "La olla de presión está sellada, así que el vapor se queda adentro y empuja.",
-            "visual": "Tapa cerrada, burbujas empujando."
+            "narration": "¿Por qué el agua hierve a cien? Porque a esa temperatura su vapor empuja tan fuerte como el aire que tiene encima.",
+            "visual": "Olla abierta en corte transversal. Arriba, flechas azules del aire empujan hacia abajo; desde el agua, flechas naranjas del vapor empujan hacia arriba y crecen hasta igualarlas. Las flechas destellan al quedar iguales y aparece un 100 °C. Mood: equilibrio entre frío y calor.",
+            "beat": "beat1",
+            "chapter": "El límite de los 100 °C",
+            "cta": ""
           },
           {
-            "narration": "Con más presión, a las moléculas les cuesta más escapar, y el agua necesita más calor para hervir.",
-            "visual": "Moléculas apretadas; termómetro subiendo; mood calor."
+            "narration": "En una olla normal ese vapor escapa, así que el agua no pasa de cien aunque subas el fuego. Guárdalo, te ahorrará gas.",
+            "visual": "La llama de la estufa crece, pero el termómetro se queda clavado en 100 y tiembla. Nubecitas de vapor con carita se escapan felices por arriba. Aparece un ícono de guardar que rebota suavemente.",
+            "beat": "beat1",
+            "chapter": "",
+            "cta": "guardar"
           },
           {
-            "narration": "A más temperatura, los alimentos se cocinan hasta en la mitad del tiempo.",
-            "visual": "Frijoles con reloj acelerado."
+            "narration": "Pero aquí viene el truco: la olla de presión se cierra con un empaque de goma, y el vapor ya no puede salir.",
+            "visual": "La tapa baja girando y encaja con un clic. El empaque de goma brilla en verde alrededor del borde. Las nubecitas de vapor chocan contra la tapa y ponen cara de sorpresa. Zoom al borde sellado.",
+            "beat": "beat2",
+            "chapter": "El truco del sellado",
+            "cta": ""
           },
           {
-            "narration": "La válvula deja salir el exceso de vapor para que nada explote. Síguenos para más Factos Didácticos.",
-            "visual": "Válvula silbando con chispas; cierre."
+            "narration": "El vapor se acumula y empuja, hasta casi duplicar la presión adentro. Así, el agua necesita unos ciento veinte grados para hervir.",
+            "visual": "Dentro de la olla, las moléculas de vapor se multiplican y se aprietan. Un manómetro redondo sube su aguja y brilla. Al mismo tiempo el termómetro pasa de 100 a 120 con un destello naranja. Mood: energía y calor creciente.",
+            "beat": "beat2",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Veinte grados extra parecen poco, pero aceleran mucho la cocción: los frijoles pueden quedar en menos de la mitad del tiempo.",
+            "visual": "Frijoles con carita dentro de la olla se ablandan y sonríen. A su lado, un reloj gira sus manecillas rápido y luego la mitad del círculo se apaga. Comparación lado a lado: olla normal lenta contra olla de presión veloz.",
+            "beat": "beat3",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Ahora, lo raro: en la montaña pasa lo contrario. Con menos aire encima, el agua hierve antes de llegar a cien.",
+            "visual": "La cámara se aleja y aparece una montaña redondeada. La olla abierta sube por la ladera. Las flechas azules del aire se hacen más delgadas y escasas. El termómetro baja y se tiñe de azul. Mood: frío.",
+            "beat": "beat3",
+            "chapter": "Altura y seguridad",
+            "cta": ""
+          },
+          {
+            "narration": "En La Paz, Bolivia, el agua hierve cerca de los ochenta y ocho grados. ¿Tú vives en altura o a nivel del mar?",
+            "visual": "En la cima, un cartel dice La Paz y un termómetro marca 88 °C con brillo azul. Dos botones redondos aparecen: una montaña y una ola de mar, que palpitan alternadamente. Aparece un ícono de comentario.",
+            "beat": "beat3",
+            "chapter": "",
+            "cta": "comentar"
+          },
+          {
+            "narration": "¿Y por qué no explota? Una válvula deja escapar el vapor sobrante; por eso la olla silba o hace girar su pesita.",
+            "visual": "Zoom a la tapa. La pesita de la válvula gira y suelta un chorro de vapor con líneas de sonido. La aguja del manómetro se estabiliza en verde. La olla pone cara aliviada.",
+            "beat": "beat4",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Si esa válvula se tapa, un seguro de respaldo libera la presión. Y nunca la abras caliente: el agua hervería de golpe.",
+            "visual": "La válvula principal se cubre de un tapón gris. Un segundo taponcito brilla en rojo y suelta el vapor. Luego aparece una mano que intenta abrir la tapa y una señal de alto rebota encima. Burbujas violentas destellan como advertencia. Mood: alerta en rojo.",
+            "beat": "beat4",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Dato que casi nadie conoce: la inventó el francés Denis Papin en mil seiscientos setenta y nueve, y también ideó una válvula de seguridad.",
+            "visual": "Transición en tono sepia sobre fondo oscuro. Un personaje plano con peluca y carita amable presenta un recipiente metálico antiguo con una válvula de palanca que brilla en dorado. Aparece el año 1679 rebotando.",
+            "beat": "dato_extra",
+            "chapter": "Un invento de 1679",
+            "cta": ""
+          },
+          {
+            "narration": "Y los hospitales usan la misma idea, en máquinas llamadas autoclaves, para esterilizar instrumentos a unos ciento veintiún grados.",
+            "visual": "Una máquina rectangular redondeada, el autoclave, se abre y deja ver tijeras y pinzas brillantes. Microbios con carita se desvanecen en destellos. Un termómetro marca 121 °C. Mood: limpio, en blanco azulado.",
+            "beat": "dato_extra",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Así que ese silbido en tu cocina es vapor atrapado cocinando más caliente. Síguenos para más Factos Didácticos.",
+            "visual": "De vuelta a una cocina acogedora. La olla silba en la estufa y los frijoles sonríen dentro. Aparece el logo de Factos Didácticos con un ícono de seguir que rebota. Mood: calidez hogareña.",
+            "beat": "cierre",
+            "chapter": "",
+            "cta": "seguir"
+          },
+          {
+            "narration": "Porque en esta olla, el agua no hierve a cien... hierve a ciento veinte.",
+            "visual": "Zoom final a la olla con carita presumida, idéntica al inicio. El termómetro vuelve a subir hasta 120 y brilla en naranja, igual que en el primer plano, para cerrar el loop.",
+            "beat": "cierre",
+            "chapter": "",
+            "cta": ""
           }
         ]
       },
       "id": "como-funciona-la-olla-de-presion",
-      "finished": "2026-11-06T18:51:13"
+      "finished": "2026-11-06T19:34:50"
     },
     {
       "day": 9,
@@ -528,8 +614,8 @@
       "category": "hogar",
       "hook": "Tu baño usa un truco de física de hace siglos.",
       "title": "El truco de física de tu baño 🚽",
-      "ig_caption": "Tu baño usa un truco de física de hace siglos. 🤯\n💾 Guárdalo y mándaselo a alguien que no lo sabía.\n\nEl inodoro usa un sifón: cuando el agua llena el tubo curvo, la gravedad jala todo de golpe.\n\n¿Sabías que el ‘gluglú’ final es aire entrando? 👇\n\n#FactosDidacticos #hogar #fisica #ciencia #datoscuriosos",
-      "pinned_comment": "¿Qué objeto de tu casa quieres que expliquemos? 🏠",
+      "ig_caption": "Tu baño usa un truco de física de hace siglos. 🤯\n💾 Guárdalo y mándaselo a alguien que no lo sabía.\n\nEl inodoro usa un sifón: cuando el agua llena el tubo curvo, la gravedad jala todo de golpe.\n\n¿Tú creías que el inodoro tenía motor? 👇\n\n#FactosDidacticos #hogar #fisica #ciencia #datoscuriosos",
+      "pinned_comment": "¿Tú creías que el inodoro tenía motor? 👇 Te leemos.",
       "hashtags": [
         "#FactosDidacticos",
         "#hogar",
@@ -537,49 +623,149 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
-      "video_id": null,
+      "status": "generado",
+      "video_id": "20261106-1956-como-funciona-el-inodoro",
       "notes": "",
       "storyboard": {
         "topic": "Cómo funciona el inodoro",
         "title": "El truco de física de tu baño 🚽",
-        "description": "Tu baño usa un truco de física de hace siglos. El inodoro usa un sifón: cuando el agua llena el tubo curvo, la gravedad jala todo de golpe.\n\n#FactosDidacticos #hogar #fisica #ciencia",
+        "description": "Tu inodoro se vacía sin motor ni bomba, solo con un sifón y la gravedad. Guárdalo para cuando tu baño huela raro o se quede sin agua. ¿Creías que el inodoro tenía bomba o motor?\n\n#FactosDidacticos #ciencia #fisica #hogar #comofunciona",
         "tags": [
           "cómo funciona el inodoro",
+          "sifón",
+          "física en casa",
           "hogar",
           "ciencia",
           "como funciona",
           "datos curiosos",
-          "shorts"
+          "trampa de agua"
         ],
+        "duracion_objetivo_s": 88,
+        "justificacion_duracion": "El tema tiene varios pasos encadenados (trampa, descarga, sifón, corte y recarga), así que necesita unos 85-90 s sin relleno.",
         "segments": [
           {
-            "narration": "Tu inodoro usa un truco de física de hace siglos: el sifón.",
-            "visual": "Inodoro con carita guiñando."
+            "narration": "¿Sabías que tu inodoro se vacía de golpe gracias a un truco de física de hace siglos?",
+            "visual": "Fondo azul oscuro con brillos. Un inodoro con carita entra rebotando, guiña un ojo y el destello de su taza brilla en blanco. Mood: curioso y fresco.",
+            "beat": "gancho",
+            "chapter": "",
+            "cta": ""
           },
           {
-            "narration": "Detrás de la taza hay un tubo curvo que siempre guarda un poco de agua.",
-            "visual": "Corte con tubo en S y agua."
+            "narration": "Vas a ver qué pasa adentro cuando jalas la palanca y por qué todo termina con ese gluglú.",
+            "visual": "El inodoro se vuelve transparente y deja ver el tanque, la taza y un tubo curvo oculto. Signo de interrogación brillante encima. La cámara se acerca un poco.",
+            "beat": "promesa",
+            "chapter": "",
+            "cta": ""
           },
           {
-            "narration": "Esa agua bloquea los malos olores que vienen del drenaje.",
-            "visual": "Olores verdes rebotando en el agua."
+            "narration": "Detrás de la taza hay un tubo curvo que siempre guarda un poco de agua. Se llama trampa.",
+            "visual": "Corte lateral: tubo en forma de S con agua azul brillante en la curva inferior. Etiqueta 'trampa' que entra rebotando. Zoom a la curva.",
+            "beat": "beat1",
+            "chapter": "",
+            "cta": ""
           },
           {
-            "narration": "Al jalar la palanca, el tanque suelta mucha agua de golpe y llena el tubo curvo.",
-            "visual": "Agua cayendo rápido con burbujas."
+            "narration": "Esa agua funciona como tapón: no deja subir los gases ni los malos olores del drenaje.",
+            "visual": "Nubecitas verdes con caritas molestas suben por el drenaje, chocan contra el agua y rebotan hacia abajo. El agua brilla como escudo. Mood: frío y protector.",
+            "beat": "beat1",
+            "chapter": "",
+            "cta": ""
           },
           {
-            "narration": "Con el tubo lleno, la gravedad jala toda el agua hacia abajo, como cuando succionas un popote.",
-            "visual": "Flujo acelerando hacia el drenaje."
+            "narration": "Si un baño huele a drenaje, quizá su trampa se secó. Guárdalo, te servirá algún día.",
+            "visual": "La curva de agua se evapora poco a poco y las nubecitas verdes se escapan riendo. Ícono de guardar parpadea en una esquina. Tonos amarillos de alerta.",
+            "beat": "beat1",
+            "chapter": "",
+            "cta": "guardar"
           },
           {
-            "narration": "El gluglú del final es aire entrando, que corta el sifón. Síguenos para más Factos Didácticos.",
-            "visual": "Burbujas de aire; cierre."
+            "narration": "Al jalar la palanca, se levanta una tapita de goma en el fondo del tanque y el agua cae de golpe.",
+            "visual": "Dentro del tanque, la palanca gira, una cadenita levanta una tapa de goma redonda con carita sorprendida y una cascada azul baja con burbujas. Mood: energía.",
+            "beat": "beat2",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "El nivel sube tan rápido que el agua pasa por encima de la curva y llena el tubo por completo.",
+            "visual": "Acercamiento al tubo en S: el agua sube, rebasa la parte alta de la curva y rellena toda la bajada, que se ilumina en azul brillante.",
+            "beat": "beat2",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Pero aquí viene lo curioso: no hay bomba ni motor. Con el tubo lleno, se activa el sifón.",
+            "visual": "Aparecen una bomba y un motor con caritas, se tachan con una X roja y salen rebotando. Queda el tubo lleno con la palabra 'SIFÓN' brillando.",
+            "beat": "beat3",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "El agua que baja por el tramo largo jala a la que viene detrás, y la presión del aire empuja la taza.",
+            "visual": "Flechas brillantes: una gruesa baja por el tramo largo y arrastra la columna; flechitas blancas de aire presionan la superficie de la taza. El flujo acelera.",
+            "beat": "beat3",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Es como vaciar una pecera con una manguera. ¿Tú creías que el inodoro tenía motor?",
+            "visual": "Pantalla dividida: una pecera con carita se vacía por una manguera junto al inodoro que se vacía igual. Ícono de comentario rebota abajo.",
+            "beat": "beat3",
+            "chapter": "",
+            "cta": "comentar"
+          },
+          {
+            "narration": "Cuando la taza se vacía, entra aire al tubo, la columna de agua se rompe y el sifón se corta: eso es el gluglú.",
+            "visual": "Grandes burbujas de aire entran por la curva, la columna azul se parte en pedazos y aparecen letras 'GLU GLU' rebotando. Zoom de cámara.",
+            "beat": "beat4",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Luego, un flotador baja con el tanque y abre la llave del agua. Al subir de nuevo, la cierra.",
+            "visual": "Un flotador redondo con carita baja, abre una válvula que suelta un chorrito, y luego sube contento hasta que la válvula se cierra con un clic brillante.",
+            "beat": "beat4",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Mientras tanto, un tubito rellena la taza para que la trampa recupere su tapón de agua.",
+            "visual": "Un tubo delgado deja caer un hilo de agua a la taza; la curva de la trampa vuelve a llenarse y brilla en azul. Mood: calma.",
+            "beat": "beat4",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Dato que casi nadie conoce: no lo inventó Thomas Crapper. La curva en S la patentó Alexander Cumming en 1775.",
+            "visual": "Pergamino dorado se desenrolla con un dibujo de la curva en S y el año 1775. Un letrero 'Crapper' se tacha suavemente. Tonos cálidos y sepia.",
+            "beat": "dato_extra",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Por eso, si te quedas sin agua en el tanque, un balde vertido rápido en la taza activa el sifón igual.",
+            "visual": "Un balde con carita decidida vierte agua de golpe en la taza; el tubo se llena, brilla y la taza se vacía. Ícono de idea brillante.",
+            "beat": "cierre",
+            "chapter": "",
+            "cta": ""
+          },
+          {
+            "narration": "Síguenos: mañana explicamos la carga inalámbrica. Mándaselo a quien cree que el inodoro tiene motor.",
+            "visual": "Un celular con carita sobre una base de carga con ondas brillantes entra rebotando como adelanto. Ícono de seguir parpadea. Mood eléctrico y morado.",
+            "beat": "cierre",
+            "chapter": "",
+            "cta": "seguir"
+          },
+          {
+            "narration": "Así que la próxima vez que escuches ese gluglú, ya sabes: es el truco de física de hace siglos despidiéndose.",
+            "visual": "Regreso al inodoro con carita del inicio; suenan burbujas, guiña el ojo igual que en la primera escena y la taza brilla. Fundido en loop.",
+            "beat": "cierre",
+            "chapter": "",
+            "cta": ""
           }
         ]
       },
-      "id": "como-funciona-el-inodoro"
+      "id": "como-funciona-el-inodoro",
+      "finished": "2026-11-06T20:11:56"
     },
     {
       "day": 10,
@@ -599,7 +785,7 @@
         "#ciencia",
         "#datoscuriosos"
       ],
-      "status": "pendiente",
+      "status": "en_cola",
       "video_id": null,
       "notes": "",
       "storyboard": {

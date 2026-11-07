@@ -73,37 +73,98 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
         raise SystemExit(f"Render falló, ver {work / 'render_error.log'}")
 
     print("[4/4] Mezcla final", flush=True)
-    from explapix import music as music_lib, sfx  # noqa: PLC0415
-    music = music or music_lib.pick()
-    events = sfx.load_events(work / "sfx_events.json")
-    sfx_wav = None
-    if events:
-        sfx_wav = work / "audio" / "sfx.wav"
-        n_sfx = sfx.build_track(events, render._dur(silent), sfx_wav)
-        print(f"   efectos: {n_sfx} · música: {music.name if music else 'ninguna'}", flush=True)
-    final = render.mux(silent, work / "audio" / "narration.wav", work / "final.mp4", music, sfx_wav)
-    from explapix import config as _cfg  # noqa: PLC0415
+    from explapix import config as _cfg, music as music_lib, qa, sfx  # noqa: PLC0415
+
+    def mix(chosen=None):
+        m = chosen or music or music_lib.pick()
+        ev = sfx.load_events(work / "sfx_events.json")
+        wav = None
+        if ev:
+            wav = work / "audio" / "sfx.wav"
+            n_sfx = sfx.build_track(ev, render._dur(silent), wav)
+            print(f"   efectos: {n_sfx} · música: {m.name if m else 'ninguna'}", flush=True)
+        out = render.mux(silent, work / "audio" / "narration.wav", work / "final.mp4", m, wav)
+        return out, m, ev
+
+    def write_meta(final, m, ev, extra=None):
+        meta = {"title": sb["title"], "description": sb["description"], "tags": sb["tags"],
+                "topic": sb.get("topic", ""), "file": str(final), "engine": timing.get("engine"),
+                "duration": timing.get("total"), "quality": quality,
+                "created": datetime.now().isoformat(timespec="seconds"),
+                "music": m.name if m else None, "sfx": bool(ev),
+                "target_s": sb.get("duracion_objetivo_s"), "duration_reason": sb.get("justificacion_duracion")}
+        if notes:
+            meta["notes"] = notes
+        meta.update(extra or {})
+        (work / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+        return meta
+
+    def rerender():
+        nonlocal silent
+        shutil.rmtree(work / "media", ignore_errors=True)
+        ok_, log_, silent_ = render.render_scene(scene_file, work, quality)
+        if not ok_:
+            raise RuntimeError(log_[-1500:])
+        silent = silent_
+
+    final, chosen, events = mix()
+    meta = write_meta(final, chosen, events)
+
+    # ---- verificador (config/reglas.yaml) con autocorrección, máximo 2 intentos
+    res = qa.check(work)
+    for attempt in range(2):
+        if res["ok"]:
+            break
+        bad = [c for c in res["checks"] if not c["ok"]]
+        fixes = {c["fix"] for c in bad} - {"", "textos"}
+        print(f"   verificación {res['passed']}/{res['total']}: falla " +
+              ", ".join(c["id"] for c in bad) + (f" → corrijo ({', '.join(sorted(fixes))})" if fixes else ""),
+              flush=True)
+        if not fixes:
+            break
+        try:
+            if "guion" in fixes and not scene:
+                from explapix import llm
+                why = "; ".join(f"{c['label']} ({c['detail']})" for c in bad if c["fix"] == "guion")
+                sb = llm.expand_storyboard(sb, "Corrige estos problemas del verificador: " + why)
+                (work / "storyboard.json").write_text(json.dumps(sb, ensure_ascii=False, indent=2), encoding="utf-8")
+                timing = tts.narrate([s_["narration"] for s_ in sb["segments"]], work / "audio")
+                shutil.copy(work / "audio" / "timing.json", work / "timing.json")
+                code = llm.scene_code(sb, timing)
+                scene_file.write_text(code, encoding="utf-8")
+                rerender()
+            elif "tts" in fixes:
+                timing = tts.narrate([s_["narration"] for s_ in sb["segments"]], work / "audio")
+                shutil.copy(work / "audio" / "timing.json", work / "timing.json")
+                rerender()
+            elif "render" in fixes:
+                rerender()
+            final, chosen, events = mix(None if "remix" in fixes else chosen)
+            meta = write_meta(final, chosen, events)
+        except Exception as e:  # noqa: BLE001
+            print(f"   la corrección automática falló: {str(e)[:300]}", flush=True)
+            break
+        res = qa.check(work)
+    meta["qa"] = res
+    (work / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"   verificación final: {res['passed']}/{res['total']} " + ("✓" if res["ok"] else "✗ necesita corrección"),
+          flush=True)
+
     real = render._dur(final)
     tope = float(_cfg.get("formato.duracion_maxima_s", 175))
     if real >= 180 or real > tope + 3:
-        bad = final.with_name("final_demasiado_largo.mp4")
-        final.replace(bad)
+        bad_f = final.with_name("final_demasiado_largo.mp4")
+        final.replace(bad_f)
         raise SystemExit(f"El video dura {real:.1f} s: pasa el límite de 3 min de Shorts/Reels "
-                         f"(tope {tope:.0f} s). Quedó en {bad}; acorta el guion y regenera.")
-    meta = {"title": sb["title"], "description": sb["description"], "tags": sb["tags"],
-            "topic": sb.get("topic", ""), "file": str(final), "engine": timing.get("engine"),
-            "duration": timing.get("total"), "quality": quality,
-            "created": datetime.now().isoformat(timespec="seconds"),
-            "music": music.name if music else None, "sfx": bool(events),
-            "target_s": sb.get("duracion_objetivo_s"), "duration_reason": sb.get("justificacion_duracion")}
-    if notes:
-        meta["notes"] = notes
+                         f"(tope {tope:.0f} s). Quedó en {bad_f}; acorta el guion y regenera.")
     if upload:
+        if not res["ok"]:
+            raise SystemExit("No subo un video que no pasó la verificación")
         from explapix import youtube
         meta["youtube_id"] = youtube.upload(final, sb["title"], sb["description"], sb["tags"], privacy)
         meta["privacy"] = privacy
         print(f"   subido: https://youtube.com/shorts/{meta['youtube_id']} ({privacy})")
-    (work / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+        (work / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Listo: {final}", flush=True)
     return final
 

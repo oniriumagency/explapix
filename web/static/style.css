@@ -138,3 +138,4 @@ code { background: #070818; padding: .1rem .35rem; border-radius: 6px; }
 .navlink { color: var(--muted); padding: .45rem .8rem; border-radius: 999px; font-family: Fredoka; text-decoration: none; white-space: nowrap; }
 .navlink:hover { color: var(--ink); background: var(--card2); }
 .track .row label { flex: 1 1 180px; margin: 0; }
+.st-necesita_correccion { background: var(--coral); color: #fff; }

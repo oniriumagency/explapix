@@ -19,10 +19,11 @@ formato:
 voz:
   motor: chatterbox         # chatterbox | kokoro | piper
   referencia: voices/ref.wav
-  emocion: 0.6              # EXPLAPIX_CB_EXAGGERATION
-  ritmo: 0.4                # EXPLAPIX_CB_CFG (menor = más pausado)
+  emocion: 0.5              # EXPLAPIX_CB_EXAGGERATION (más bajo = dicción más clara)
+  ritmo: 0.35               # EXPLAPIX_CB_CFG (menor = más pausado)
+  por_frases: true          # sintetiza frase por frase con pausas según la puntuación
   kokoro_voz: em_alex
-  pausa_entre_segmentos_s: 0.35
+  pausas_s: {coma: 0.18, punto: 0.35, pregunta: 0.45, fin_segmento: 0.5}
 
 visual:
   ejemplo_referencia: examples/microondas/scene.py

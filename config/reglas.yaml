@@ -1,0 +1,86 @@
+# REGLAS DEL CANAL — fuente única. Cualquier cambio de criterio se hace AQUÍ.
+# Las usan: los prompts de Claude (explapix/llm.py), el verificador (explapix/qa.py) y la página
+# «Cómo funciona» del panel. Las secciones `texto` son las normas en palabras; `parametros` son los
+# números que el verificador comprueba.
+
+marca:
+  texto:
+    - El canal se llama «Factos Didácticos» (nunca «Explapix», que es solo el nombre interno del código).
+    - "Cierre de marca con el logo FACTOS DIDÁCTICOS y confeti; hashtag principal #FactosDidacticos."
+  parametros:
+    nombre: Factos Didácticos
+    hashtag: "#FactosDidacticos"
+    prohibido: [Explapix, EXPLAPIX]
+
+guion:
+  texto:
+    - Exactitud científica ante todo; si algo se simplifica, que no sea falso. Sin cifras inventadas.
+    - Duración variable según cuánto dé el tema, de 61 a 175 s (más de 1 minuto para el programa de recompensas de TikTok; 175 s es el tope para no pasar los 3 min de Shorts/Reels). Nunca relleno.
+    - "Estructura: gancho (0-2 s) → promesa → 3-4 pasos con un re-gancho cada 12-15 s → dato extra que casi nadie conoce → cierre práctico cuya última frase conecta con el gancho (loop)."
+    - Si pasa de 90 s, se divide en 2-4 capítulos con mini-título.
+    - Frases cortas de 12-26 palabras por segmento, fáciles de decir en voz alta; 8-28 segmentos.
+  parametros:
+    duracion_min_s: 61
+    duracion_max_s: 175
+    duracion_limite_plataforma_s: 180
+    palabras_por_segundo: 2.6
+
+cta:
+  texto:
+    - Nada de llamados a la acción en los primeros 5 s (mata la retención).
+    - "Guardar (~25-35 % del video), justo después del primer dato útil, con la frase que empieza «Guarda este video para…»."
+    - Comentar (~50-65 %) con una pregunta fácil y ligada al tema (opción A/B, «¿lo sabías?», «¿qué otro objeto te intriga?»).
+    - Compartir y/o seguir cerca del final pero ANTES de la última frase («Mándaselo a quien…», «Síguenos: mañana explicamos <siguiente tema>»).
+    - Máximo 3 CTA hablados, de 8 palabras o menos cada uno, variados y sin repetir los del video anterior.
+    - Prohibido el cebo de interacción («comenta SÍ si…», «etiqueta a 3 amigos», «dale like para…»); «like» solo como «dale like si no lo sabías» pegado a un dato, casi nunca.
+    - Cada CTA hablado se refuerza en pantalla con un ícono animado (guardar, comentar, compartir, seguir) y, en guardar/comentar/compartir, una flecha que apunta a la columna de botones de la derecha.
+    - En Instagram, el caption lleva un CTA en la 1.ª o 2.ª línea y termina con la pregunta del CTA de comentar; el comentario fijado es esa misma pregunta.
+  parametros:
+    sin_cta_antes_de_s: 5
+    max_hablados: 3
+    guardar_frase: "Guarda este video para"
+    guardar_ventana: [0.20, 0.42]
+    comentar_ventana: [0.45, 0.72]
+    final_desde: 0.70
+    cebo_prohibido: ["comenta s[ií] si", "comenta 's[ií]'", "etiqueta a", "dale like para", "si llegas hasta aqu[ií]"]
+    botones_altura: {general: 0.65, youtube_shorts: 0.62, instagram_reels: 0.66, tiktok: 0.60}
+
+estilo_visual:
+  texto:
+    - Fondo oscuro que cambia de color (mood) según la idea de cada segmento, con polvo de estrellas en capas.
+    - Formas planas redondeadas con volumen (sombra tonal y luz de borde), colores saturados de la paleta, lo importante brilla.
+    - Protagonistas con carita que parpadea; etiquetas cortas en cápsula; tipografías Fredoka y Nunito.
+    - Cámara viva (balanceo suave, 3-4 acercamientos y giros de hasta ±10°) y partículas en todos los segmentos.
+    - Animación con los 12 principios (squash & stretch, anticipación, arcos, overshoot, acción secundaria…). Nada quieto.
+
+zona_segura:
+  texto:
+    - Todo lo importante dentro de la zona segura de Reels/Shorts/TikTok; los subtítulos en su franja, por encima de la interfaz.
+  parametros:
+    arriba: 0.12
+    abajo: 0.20
+    derecha: 0.15
+    izquierda: 0.05
+
+voz:
+  texto:
+    - Voz Chatterbox con el timbre de referencia; se sintetiza frase por frase con pausas según la puntuación.
+    - Texto normalizado antes de leer (números y años en palabras, °C → grados, %, unidades, siglas deletreadas).
+    - La transcripción automática (Whisper) debe coincidir con el guion en al menos 95 %.
+  parametros:
+    coincidencia_min: 0.95
+    pausas: {coma: 0.18, punto: 0.35, pregunta: 0.45, fin_segmento: 0.5}
+
+audio:
+  texto:
+    - Voz alrededor de -16 LUFS; música unos 20 dB por debajo y baja más cuando hay voz; efectos propios a bajo volumen.
+    - Picos por debajo de -1 dB (sin saturación).
+    - Música solo con licencia comercial, en rotación sin repetir la misma en videos seguidos.
+  parametros:
+    lufs: [-18.5, -13.5]
+    pico_max_db: -1.0
+
+publicacion:
+  texto:
+    - Nada se publica ni se responde sin la aprobación de Magne en el panel.
+    - YouTube sube en privado por defecto; Instagram solo con confirmación explícita.

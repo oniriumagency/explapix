@@ -125,6 +125,8 @@ def _safe_framing():
             "safe": (sx0, sx1, sy0, sy1), "content_center": screen_c}
 
 
+BUTTONS_HEIGHT = 0.65   # fracción desde arriba donde suelen estar los botones de acción (columna derecha)
+
 TEMPO = {"golpe": 0.25, "rapido": 0.45, "normal": 0.8, "lento": 1.2}
 
 
@@ -284,7 +286,7 @@ def cta_icon(kind: str, size: float = 0.9) -> VGroup:
     return g.scale(s)
 
 
-CTA_TEXT = {"save": "¡Guárdalo!", "guardar": "¡Guárdalo!", "comment": "Comenta", "comentar": "Comenta",
+CTA_TEXT = {"save": "Guarda este video", "guardar": "Guarda este video", "comment": "Comenta", "comentar": "Comenta",
             "share": "Compártelo", "compartir": "Compártelo", "follow": "Síguenos", "seguir": "Síguenos",
             "like": "Dale like"}
 
@@ -801,6 +803,7 @@ class ExplapixScene(MovingCameraScene):
         self._caption_pos = sf["caption"] if sf else DOWN * 6.3
         self._content_screen = sf["content_center"] if sf else ORIGIN.copy()
         self.frame.move_to(self._base_center).set(height=self._base_height)
+        self._sfx_events.append({"t": 0.0, "kind": "layout_safe" if sf else "layout_full", "gain": 0})
         self.bg = backdrop() if self.show_backdrop else VGroup()
         self.add(self.bg)
         ticker = VMobject()          # motor de tweens no bloqueantes (cámara, color de fondo)
@@ -1006,9 +1009,18 @@ class ExplapixScene(MovingCameraScene):
         bg = RoundedRectangle(corner_radius=0.35, width=badge.width + 0.6, height=badge.height + 0.35,
                               fill_color=BLACK, fill_opacity=0.45, stroke_width=0)
         base = VGroup(bg, badge.move_to(bg))
+        # flecha hacia la columna de botones de la derecha (guardar, comentar, compartir)
+        point = kind in ("save", "guardar", "comment", "comentar", "share", "compartir", "like")
+        arrow = Arrow(LEFT * 0.7, RIGHT * 0.7, buff=0, color=SUN, stroke_width=16,
+                      max_tip_length_to_length_ratio=0.3, max_stroke_width_to_length_ratio=12) if point else VGroup()
         holder = VGroup(base.copy())
         frame, st = self.frame, {"t": 0.0}
         pos = self._caption_pos + UP * (CAPTION_BAND / 2 + 0.55)
+        W, H = config.frame_width, config.frame_height
+        btn_y = H / 2 - BUTTONS_HEIGHT * H                      # altura de los botones de acción
+        sx1 = W / 2 - SAFE_ZONE["right"] * W
+        arrow_end = np.array([W / 2 - 0.55, btn_y, 0])   # entra a la columna de botones
+        self._sfx_events.append({"t": round(self.renderer.time, 3), "kind": f"cta_{kind}", "gain": 0})
 
         def upd(m, dt):
             st["t"] += dt
@@ -1023,10 +1035,22 @@ class ExplapixScene(MovingCameraScene):
             k = frame.height / config.frame_height
             c = frame.get_center()
             b = base.copy().scale(max(s_in * s_out, 0.01) * k).rotate(wig).move_to(c + pos * k)
+            g = VGroup(b)
+            if point and t > 0.25:
+                # anticipación (retrocede), disparo con rebote y empujoncitos hacia los botones
+                u = t - 0.25
+                nudge = 0.25 * np.sin(u * 7) * np.exp(-u * 0.6) if u > 0.6 else 0.0
+                start = np.array([b.get_right()[0] / k - c[0] / k + 0.15, (pos[1] + btn_y) / 2, 0])
+                end = arrow_end + RIGHT * nudge
+                prog = anticipate_overshoot(min(u / 0.6, 1.0))
+                tip = start + (end - start) * prog
+                ar = arrow.copy().put_start_and_end_on(start * k + c, tip * k + c + 1e-3 * RIGHT)
+                ar.set_opacity(s_out)
+                g.add(ar)
             ang = getattr(frame, "cam_angle", 0.0)
             if ang:
-                b.rotate(ang, about_point=c)
-            m.become(VGroup(b))
+                g.rotate(ang, about_point=c)
+            m.become(g)
         holder.add_updater(upd)
         upd(holder, 0)
         self.sfx("pop")

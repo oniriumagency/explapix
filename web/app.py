@@ -101,6 +101,8 @@ def video_status(meta: dict, d: Path) -> str:
         return "error" if (d / "render_error.log").exists() else "incompleto"
     if meta.get("youtube_id"):
         return {"public": "publico", "unlisted": "no_listado"}.get(meta.get("privacy"), "subido_privado")
+    if meta.get("qa") and not meta["qa"].get("ok") and meta.get("review", {}).get("status") != "approved":
+        return "necesita_correccion"
     return {"approved": "aprobado", "rejected": "rechazado"}.get(
         meta.get("review", {}).get("status"), "generado")
 
@@ -284,6 +286,7 @@ class Jobs:
                             pinned_comment=it["pinned_comment"], calendar_id=cid,
                             scheduled=f"{it['date']} {it['time']} (CDMX)")
                 write_json(mf, meta)
+                _qa_refresh(OUT / j["result"])
         if cid:
             calendar_mark(cid, video_id=j.get("result"),
                           status="generado" if j["status"] == "done" and j.get("result") else
@@ -305,6 +308,23 @@ class Jobs:
             nmeta = read_json(nf, {}) or {}
             nmeta["replaces"] = src
             write_json(nf, nmeta)
+
+
+def _qa_refresh(folder: Path):
+    """Recalcula el verificador sin Whisper (p. ej. tras copiar captions) conservando el resultado de voz."""
+    try:
+        from explapix import qa  # noqa: PLC0415
+        meta = read_json(folder / "meta.json", {}) or {}
+        old = {c["id"]: c for c in (meta.get("qa") or {}).get("checks", [])}
+        res = qa.check(folder, whisper=False)
+        if "voz_transcripcion" in old:
+            res["checks"].append(old["voz_transcripcion"])
+        res["passed"] = sum(c["ok"] for c in res["checks"])
+        res["total"] = len(res["checks"])
+        res["ok"] = res["passed"] == res["total"]
+        qa.save(folder, res)
+    except Exception as e:  # noqa: BLE001
+        print("qa:", e, flush=True)
 
 
 jobs = Jobs()
@@ -513,6 +533,7 @@ def api_video(vid: str):
             "ig_caption": meta.get("ig_caption", ""), "pinned_comment": meta.get("pinned_comment", ""),
             "scheduled": meta.get("scheduled"), "instagram_id": meta.get("instagram_id"),
             "instagram_permalink": meta.get("instagram_permalink"), "stats": meta.get("stats"),
+            "qa": meta.get("qa"),
             "scene": scene.read_text(encoding="utf-8") if scene.exists() else "",
             "error_log": err.read_text(encoding="utf-8")[-6000:] if err.exists() else ""}
 
@@ -1286,6 +1307,21 @@ def api_music_delete(name: str):
     lib.pop(name)
     m.save(lib)
     return api_music()
+
+
+@app.post("/api/qa")
+def api_qa(body: dict = Body(default={})):
+    vid = body.get("video")
+    if vid:
+        d = video_dir(vid)
+        return jobs.add("qa", f"Verificar: {vid}", [PY, "-m", "explapix.qa", str(d)])
+    return jobs.add("qa", "Verificar todos los videos", [PY, "-m", "explapix.qa", "--all"])
+
+
+@app.get("/api/rules")
+def api_rules():
+    import yaml  # noqa: PLC0415
+    return yaml.safe_load((ROOT / "config" / "reglas.yaml").read_text(encoding="utf-8"))
 
 
 @app.post("/api/remix")

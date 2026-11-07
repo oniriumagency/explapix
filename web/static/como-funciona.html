@@ -62,6 +62,13 @@
     <div class="step"><div class="dot">11</div><div class="card"><h3>Métricas <span class="tag t-ext">APIs</span> <span class="tag t-local">Local</span></h3><p>Vistas, % visto, alcance, guardados y compartidos por video y por categoría, en <b>Sistema</b>, para elegir los siguientes temas.</p></div></div>
   </div>
 
+  <h2>Reglas del canal</h2>
+  <p class="hint">Se leen en vivo de <code>config/reglas.yaml</code>, la fuente única que también usan los prompts de Claude y el verificador.</p>
+  <div id="rules" class="cols"></div>
+
+  <h2>Verificador automático</h2>
+  <p>Después de cada render, antes de marcarlo «por revisar», el sistema comprueba el video contra las reglas: duración, marca, cada llamado a la acción (momento, frase e ícono), sin cebo de interacción, zona segura, volumen y picos, música con licencia, efectos, que la voz diga el guion (Whisper ≥ 95 %), pausas en la puntuación y textos para redes. Si algo falla, intenta corregirlo solo (re-mezcla, rehacer la voz, re-renderizar o pedirle a Claude que ajuste el guion y la escena, máx. 2 intentos). Si sigue fallando, el video queda como <b>«Necesita corrección»</b> y en la Biblioteca ves la lista ✓/✗.</p>
+
   <h2>Llamados a la acción (regla de todos los videos)</h2>
   <div class="tablewrap"><table>
     <tr><th>Cuándo</th><th>Qué</th><th>Por qué</th></tr>
@@ -149,6 +156,15 @@
   <details class="faq"><summary>¿Cuánto duran los videos?</summary><p>Entre 61 s y 175 s, según cuánto dé el tema. Lo que hace crecer y pagar es la retención, no los segundos: más de 1 minuto permite entrar al programa de recompensas de TikTok, y los temas ricos pueden llegar casi a 3 min con capítulos y re-ganchos. Los temas simples quedan más cortos; los complejos, más largos. En Biblioteca, «Versión extendida» amplía los videos viejos de ~40 s reutilizando su animación.</p></details>
   <details class="faq"><summary>¿Y los videos horizontales largos?</summary><p>Se pueden armar reutilizando las mismas escenas en 16:9 y juntando varios temas en un episodio con capítulos. Está propuesto y pendiente de tu visto bueno.</p></details>
   <p style="margin-top:2rem"><a class="back" href="/#biblioteca">← Volver al panel</a></p>
+<script>
+fetch("/api/rules").then((r) => r.json()).then((d) => {
+  const names = { marca: "Marca", guion: "Guion y duración", cta: "Llamados a la acción", estilo_visual: "Estilo visual",
+    zona_segura: "Zona segura", voz: "Voz", audio: "Audio y música", publicacion: "Publicación" };
+  const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  document.getElementById("rules").innerHTML = Object.entries(d).map(([k, v]) =>
+    `<div class="card"><h3>${esc(names[k] || k)}</h3><ul>${(v.texto || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>`).join("");
+}).catch(() => {});
+</script>
 </main>
 </body>
 </html>

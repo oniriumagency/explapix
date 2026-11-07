@@ -1,0 +1,39 @@
+{
+  "topic": "Cómo funciona la carga inalámbrica",
+  "title": "¿Cómo se carga sin cable? 🔋",
+  "description": "Tu celular se carga sin que nada lo toque. Dos bobinas: la de la base crea un campo magnético que cambia y la del celular lo convierte en corriente.\n\n#FactosDidacticos #tecnologia #carga #ciencia",
+  "tags": [
+    "cómo funciona la carga inalámbrica",
+    "tecnología",
+    "ciencia",
+    "como funciona",
+    "datos curiosos",
+    "shorts"
+  ],
+  "segments": [
+    {
+      "narration": "Tu celular se carga sin que ningún cable lo toque. El secreto: dos bobinas de alambre.",
+      "visual": "Celular sobre base con carita."
+    },
+    {
+      "narration": "Dentro de la base hay una bobina por la que pasa una corriente que cambia de sentido muy rápido.",
+      "visual": "Bobina con corriente brillando."
+    },
+    {
+      "narration": "Esa corriente crea un campo magnético que también cambia, una y otra vez.",
+      "visual": "Líneas de campo pulsando; mood energía."
+    },
+    {
+      "narration": "En el celular hay otra bobina. El campo que cambia empuja sus electrones y genera corriente.",
+      "visual": "Bobina del celular encendiéndose; chispas."
+    },
+    {
+      "narration": "A eso se le llama inducción. Por eso hay que poner el celular centrado y muy cerca.",
+      "visual": "Celular desalineado: barra baja."
+    },
+    {
+      "narration": "Tu cepillo de dientes eléctrico se carga igual. Síguenos para más Factos Didácticos.",
+      "visual": "Cepillo con carita; cierre."
+    }
+  ]
+}

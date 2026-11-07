@@ -87,28 +87,62 @@ def synth(text: str, out_wav: Path, engine: str | None = None) -> float:
 
 
 # recorta silencios del principio/final (los modelos neuronales a veces dejan colas)
-_TRIM = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,"
-         "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.08,areverse")
+_TRIM = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,"
+         "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse")
+SR_OUT = 44100
 
 
-def narrate(segments: list[str], workdir: Path, pad: float = 0.35) -> dict:
-    """Genera un wav por segmento + narration.wav concatenado + timing.json."""
+def _load_trimmed(path: Path) -> "np.ndarray":
+    import numpy as np  # noqa: PLC0415
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-af", _TRIM, "-ac", "1", "-ar",
+                          str(SR_OUT), "-f", "s16le", "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768
+
+
+def _write_wav(path: Path, x) -> None:
+    import wave  # noqa: PLC0415
+    import numpy as np  # noqa: PLC0415
+    with wave.open(str(path), "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(SR_OUT)
+        w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
+
+
+def narrate(segments: list[str], workdir: Path, pad: float | None = None, by_phrase: bool | None = None) -> dict:
+    """Voz por segmento: normaliza el texto, sintetiza frase por frase, recorta y mete pausas según
+    la puntuación (coma ~0,18 s, punto/;/: ~0,35 s, ¿?/¡! ~0,45 s, fin de segmento ~0,5 s).
+    Devuelve timing.json con la duración REAL de cada segmento (la animación se sincroniza con eso)."""
+    import numpy as np  # noqa: PLC0415
+    from explapix import config, textnorm  # noqa: PLC0415
     workdir.mkdir(parents=True, exist_ok=True)
-    raw = [workdir / f"seg_{i:02d}.wav" for i in range(len(segments))]
-    synth_many(segments, raw)
-    timing, parts = [], []
-    for i, (text, wav) in enumerate(zip(segments, raw)):
-        # silencio al final de cada segmento para respirar
-        padded = workdir / f"seg_{i:02d}_p.wav"
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wav), "-af",
-                        f"{_TRIM},apad=pad_dur={pad}", "-ar", "44100", "-ac", "1", str(padded)],
-                       check=True)
-        timing.append({"text": text, "duration": round(_duration(padded), 3)})
-        parts.append(padded)
-    lst = workdir / "concat.txt"
-    lst.write_text("".join(f"file '{p.resolve()}'\n" for p in parts))
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(lst),
-                    "-c", "copy", str(workdir / "narration.wav")], check=True)
+    by_phrase = config.get("voz.por_frases", True) if by_phrase is None else by_phrase
+    plan: list[list[tuple[str, float]]] = []
+    for text in segments:
+        if by_phrase:
+            plan.append(textnorm.chunks(text))
+        else:
+            plan.append([(textnorm.normalize(text), textnorm.END_PAUSE if pad is None else pad)])
+    texts, outs = [], []
+    for i, ch in enumerate(plan):
+        for k, (t, _) in enumerate(ch):
+            texts.append(t)
+            outs.append(workdir / f"seg_{i:02d}_{k:02d}.wav")
+    synth_many(texts, outs)
+    timing, full = [], []
+    idx = 0
+    for i, (text, ch) in enumerate(zip(segments, plan)):
+        parts = []
+        for _t, pause in ch:
+            parts.append(_load_trimmed(outs[idx]))
+            parts.append(np.zeros(int(SR_OUT * pause), dtype=np.float32))
+            idx += 1
+        seg = np.concatenate(parts) if parts else np.zeros(int(SR_OUT * 0.5), dtype=np.float32)
+        _write_wav(workdir / f"seg_{i:02d}_p.wav", seg)
+        timing.append({"text": text, "spoken": " ".join(t for t, _ in ch),
+                       "duration": round(len(seg) / SR_OUT, 3)})
+        full.append(seg)
+    _write_wav(workdir / "narration.wav", np.concatenate(full))
     data = {"engine": engine_name(), "segments": timing,
             "total": round(sum(t["duration"] for t in timing), 3)}
     (workdir / "timing.json").write_text(json.dumps(data, ensure_ascii=False, indent=2))

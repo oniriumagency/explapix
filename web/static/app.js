@@ -5,7 +5,7 @@ const STATUS = {
   generado: "Por revisar", aprobado: "Aprobado", rechazado: "Rechazado", error: "Error", incompleto: "Incompleto",
   subido_privado: "YouTube · privado", no_listado: "YouTube · no listado", publico: "YouTube · público",
   queued: "En cola", running: "Generando", done: "Listo", cancelled: "Cancelado",
-  pendiente: "Pendiente", manual: "Escena a mano", en_cola: "En cola", omitido: "Omitido", publicado: "Publicado",
+  necesita_correccion: "Necesita corrección", pendiente: "Pendiente", manual: "Escena a mano", en_cola: "En cola", omitido: "Omitido", publicado: "Publicado",
 };
 const ENGINES = { chatterbox: "Chatterbox (natural)", kokoro: "Kokoro (rápida)", piper: "Piper (robótica)" };
 const PRIV = { private: "Privado", unlisted: "No listado", public: "Público" };
@@ -107,6 +107,10 @@ async function openVideo(id) {
         <div class="bar" style="margin-bottom:.4rem">${pill(v.status)} <small>${fmtDate(v.created)} · ${fmtDur(v.duration)} · voz ${esc(v.engine)}</small> ${yt}</div>
         ${v.scheduled ? `<p class="hint">📅 Programado en el calendario: ${esc(v.scheduled)}</p>` : ""}
         ${statsHtml}
+        ${v.qa ? `<details class="card" ${v.qa.ok ? "" : "open"}><summary>Verificación automática: ${v.qa.passed}/${v.qa.total} ${v.qa.ok ? "✓" : "✗"}</summary>
+          <div class="list" style="margin-top:.5rem">${v.qa.checks.map((c) => `<div><span class="${c.ok ? "yes" : "no"}">${c.ok ? "✓" : "✗"}</span> ${esc(c.label)}${c.detail ? ` <small>· ${esc(c.detail)}</small>` : ""}</div>`).join("")}</div>
+          <small class="hint">Revisado ${fmtDate(v.qa.at)} según config/reglas.yaml</small>
+          <div class="row" style="margin-top:.5rem"><button class="ghost" id="bQa">Volver a verificar</button></div></details>` : `<button class="ghost" id="bQa">Verificar contra las reglas</button>`}
         ${v.review?.note ? `<p class="warn">Nota de revisión: ${esc(v.review.note)}</p>` : ""}
         ${v.review?.replaced_by ? `<p class="hint">Regenerado como <a href="#v/${esc(v.review.replaced_by)}">${esc(v.review.replaced_by)}</a></p>` : ""}
         ${v.replaces ? `<p class="hint">Versión nueva de <a href="#v/${esc(v.replaces)}">${esc(v.replaces)}</a></p>` : ""}
@@ -143,6 +147,7 @@ async function openVideo(id) {
     await act(() => api(`/api/videos/${id}/extend`, { method: "POST", body: { note: f.get("note") } }), "Versión extendida en cola ✓");
     refreshRunning();
   });
+  $("#bQa") && ($("#bQa").onclick = () => act(() => api("/api/qa", { method: "POST", body: { video: id } }), "Verificación en cola ✓").then(refreshRunning));
   $("#bRegen").onclick = async () => {
     const f = await dialog("Regenerar", `
       <label><input type="radio" name="mode" value="ai" checked style="width:auto"> Nuevo guion y animación (usa Claude)</label>
