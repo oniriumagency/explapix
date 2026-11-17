@@ -117,6 +117,20 @@ Seguridad: nada se publica sin confirmación; `secrets/` y `.env` nunca se sirve
   - `api`: API de Anthropic con `ANTHROPIC_API_KEY`.
 - **Calendario** (`data/calendario.json`, pantalla «Calendario» del panel): 30 temas con gancho, título, caption de Instagram, comentario fijado, hora (CDMX) y guion. Se puede editar, reordenar y marcar estado. Con «Generar pendientes solo» activado, el panel genera uno a la vez con 20 min de pausa entre videos (`llm.pausa_entre_videos_min`). Las escenas escritas a mano van en `data/escenas/<id>.py` y tienen prioridad sobre la IA. Regenerar la base: `python scripts/calendario_base.py --force`.
 
+## Video largo horizontal (YouTube, 8-12 min)
+
+Une varios temas del calendario en un video 16:9 con capítulos (reglas: `video_largo` y `enlace_largo` en `config/reglas.yaml`).
+
+```bash
+python make_long.py data/largos/tu-celular-por-dentro.json --quality draft   # prueba rápida
+python make_long.py data/largos/tu-celular-por-dentro.json                   # HD; retoma capítulos ya hechos
+python make_long.py data/largos/tu-celular-por-dentro.json --redo 03-carga-inalambrica
+python make_long.py data/largos/tu-celular-por-dentro.json --textos          # rehace descripción con enlaces a los shorts
+python scripts/corregir_y_enlazar.py [--aplicar] [--youtube]                  # «Guárdalo» → «Guarda este video para…» y enlaces short → largo
+```
+
+Sale en `out/largo-<id>/` con `final.mp4` (1920×1080) y `meta.json` (descripción con capítulos, `ad_breaks` sugeridos, `end_screen_from`). Escenas a mano: `data/largos/<id>/<NN-id>.py`. En YouTube Studio quedan a mano: elementos de la pantalla final, pausas publicitarias (usar `ad_breaks`), «Video relacionado» de cada short y fijar el comentario.
+
 ## Instagram (Reels y comentarios)
 
 Usa la «API de Instagram con inicio de sesión de Instagram» de Meta (cuenta profesional: empresa o creador).

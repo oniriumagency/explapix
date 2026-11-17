@@ -81,8 +81,16 @@ GOOD = MINT
 PALETTE = [BLUE, CYAN, VIOLET, PINK, CORAL, SUN, MINT]
 
 config.background_color = BG
-# Formato vertical 9:16 (Reels/Shorts/TikTok). EXPLAPIX_VERTICAL=0 para 16:9.
-if os.environ.get("EXPLAPIX_VERTICAL", "1") == "1":
+# Formato: "vertical" 9:16 (Reels/Shorts/TikTok, por defecto) o "largo" 16:9 (YouTube horizontal).
+# EXPLAPIX_FORMATO=largo (o el antiguo EXPLAPIX_VERTICAL=0) cambia a horizontal. En ambos formatos una
+# unidad mide lo mismo en pixeles (120 px en HD), así que los tamaños de texto y formas no cambian.
+FORMATO = os.environ.get("EXPLAPIX_FORMATO") or ("vertical" if os.environ.get("EXPLAPIX_VERTICAL", "1") == "1"
+                                                 else "largo")
+LARGO = FORMATO == "largo"
+if LARGO:
+    config.frame_height = 9.0
+    config.frame_width = 16.0
+else:
     config.frame_height = 16.0
     config.frame_width = 9.0
 
@@ -107,6 +115,14 @@ def anticipate_overshoot(t: float, tension: float = 2.2) -> float:
 SAFE_ZONE = {"top": 0.12, "bottom": 0.20, "right": 0.15, "left": 0.05}
 CAPTION_BAND = 1.75            # alto de la franja de subtítulos (unidades de pantalla, 16 = alto)
 DESIGN_BOX = (-4.3, 4.3, -5.0, 7.3)   # x0, x1, y0, y1 donde va TODO lo importante de la escena
+CAPTION_CHARS = 22             # caracteres por línea de subtítulo
+if LARGO:
+    # Horizontal (YouTube): sin interfaz encima; solo el margen de seguridad de TV (5 %) y la franja de
+    # subtítulos abajo. Caja de diseño apaisada: x∈[-7.4, 7.4], y∈[-3.2, 4.0].
+    SAFE_ZONE = {"top": 0.05, "bottom": 0.05, "right": 0.05, "left": 0.05}
+    CAPTION_BAND = 1.1
+    DESIGN_BOX = (-7.4, 7.4, -3.2, 4.0)
+    CAPTION_CHARS = 44
 
 
 def _safe_framing():
@@ -289,6 +305,8 @@ def cta_icon(kind: str, size: float = 0.9) -> VGroup:
 CTA_TEXT = {"save": "Guarda este video", "guardar": "Guarda este video", "comment": "Comenta", "comentar": "Comenta",
             "share": "Compártelo", "compartir": "Compártelo", "follow": "Síguenos", "seguir": "Síguenos",
             "like": "Dale like"}
+if LARGO:
+    CTA_TEXT.update(follow="Suscríbete", seguir="Suscríbete")
 
 
 # ---------- Caritas (appeal) ----------
@@ -719,9 +737,12 @@ MOODS = {  # (abajo, medio, arriba, halo)
 }
 
 
-def backdrop(w: float = 30, h: float = 48, n: int = 110, seed: int = 7) -> VGroup:
+def backdrop(w: float | None = None, h: float | None = None, n: int = 110, seed: int = 7) -> VGroup:
     """Degradado + brillo + polvo de estrellas en 3 capas que derivan (parallax)."""
     rng = random.Random(seed)
+    w = w or (48 if LARGO else 30)
+    h = h or (30 if LARGO else 48)
+    n = int(n * 1.5) if LARGO else n
     grad = Rectangle(width=w, height=h, stroke_width=0)
     lo, mid, hi, hc = MOODS["noche"]
     grad.set_fill(color=[lo, mid, hi], opacity=1).set_sheen_direction(UP)
@@ -737,7 +758,7 @@ def backdrop(w: float = 30, h: float = 48, n: int = 110, seed: int = 7) -> VGrou
             layer.add(Dot([x, y, 0], radius=rng.uniform(rmin, rmax), color=c, fill_opacity=op))
         for _ in range(2 + depth):
             layer.add(sparkle(rng.uniform(0.07, 0.14), INK).set_opacity(op).move_to(
-                [rng.uniform(-4.2, 4.2), rng.uniform(-7.5, 7.5), 0]))
+                [rng.uniform(-0.47, 0.47) * config.frame_width, rng.uniform(-0.47, 0.47) * config.frame_height, 0]))
         layer.add_updater(lambda m, dt, spd=spd: m.shift(UP * spd * dt))
         layers.add(layer)
     g = VGroup(grad, halo, layers)
@@ -800,7 +821,7 @@ class ExplapixScene(MovingCameraScene):
         sf = _safe_framing() if os.environ.get("EXPLAPIX_SAFE", "1") == "1" else None
         self._base_center = sf["center"] if sf else ORIGIN.copy()
         self._base_height = sf["height"] if sf else config.frame_height
-        self._caption_pos = sf["caption"] if sf else DOWN * 6.3
+        self._caption_pos = sf["caption"] if sf else DOWN * (3.6 if LARGO else 6.3)
         self._content_screen = sf["content_center"] if sf else ORIGIN.copy()
         self.frame.move_to(self._base_center).set(height=self._base_height)
         self._sfx_events.append({"t": 0.0, "kind": "layout_safe" if sf else "layout_full", "gain": 0})
@@ -1011,6 +1032,8 @@ class ExplapixScene(MovingCameraScene):
         base = VGroup(bg, badge.move_to(bg))
         # flecha hacia la columna de botones de la derecha (guardar, comentar, compartir)
         point = kind in ("save", "guardar", "comment", "comentar", "share", "compartir", "like")
+        if LARGO:      # horizontal: los botones están bajo el reproductor → flecha que rebota hacia abajo
+            point = point or kind in ("follow", "seguir")
         arrow = Arrow(LEFT * 0.7, RIGHT * 0.7, buff=0, color=SUN, stroke_width=16,
                       max_tip_length_to_length_ratio=0.3, max_stroke_width_to_length_ratio=12) if point else VGroup()
         holder = VGroup(base.copy())
@@ -1036,7 +1059,16 @@ class ExplapixScene(MovingCameraScene):
             c = frame.get_center()
             b = base.copy().scale(max(s_in * s_out, 0.01) * k).rotate(wig).move_to(c + pos * k)
             g = VGroup(b)
-            if point and t > 0.25:
+            if point and t > 0.25 and LARGO:
+                u = t - 0.25
+                bob = 0.18 * abs(np.sin(u * 5)) * np.exp(-u * 0.3)
+                x = b.get_right()[0] + 0.45 * k
+                top = b.get_center()[1] + 0.35 * k
+                bot = top - (0.8 + bob) * k
+                ar = arrow.copy().put_start_and_end_on(np.array([x, top, 0]), np.array([x, bot, 0]) + 1e-3 * DOWN)
+                ar.set_opacity(s_out * min(u / 0.2, 1.0))
+                g.add(ar)
+            elif point and t > 0.25:
                 # anticipación (retrocede), disparo con rebote y empujoncitos hacia los botones
                 u = t - 0.25
                 nudge = 0.25 * np.sin(u * 7) * np.exp(-u * 0.6) if u > 0.6 else 0.0
@@ -1057,15 +1089,50 @@ class ExplapixScene(MovingCameraScene):
         self.sfx("blip", 0.15)
         self.add_foreground_mobject(holder)
 
-    def chapter(self, title: str, color=None):
-        """Mini-título de capítulo (videos largos): entra con pop, se queda ~0.6 s y sale (≈1.1 s)."""
+    def chapter(self, title: str, color=None, number: int | None = None):
+        """Mini-título de capítulo: entra con pop, se queda y sale (≈1.1 s vertical, ≈1.8 s horizontal).
+        En horizontal es una pausa natural donde YouTube puede poner un anuncio."""
         kf = self.frame.height / config.frame_height
-        c = self.frame.get_center() + self._content_screen * kf + UP * 2.2 * kf
-        card = pill(title, color or VIOLET, 40, text_color=INK).scale(kf).move_to(c)
+        c = self.frame.get_center() + self._content_screen * kf + (UP * 2.2 * kf if not LARGO else ORIGIN)
+        card = pill(title, color or VIOLET, 56 if LARGO else 40, text_color=INK)
+        if number is not None:
+            card = VGroup(T(f"CAPÍTULO {number}", 26, MUTED, weight=HEAVY), card).arrange(DOWN, buff=0.18)
+        card.scale(kf).move_to(c)
+        self._sfx_events.append({"t": round(self.renderer.time, 3), "kind": "chapter", "title": title, "gain": 0})
         self.sfx("blip")
-        self.play(pop_in(card, anchor=ORIGIN, run_time=0.45))
-        self.wait(0.35)
-        self.play(exit_out(card, run_time=0.3))
+        self.play(pop_in(card, anchor=ORIGIN, run_time=0.5))
+        self.wait(0.9 if LARGO else 0.35)
+        self.play(exit_out(card, run_time=0.35))
+
+    def end_screen(self, dur: float = 20.0, message: str = "¡Gracias por ver!"):
+        """Pantalla final de YouTube (horizontal): logo y mensaje en la mitad izquierda; la derecha queda
+        libre para los elementos que se ponen en YouTube Studio (video sugerido y botón de suscribirse).
+        Dibuja guías suaves donde irán. Dura `dur` segundos."""
+        kf = self.frame.height / config.frame_height
+        c = self.frame.get_center()
+        W, H = config.frame_width, config.frame_height
+        self._sfx_events.append({"t": round(self.renderer.time, 3), "kind": "end_screen", "gain": 0})
+        left = c + np.array([-W * 0.25, 0.4, 0]) * kf
+        l1, l2 = T("FACTOS", 80, INK), T("DIDÁCTICOS", 56, SUN)
+        logo = VGroup(l1, l2).arrange(DOWN, buff=0.05)
+        sub = T(message, 34, MUTED, weight=NORMAL).next_to(logo, DOWN, buff=0.35)
+        blk = VGroup(logo, sub).scale(kf).move_to(left)
+        halo = glow(logo, VIOLET, radius=2.8 * kf, opacity=0.16).move_to(logo)
+        # guías: video sugerido 16:9 (arriba) y círculo de suscribirse (abajo), mitad derecha
+        vid = RoundedRectangle(corner_radius=0.2, width=5.6, height=3.15, stroke_color=INK, stroke_width=3,
+                               stroke_opacity=0.25, fill_color=BLACK, fill_opacity=0.18)
+        sus = Circle(radius=0.95, stroke_color=INK, stroke_width=3, stroke_opacity=0.25,
+                     fill_color=BLACK, fill_opacity=0.18)
+        guides = VGroup(vid, sus).arrange(DOWN, buff=0.45).scale(kf).move_to(c + np.array([W * 0.23, 0, 0]) * kf)
+        conf = particles("estrellas", c, W * kf, H * kf, 40)
+        self.add(conf)
+        self.sfx("pop", 0.1)
+        self.play(FadeIn(halo, run_time=0.4), pop_in(l1, run_time=0.8, anchor=ORIGIN),
+                  Succession(Wait(0.15), pop_in(l2, run_time=0.7, anchor=ORIGIN)),
+                  FadeIn(sub, shift=UP * 0.2, run_time=0.6), FadeIn(guides, run_time=0.8))
+        idle_pulse(logo, amp=0.02, period=1.8)
+        self.wait(max(dur - 0.8, 0.1))
+        return VGroup(halo, blk, guides, conf)
 
     def outro(self):
         """Cierre de marca con confeti (≈1.2 s)."""
@@ -1090,7 +1157,7 @@ class ExplapixScene(MovingCameraScene):
 
     # ----- subtítulos estilo reel (fijos aunque la cámara gire) -----
     @staticmethod
-    def _chunks(text: str, per_line: int = 22, lines_per_chunk: int = 2) -> list[list[str]]:
+    def _chunks(text: str, per_line: int = CAPTION_CHARS, lines_per_chunk: int = 2) -> list[list[str]]:
         words, lines, cur = text.split(), [], ""
         for w in words:
             if cur and len(cur) + len(w) + 1 > per_line:

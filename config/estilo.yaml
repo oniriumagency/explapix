@@ -71,7 +71,7 @@ cta:   # llamados a la acción: regla general de todos los guiones
   en_pantalla: "ícono animado (guardar, comentar, compartir, seguir) con pop y sonido, sobre los subtítulos"
   caption: "CTA en la 1.ª o 2.ª línea y la pregunta del CTA de comentar al final; comentario fijado = esa pregunta"
   variantes:
-    guardar: ["Guárdalo, te va a servir cuando…", "Guárdalo para la próxima vez que…", "Este dato guárdalo."]
+    guardar: ["Guarda este video para cuando…", "Guarda este video para la próxima vez que…", "Guarda este video para no olvidarlo."]  # nunca «Guárdalo»
     comentar: ["¿Tú lo sabías?", "¿Cuál te sorprendió más: A o B?", "¿Qué otro objeto te intriga?"]
     compartir: ["Mándaselo a quien…", "Compártelo con alguien que…", "Pásaselo a tu amigo que…"]
     seguir: ["Síguenos: mañana explicamos…", "Síguenos para el próximo dato."]

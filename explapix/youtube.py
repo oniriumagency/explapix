@@ -75,9 +75,10 @@ def service():
 
 
 def upload(video: Path, title: str, description: str, tags: list[str],
-           privacy: str = "private", publish_at: str | None = None) -> str:
-    """Sube el video. privacy: private | unlisted | public. publish_at ISO8601 programa la salida."""
-    if "#shorts" not in description.lower():
+           privacy: str = "private", publish_at: str | None = None, short: bool = True) -> str:
+    """Sube el video. privacy: private | unlisted | public. publish_at ISO8601 programa la salida.
+    short=False para el video largo horizontal (no lleva #Shorts)."""
+    if short and "#shorts" not in description.lower():
         description += "\n#Shorts"
     status = {"privacyStatus": privacy, "selfDeclaredMadeForKids": False,
               "containsSyntheticMedia": True}  # voz sintética: declaración de contenido alterado
@@ -95,6 +96,28 @@ def upload(video: Path, title: str, description: str, tags: list[str],
         _, resp = req.next_chunk()
     spend(COST["upload"])
     return resp["id"]
+
+
+def update_description(video_id: str, description: str) -> None:
+    """Cambia solo la descripción de un video ya subido (conserva título, tags y categoría)."""
+    yt = service()
+    items = yt.videos().list(part="snippet", id=video_id).execute().get("items", [])
+    if not items:
+        raise RuntimeError(f"No encontré el video {video_id}")
+    sn = items[0]["snippet"]
+    body = {"id": video_id, "snippet": {k: sn[k] for k in ("title", "categoryId", "tags", "defaultLanguage",
+                                                            "defaultAudioLanguage") if k in sn}}
+    body["snippet"]["description"] = description[:5000]
+    yt.videos().update(part="snippet", body=body).execute()
+    spend(COST.get("update", 50))
+
+
+def comment(video_id: str, text: str) -> str:
+    """Publica un comentario principal en el video (fijarlo se hace a mano: la API no lo permite)."""
+    r = service().commentThreads().insert(part="snippet", body={
+        "snippet": {"videoId": video_id, "topLevelComment": {"snippet": {"textOriginal": text}}}}).execute()
+    spend(COST.get("reply", 50))
+    return r["id"]
 
 
 def channel_id(yt) -> str:

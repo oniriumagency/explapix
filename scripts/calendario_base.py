@@ -419,7 +419,7 @@ def build():
         d = START + timedelta(days=k)
         hashtags = ["#FactosDidacticos", *tags, "#ciencia", "#datoscuriosos"]
         caption = (f"{hook} 🤯\n\n{summary}\n\n{question} 👇\n\n"
-                   f"💾 Guárdalo para recordarlo y compártelo con alguien que no lo sabía.\n\n"
+                   f"💾 Guarda este video para recordarlo y compártelo con alguien que no lo sabía.\n\n"
                    + " ".join(hashtags))
         sb = {"topic": topic, "title": title,
               "description": f"{hook} {summary}\n\n" + " ".join(hashtags[:4]),

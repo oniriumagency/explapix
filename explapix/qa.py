@@ -84,10 +84,31 @@ def check(folder: Path, whisper: bool = True) -> dict:
     def add(cid, label, ok, detail="", fix=""):
         checks.append({"id": cid, "label": label, "ok": bool(ok), "detail": detail, "fix": "" if ok else fix})
 
+    largo = meta.get("formato") == "largo" or sb.get("formato") == "largo"
+
     # --- duración
     dur = _dur(final) if final.exists() else 0
-    dmin, dmax = _p(r, "guion", "duracion_min_s", 61), _p(r, "guion", "duracion_max_s", 175)
-    add("duracion", f"Duración entre {dmin} y {dmax} s", dmin <= dur <= dmax + 3, f"{dur:.1f} s", "guion")
+    if largo:
+        dmin, dmax = _p(r, "video_largo", "duracion_min_s", 480), _p(r, "video_largo", "duracion_max_s", 720)
+        add("duracion", f"Duración entre {dmin // 60} y {dmax // 60} min (anuncios a mitad desde 8:00)",
+            dmin <= dur <= dmax, f"{int(dur // 60)}:{int(dur % 60):02d}", "guion")
+    else:
+        dmin, dmax = _p(r, "guion", "duracion_min_s", 61), _p(r, "guion", "duracion_max_s", 175)
+        add("duracion", f"Duración entre {dmin} y {dmax} s", dmin <= dur <= dmax + 3, f"{dur:.1f} s", "guion")
+    desc = meta.get("description", "") or sb.get("description", "")
+
+    # --- capítulos con mini-título
+    if largo:
+        caps = meta.get("chapters") or []
+        cmin, clen = _p(r, "video_largo", "capitulos_min", 3), _p(r, "video_largo", "capitulo_min_s", 10)
+        secs = [int(a) * 60 + int(b) for a, b in re.findall(r"^(\d+):(\d\d) ", desc, re.M)]
+        gaps = [b - a for a, b in zip(secs, secs[1:] + [dur])]
+        ok_caps = len(secs) >= cmin and secs[0] == 0 and all(g_ >= clen for g_ in gaps) and len(caps) >= cmin
+        add("capitulos", f"Capítulos de YouTube en la descripción (0:00, ≥{cmin}, ≥{clen} s c/u)", ok_caps,
+            f"{len(secs)} marcas en la descripción, {len(caps)} capítulos", "textos")
+    elif dur > 90:
+        n_ch = sum(1 for s_ in segs if (s_.get("chapter") or "").strip())
+        add("capitulos", "Más de 90 s: 2-4 capítulos con mini-título", 2 <= n_ch <= 4, f"{n_ch} capítulos", "guion")
 
     # --- marca
     nombre = _p(r, "marca", "nombre", "Factos Didácticos")
@@ -95,7 +116,6 @@ def check(folder: Path, whisper: bool = True) -> dict:
                        " ".join(s.get("narration", "") for s in segs)])
     prohibidas = [w for w in _p(r, "marca", "prohibido", []) if w in textos]
     tag = _p(r, "marca", "hashtag", "#FactosDidacticos")
-    desc = meta.get("description", "") or sb.get("description", "")
     tag_ok = tag.lower() in desc.lower()
     add("marca", f"Marca correcta ({nombre}, {tag}, sin nombres internos)", tag_ok and not prohibidas,
         "prohibidas: " + ", ".join(prohibidas) if prohibidas else ("" if tag_ok else f"falta {tag} en la descripción"),
@@ -110,28 +130,49 @@ def check(folder: Path, whisper: bool = True) -> dict:
     ctas = [(i, s.get("cta"), starts[i] if i < len(starts) else 0, s.get("narration", ""))
             for i, s in enumerate(segs) if s.get("cta")]
     pre = _p(r, "cta", "sin_cta_antes_de_s", 5)
+    if largo:   # horizontal: más CTA permitidos y ventanas proporcionales a un video de 8-12 min
+        win_g, win_c, fd_def, mx_def = [0.05, 0.40], [0.30, 0.75], 0.70, _p(r, "video_largo", "max_hablados", 4)
+    else:
+        win_g, win_c, fd_def, mx_def = (_p(r, "cta", "guardar_ventana", [0.2, 0.42]),
+                                        _p(r, "cta", "comentar_ventana", [0.45, 0.72]),
+                                        _p(r, "cta", "final_desde", 0.7), _p(r, "cta", "max_hablados", 3))
     add("cta_inicio", f"Sin CTA en los primeros {pre} s", all(st >= pre for _, _, st, _ in ctas),
         ", ".join(f"{k} en {st:.0f}s" for _, k, st, _ in ctas if st < pre), "guion")
-    mx = _p(r, "cta", "max_hablados", 3)
+    mx = mx_def
     add("cta_cantidad", f"Entre 1 y {mx} CTA hablados", 1 <= len(ctas) <= mx, f"{len(ctas)} CTA", "guion")
     frase = _p(r, "cta", "guardar_frase", "Guarda este video para").lower()
-    w0, w1 = _p(r, "cta", "guardar_ventana", [0.2, 0.42])
+    w0, w1 = win_g
     g = [c for c in ctas if c[1] == "guardar"]
     gok = bool(g) and frase in g[0][3].lower() and w0 <= g[0][2] / total <= w1
     add("cta_guardar", f"Guardar ({int(w0*100)}-{int(w1*100)} %) con «{frase.capitalize()}…»", gok,
         (f"en {g[0][2]:.0f} s ({g[0][2]/total:.0%})" + ("" if frase in g[0][3].lower() else "; frase distinta"))
         if g else "no hay CTA de guardar", "guion")
-    c0, c1 = _p(r, "cta", "comentar_ventana", [0.45, 0.72])
+    c0, c1 = win_c
     c = [x for x in ctas if x[1] == "comentar"]
     cok = bool(c) and "?" in c[0][3] and c0 <= c[0][2] / total <= c1
     add("cta_comentar", f"Comentar ({int(c0*100)}-{int(c1*100)} %) con pregunta", cok,
         f"en {c[0][2]:.0f} s ({c[0][2]/total:.0%})" if c else "no hay CTA de comentar", "guion")
-    fd = _p(r, "cta", "final_desde", 0.7)
+    fd = fd_def
     f = [x for x in ctas if x[1] in ("compartir", "seguir")]
     add("cta_final", f"Compartir/seguir después del {int(fd*100)} %", bool(f) and f[-1][2] / total >= fd,
         f"en {f[-1][2]:.0f} s ({f[-1][2]/total:.0%})" if f else "no hay CTA de compartir/seguir", "guion")
     cebo = [pat for pat in _p(r, "cta", "cebo_prohibido", []) if re.search(pat, textos, re.I)]
     add("sin_cebo", "Sin cebo de interacción", not cebo, ", ".join(cebo), "guion")
+    pats = _p(r, "cta", "guardar_prohibido", [r"gu[aá]rdal[oa]\b"])
+    voz = " ".join(s_.get("narration", "") for s_ in segs)
+    redes = " ".join([meta.get("ig_caption", ""), meta.get("pinned_comment", ""), desc])
+    en_voz = any(re.search(x, voz, re.I) for x in pats)
+    en_redes = any(re.search(x, redes, re.I) for x in pats)
+    add("sin_guardalo", "Nunca «Guárdalo» (siempre «Guarda este video para…»)", not en_voz and not en_redes,
+        " y ".join(([("en la voz")] if en_voz else []) + (["en los textos"] if en_redes else [])),
+        "guion" if en_voz else "textos")
+    if not largo and meta.get("largo_id"):
+        url = meta.get("largo_url") or ""
+        first = (desc.strip().splitlines() or [""])[0]
+        ok_l = bool(url) and url in first and url in meta.get("pinned_comment", "")
+        add("enlace_largo", "Enlaza al video largo (1.ª línea de la descripción y comentario fijado)", ok_l,
+            "" if ok_l else ("el video largo aún no está publicado" if not url else
+                             "falta el enlace en la descripción o en el comentario fijado"), "textos")
     icons = [e for e in events if str(e.get("kind", "")).startswith("cta_")]
     add("cta_iconos", "Cada CTA con su ícono en pantalla", len(icons) >= len(ctas) and bool(ctas),
         f"{len(icons)} íconos / {len(ctas)} CTA", "render")
@@ -141,6 +182,12 @@ def check(folder: Path, whisper: bool = True) -> dict:
     safe = any(e.get("kind") == "layout_safe" for e in events) or (
         silent is not None and silent.stat().st_mtime > SAFE_SINCE)
     add("zona_segura", "Encuadre dentro de la zona segura", safe, "", "render")
+    if largo:
+        endf = _p(r, "video_largo", "pantalla_final_s", 20)
+        es = [e for e in events if e.get("kind") == "end_screen"]
+        ok_es = bool(es) and dur - es[-1]["t"] >= endf - 0.5
+        add("pantalla_final", f"Pantalla final de {endf} s con espacio para los elementos de YouTube", ok_es,
+            f"{dur - es[-1]['t']:.1f} s" if es else "no hay pantalla final", "render")
 
     # --- audio
     if final.exists():

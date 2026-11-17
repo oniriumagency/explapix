@@ -154,12 +154,13 @@
   <details class="faq"><summary>¿Puedo cambiar la voz?</summary><p>Sí. En <b>Voces</b> eliges el motor, ajustas emoción y ritmo o subes 10-20 s de tu voz para que Chatterbox la imite.</p></details>
   <details class="faq"><summary>Un video salió mal, ¿qué hago?</summary><p>Recházalo con una nota de qué cambiar y regenéralo: Claude usa tu nota. Si solo quieres otra toma de voz, elige «solo voz y render» (gratis).</p></details>
   <details class="faq"><summary>¿Cuánto duran los videos?</summary><p>Entre 61 s y 175 s, según cuánto dé el tema. Lo que hace crecer y pagar es la retención, no los segundos: más de 1 minuto permite entrar al programa de recompensas de TikTok, y los temas ricos pueden llegar casi a 3 min con capítulos y re-ganchos. Los temas simples quedan más cortos; los complejos, más largos. En Biblioteca, «Versión extendida» amplía los videos viejos de ~40 s reutilizando su animación.</p></details>
-  <details class="faq"><summary>¿Y los videos horizontales largos?</summary><p>Se pueden armar reutilizando las mismas escenas en 16:9 y juntando varios temas en un episodio con capítulos. Está propuesto y pendiente de tu visto bueno.</p></details>
+  <details class="faq"><summary>¿Y los videos horizontales largos?</summary><p>Juntan 6-9 temas de un mismo mundo de CPM alto (tecnología, dinero, energía) en un video de 8 a 12 min en 16:9, un capítulo por tema. Se generan con <code>python make_long.py data/largos/&lt;id&gt;.json</code>: cada capítulo se narra y anima por separado (si algo falla, se retoma donde quedó), y al final se escriben los capítulos de YouTube en la descripción, las pausas sugeridas para anuncios y la pantalla final de 20 s. Cada short de esos temas enlaza al largo en su descripción y comentario fijado (<code>scripts/corregir_y_enlazar.py</code>); el «Video relacionado» se pone a mano en YouTube Studio.</p></details>
   <p style="margin-top:2rem"><a class="back" href="/#biblioteca">← Volver al panel</a></p>
 <script>
 fetch("/api/rules").then((r) => r.json()).then((d) => {
   const names = { marca: "Marca", guion: "Guion y duración", cta: "Llamados a la acción", estilo_visual: "Estilo visual",
-    zona_segura: "Zona segura", voz: "Voz", audio: "Audio y música", publicacion: "Publicación" };
+    zona_segura: "Zona segura", voz: "Voz", audio: "Audio y música", publicacion: "Publicación",
+    video_largo: "Video largo (YouTube horizontal)", enlace_largo: "Enlace short → video largo" };
   const esc = (t) => String(t).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
   document.getElementById("rules").innerHTML = Object.entries(d).map(([k, v]) =>
     `<div class="card"><h3>${esc(names[k] || k)}</h3><ul>${(v.texto || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>`).join("");

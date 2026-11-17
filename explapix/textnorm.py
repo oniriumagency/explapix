@@ -23,6 +23,9 @@ UNITS = [
     (r"(\d)\s?km\b", r"\1 kilómetros"), (r"(\d)\s?cm\b", r"\1 centímetros"), (r"(\d)\s?mm\b", r"\1 milímetros"),
     (r"(\d)\s?kg\b", r"\1 kilos"), (r"(\d)\s?g\b", r"\1 gramos"), (r"(\d)\s?GHz\b", r"\1 gigahercios"),
     (r"(\d)\s?MHz\b", r"\1 megahercios"), (r"(\d)\s?kWh\b", r"\1 kilovatios hora"), (r"(\d)\s?W\b", r"\1 vatios"),
+    (r"(\d)\s?mAh\b", r"\1 miliamperios hora"), (r"(\d)\s?V\b", r"\1 voltios"),
+    (r"(\d)\s?MP\b", r"\1 megapíxeles"), (r"(\d)\s?Mbps\b", r"\1 megabits por segundo"),
+    (r"(\d)\s?nm\b", r"\1 nanómetros"),
     (r"(\d)\s?m/s\b", r"\1 metros por segundo"), (r"(\d)\s?m\b", r"\1 metros"), (r"(\d)\s?s\b", r"\1 segundos"),
     (r"(\d)\s?[x×]\b", r"\1 veces"), (r"~\s?", "unos "),
 ]
@@ -30,7 +33,8 @@ ACRONYMS = {
     "GPS": "ge pe ese", "QR": "cu erre", "UV": "u ve", "UVA": "u ve a", "UVB": "u ve be", "ADN": "a de ene",
     "ARN": "a erre ene", "NFC": "ene efe ce", "CO2": "ce o dos", "CO₂": "ce o dos", "USB": "u ese be",
     "IA": "i a", "LCD": "ele ce de", "SPF": "ese pe efe", "FPS": "efe pe ese", "CDMX": "Ciudad de México",
-    "SASMEX": "sasmex", "TV": "tele",
+    "SASMEX": "sasmex", "TV": "tele", "Wi-Fi": "uaifai", "WiFi": "uaifai", "wifi": "uaifai",
+    "LED": "led", "CPU": "ce pe u", "PIN": "pin", "SIM": "sim",
 }
 
 
@@ -52,6 +56,7 @@ def normalize(text: str) -> str:
         t = re.sub(pat, rep, t)
     for k, v in ACRONYMS.items():
         t = re.sub(rf"(?<![\w]){re.escape(k)}(?![\w])", v, t)
+    t = re.sub(r"(?<=\d) (?=\d{3}\b)", "", t)          # 20 200 -> 20200 (miles con espacio)
     t = re.sub(r"\d{1,3}(?:\.\d{3})+|\d+,\d+|\d+", _num, t)
     t = t.replace("—", ", ").replace("–", ", ").replace("…", "…")
     t = re.sub(r"\s+", " ", t).strip()

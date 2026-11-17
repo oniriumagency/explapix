@@ -257,6 +257,7 @@ class Jobs:
         """Efectos al terminar: enlazar el video regenerado con el original y con el calendario."""
         cid = j["meta"].get("calendar_id")
         if cid and j["status"] == "done" and j.get("result"):
+            from explapix import enlaces  # noqa: PLC0415
             it = next((x for x in calendar_load()["items"] if x["id"] == cid), None)
             mf = OUT / j["result"] / "meta.json"
             meta = read_json(mf, None)
@@ -273,6 +274,7 @@ class Jobs:
                         if x["id"] == cid:
                             x["pinned_comment"] = f"{q} 👇 Te leemos."
                             x["ig_caption"] = build_caption(x, q)
+                            enlaces.apply(x, cid)      # enlace al video largo, si el tema tiene uno
                             it = x
                     calendar_save(data)
             if it and nsb and nsb.get("duracion_objetivo_s") and not it["storyboard"].get("duracion_objetivo_s"):
@@ -285,6 +287,7 @@ class Jobs:
                 meta.update(title=it["title"], ig_caption=it["ig_caption"],
                             pinned_comment=it["pinned_comment"], calendar_id=cid,
                             scheduled=f"{it['date']} {it['time']} (CDMX)")
+                enlaces.apply(meta, cid)
                 write_json(mf, meta)
                 _qa_refresh(OUT / j["result"])
         if cid:
@@ -391,7 +394,7 @@ def build_caption(it: dict, question: str | None = None) -> str:
     if not summary:
         parts = [p_ for p_ in (it.get("ig_caption") or "").split("\n\n") if p_.strip()]
         summary = parts[1] if len(parts) > 1 and "?" not in parts[1] else ""
-    return (f"{it['hook']} 🤯\n💾 Guárdalo y mándaselo a alguien que no lo sabía.\n\n"
+    return (f"{it['hook']} 🤯\n💾 Guarda este video para tenerlo a mano y mándaselo a alguien que no lo sabía.\n\n"
             f"{summary}\n\n{q} 👇\n\n{tags}").replace("\n\n\n", "\n\n")
 
 
