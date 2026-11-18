@@ -906,10 +906,36 @@ def api_voices():
             if f.suffix in (".wav", ".mp3") and not (f.suffix == ".wav" and f.with_suffix(".mp3").exists()):
                 files.append({"name": f.name, "size": f.stat().st_size})
     ref = ROOT / "voices" / "ref.wav"
-    return {"files": files, "settings": {k: env.get(k, "") for k in VOICE_KEYS},
+    return {"files": files, "ratings": read_json(VOICE_RATINGS, {}) or {},
+            "settings": {k: env.get(k, "") for k in VOICE_KEYS},
             "default_engine": env.get("EXPLAPIX_TTS") or "chatterbox",
             "ref": {"exists": ref.exists(), "mtime": ref.stat().st_mtime if ref.exists() else None,
                     "custom": (ROOT / "voices" / "ref_propia.txt").exists()}}
+
+
+VOICE_RATINGS = STUDIO / "voice_ratings.json"
+_RATINGS_LOCK = threading.Lock()
+
+
+@app.put("/api/voices/rating")
+def api_voice_rating(body: dict = Body(...)):
+    """Calificación (1-5 estrellas, 0 = sin calificar) y comentario de Magne para una muestra de voz."""
+    name = str(body.get("name", ""))
+    if not SAFE_FILE_RE.match(name) or not (VOICES_OUT / name).exists():
+        raise HTTPException(404, "Muestra no encontrada")
+    try:
+        stars = int(body.get("stars", 0))
+    except (TypeError, ValueError):
+        raise HTTPException(422, "Estrellas inválidas")
+    if not 0 <= stars <= 5:
+        raise HTTPException(422, "Estrellas entre 0 y 5")
+    with _RATINGS_LOCK:     # dos guardados a la vez (estrella + comentario) no deben pisarse
+        data = read_json(VOICE_RATINGS, {}) or {}
+        data[name] = {"stars": stars, "comment": str(body.get("comment", ""))[:2000],
+                      "at": datetime.now().isoformat(timespec="seconds")}
+        VOICE_RATINGS.parent.mkdir(parents=True, exist_ok=True)
+        write_json(VOICE_RATINGS, data)
+        return data[name]
 
 
 @app.get("/media/voces/{name}")

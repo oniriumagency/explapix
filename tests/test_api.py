@@ -143,3 +143,17 @@ def test_calendar_edit_reorder(client):
     assert [(i["id"], i["day"], i["date"]) for i in r["items"]][0] == ("tema-2", 1, "2026-11-01")
     assert client.post("/api/calendar/reorder", json={"order": ["tema-2"]}).status_code == 422
     assert client.put("/api/calendar/settings", json={"auto_generate": True}).json()["auto_generate"]
+
+
+def test_voice_rating(client):
+    v = client.out / "voces"
+    v.mkdir()
+    (v / "comparacion2_qwen3tts_mujer1.mp3").write_bytes(b"\x00" * 100)
+    r = client.put("/api/voices/rating", json={"name": "comparacion2_qwen3tts_mujer1.mp3", "stars": 4,
+                                               "comment": "natural, algo plana"})
+    assert r.status_code == 200 and r.json()["stars"] == 4
+    d = client.get("/api/voices").json()
+    assert d["ratings"]["comparacion2_qwen3tts_mujer1.mp3"]["comment"] == "natural, algo plana"
+    assert client.put("/api/voices/rating", json={"name": "comparacion2_qwen3tts_mujer1.mp3", "stars": 9}).status_code == 422
+    assert client.put("/api/voices/rating", json={"name": "../secrets/x.mp3", "stars": 3}).status_code == 404
+    assert client.put("/api/voices/rating", json={"name": "no-existe.mp3", "stars": 3}).status_code == 404

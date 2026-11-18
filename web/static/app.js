@@ -370,10 +370,66 @@ async function loadVoices() {
   $("#refInfo").innerHTML = v.ref.exists
     ? `<p>Referencia actual: <b>${v.ref.custom ? "tu grabación" : "voz de Kokoro (em_alex)"}</b></p><audio controls src="/media/ref.wav?t=${v.ref.mtime}"></audio>`
     : `<p class="warn">No hay referencia: Chatterbox usará su voz por defecto.</p>`;
-  $("#samples").innerHTML = v.files.length ? v.files.map((f) => `
-    <div class="item"><div class="head"><b>${esc(f.name.replace(/\.(mp3|wav)$/, "").replaceAll("_", " "))}</b><small>${Math.round(f.size / 1024)} KB</small></div>
-    <audio controls preload="none" src="/media/voces/${esc(f.name)}"></audio></div>`).join("") : `<div class="empty">Sin muestras.</div>`;
+  voiceRatings = v.ratings || {};
+  voiceFiles = v.files;
+  renderSamples();
 }
+let voiceRatings = {}, voiceFiles = [];
+const motorOf = (n) => { const m = n.match(/^comparacion2?_([^_]+)_/); return m ? m[1] : null; };
+function renderSummary() {
+  const by = {};
+  for (const [n, r] of Object.entries(voiceRatings)) {
+    const m = motorOf(n);
+    if (!m || !r.stars) continue;
+    (by[m] = by[m] || []).push(r.stars);
+  }
+  const rows = Object.entries(by).map(([m, a]) => [m, a.reduce((x, y) => x + y, 0) / a.length, a.length])
+    .sort((a, b) => b[1] - a[1]);
+  $("#ratingSummary").innerHTML = rows.length
+    ? `<p><b>Promedio por motor</b> (según tus estrellas):</p><ul>${rows.map(([m, avg, n]) =>
+        `<li>${esc(m)}: ${"★".repeat(Math.round(avg))}${"☆".repeat(5 - Math.round(avg))} ${avg.toFixed(1)} (${n} muestra${n > 1 ? "s" : ""})</li>`).join("")}</ul>`
+    : "";
+}
+function renderSamples() {
+  const q = ($("#sampleFilter")?.value || "").toLowerCase();
+  const files = voiceFiles.filter((f) => f.name.toLowerCase().includes(q));
+  $("#samples").innerHTML = files.length ? files.map((f) => {
+    const r = voiceRatings[f.name] || { stars: 0, comment: "" };
+    return `<div class="item" data-name="${esc(f.name)}"><div class="head"><b>${esc(f.name.replace(/\.(mp3|wav)$/, "").replaceAll("_", " "))}</b><small>${Math.round(f.size / 1024)} KB</small></div>
+    <audio controls preload="none" src="/media/voces/${esc(f.name)}"></audio>
+    <div class="stars" role="radiogroup" aria-label="Calificación">${[1, 2, 3, 4, 5].map((k) =>
+      `<button type="button" class="star${k <= r.stars ? " on" : ""}" data-k="${k}" aria-label="${k} estrella${k > 1 ? "s" : ""}">★</button>`).join("")}
+      <small class="saved"></small></div>
+    <textarea class="vcomment" rows="2" placeholder="¿Qué te gustó y qué no? (se guarda solo)">${esc(r.comment)}</textarea></div>`;
+  }).join("") : `<div class="empty">Sin muestras.</div>`;
+  renderSummary();
+}
+async function saveRating(item, stars, comment) {
+  const name = item.dataset.name;
+  const r = await act(() => api("/api/voices/rating", { method: "PUT", body: { name, stars, comment } }));
+  if (!r) return;
+  voiceRatings[name] = r;
+  item.querySelectorAll(".star").forEach((b) => b.classList.toggle("on", +b.dataset.k <= stars));
+  const s = item.querySelector(".saved");
+  s.textContent = "guardado ✓";
+  setTimeout(() => (s.textContent = ""), 1500);
+  renderSummary();
+}
+$("#samples").addEventListener("click", (e) => {
+  const b = e.target.closest(".star");
+  if (!b) return;
+  const item = b.closest(".item");
+  const cur = (voiceRatings[item.dataset.name] || {}).stars || 0;
+  const k = +b.dataset.k;
+  saveRating(item, k === cur ? 0 : k, item.querySelector(".vcomment").value);   // clic en la misma estrella = quitar
+});
+$("#samples").addEventListener("focusout", (e) => {
+  if (!e.target.classList.contains("vcomment")) return;
+  const item = e.target.closest(".item");
+  const prev = voiceRatings[item.dataset.name] || { stars: 0, comment: "" };
+  if (e.target.value !== prev.comment) saveRating(item, prev.stars || 0, e.target.value);
+});
+$("#sampleFilter").oninput = renderSamples;
 $("#vEx").oninput = () => ($("#exV").textContent = $("#vEx").value);
 $("#vCfg").oninput = () => ($("#cfgV").textContent = $("#vCfg").value);
 $("#btnVoiceSave").onclick = () => act(() => api("/api/settings/voice", { method: "PUT", body: {
