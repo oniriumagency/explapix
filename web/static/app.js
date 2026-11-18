@@ -400,7 +400,8 @@ function renderSamples() {
     <div class="stars" role="radiogroup" aria-label="Calificación">${[1, 2, 3, 4, 5].map((k) =>
       `<button type="button" class="star${k <= r.stars ? " on" : ""}" data-k="${k}" aria-label="${k} estrella${k > 1 ? "s" : ""}">★</button>`).join("")}
       <small class="saved"></small></div>
-    <textarea class="vcomment" rows="2" placeholder="¿Qué te gustó y qué no? (se guarda solo)">${esc(r.comment)}</textarea></div>`;
+    <textarea class="vcomment" rows="2" maxlength="2000" placeholder="¿Qué te gustó y qué no? (ritmo, acento, naturalidad, errores…)">${esc(r.comment)}</textarea>
+    <div class="rate-foot"><button type="button" class="ghost rate-save">Guardar comentario</button><small class="rate-at">${r.at ? "Guardado " + esc(r.at.replace("T", " ")) : ""}</small></div></div>`;
   }).join("") : `<div class="empty">Sin muestras.</div>`;
   renderSummary();
 }
@@ -408,14 +409,20 @@ async function saveRating(item, stars, comment) {
   const name = item.dataset.name;
   const r = await act(() => api("/api/voices/rating", { method: "PUT", body: { name, stars, comment } }));
   if (!r) return;
-  voiceRatings[name] = r;
-  item.querySelectorAll(".star").forEach((b) => b.classList.toggle("on", +b.dataset.k <= stars));
+  if (r.at) voiceRatings[name] = r; else delete voiceRatings[name];
+  item.querySelectorAll(".star").forEach((b) => b.classList.toggle("on", +b.dataset.k <= r.stars));
   const s = item.querySelector(".saved");
   s.textContent = "guardado ✓";
   setTimeout(() => (s.textContent = ""), 1500);
+  item.querySelector(".rate-at").textContent = r.at ? "Guardado " + r.at.replace("T", " ") : "";
   renderSummary();
 }
 $("#samples").addEventListener("click", (e) => {
+  const save = e.target.closest(".rate-save");
+  if (save) {
+    const item = save.closest(".item");
+    return saveRating(item, (voiceRatings[item.dataset.name] || {}).stars || 0, item.querySelector(".vcomment").value);
+  }
   const b = e.target.closest(".star");
   if (!b) return;
   const item = b.closest(".item");

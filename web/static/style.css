@@ -149,3 +149,5 @@ code { background: #070818; padding: .1rem .35rem; border-radius: 6px; }
 .vcomment { width: 100%; resize: vertical; min-height: 2.6rem; }
 #sampleFilter { width: 100%; margin: .3rem 0 .8rem; }
 #ratingSummary ul { margin: .2rem 0 .8rem 1.1rem; padding: 0; }
+.rate-foot { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-top: .4rem; }
+.rate-foot small { opacity: .7; }

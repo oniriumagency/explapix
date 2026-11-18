@@ -157,3 +157,6 @@ def test_voice_rating(client):
     assert client.put("/api/voices/rating", json={"name": "comparacion2_qwen3tts_mujer1.mp3", "stars": 9}).status_code == 422
     assert client.put("/api/voices/rating", json={"name": "../secrets/x.mp3", "stars": 3}).status_code == 404
     assert client.put("/api/voices/rating", json={"name": "no-existe.mp3", "stars": 3}).status_code == 404
+    assert json.loads((v / "calificaciones.json").read_text())["comparacion2_qwen3tts_mujer1.mp3"]["stars"] == 4
+    r = client.put("/api/voices/rating", json={"name": "comparacion2_qwen3tts_mujer1.mp3", "stars": 0, "comment": " "})
+    assert r.json()["stars"] == 0 and client.get("/api/voices").json()["ratings"] == {}
