@@ -35,7 +35,7 @@ STUDIO = OUT / "_studio"
 VOICES_OUT = OUT / "voces"
 PY = os.environ.get("EXPLAPIX_PYTHON", sys.executable)
 USER = os.environ.get("EXPLAPIX_PANEL_USER", "magne")
-VIDEO_RE = re.compile(r"^\d{8}-\d{4}-[a-z0-9-]+$")
+VIDEO_RE = re.compile(r"^(\d{8}-\d{4}|largo)-[a-z0-9-]+$")   # shorts y videos largos
 SAFE_FILE_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
 STEP_RE = re.compile(r"\[(\d)/(\d)\]\s*(.+)")
 QUOTA_LIMIT = 10_000
@@ -257,6 +257,7 @@ class Jobs:
         """Efectos al terminar: enlazar el video regenerado con el original y con el calendario."""
         cid = j["meta"].get("calendar_id")
         if cid and j["status"] == "done" and j.get("result"):
+            from explapix import enlaces  # noqa: PLC0415
             it = next((x for x in calendar_load()["items"] if x["id"] == cid), None)
             mf = OUT / j["result"] / "meta.json"
             meta = read_json(mf, None)
@@ -273,6 +274,7 @@ class Jobs:
                         if x["id"] == cid:
                             x["pinned_comment"] = f"{q} 👇 Te leemos."
                             x["ig_caption"] = build_caption(x, q)
+                            enlaces.apply(x, cid)      # enlace al video largo, si el tema tiene uno
                             it = x
                     calendar_save(data)
             if it and nsb and nsb.get("duracion_objetivo_s") and not it["storyboard"].get("duracion_objetivo_s"):
@@ -285,6 +287,7 @@ class Jobs:
                 meta.update(title=it["title"], ig_caption=it["ig_caption"],
                             pinned_comment=it["pinned_comment"], calendar_id=cid,
                             scheduled=f"{it['date']} {it['time']} (CDMX)")
+                enlaces.apply(meta, cid)
                 write_json(mf, meta)
                 _qa_refresh(OUT / j["result"])
         if cid:
@@ -391,7 +394,7 @@ def build_caption(it: dict, question: str | None = None) -> str:
     if not summary:
         parts = [p_ for p_ in (it.get("ig_caption") or "").split("\n\n") if p_.strip()]
         summary = parts[1] if len(parts) > 1 and "?" not in parts[1] else ""
-    return (f"{it['hook']} 🤯\n💾 Guárdalo y mándaselo a alguien que no lo sabía.\n\n"
+    return (f"{it['hook']} 🤯\n💾 Guarda este video para tenerlo a mano y mándaselo a alguien que no lo sabía.\n\n"
             f"{summary}\n\n{q} 👇\n\n{tags}").replace("\n\n\n", "\n\n")
 
 
@@ -903,10 +906,51 @@ def api_voices():
             if f.suffix in (".wav", ".mp3") and not (f.suffix == ".wav" and f.with_suffix(".mp3").exists()):
                 files.append({"name": f.name, "size": f.stat().st_size})
     ref = ROOT / "voices" / "ref.wav"
-    return {"files": files, "settings": {k: env.get(k, "") for k in VOICE_KEYS},
+    return {"files": files, "ratings": _voice_ratings(),
+            "settings": {k: env.get(k, "") for k in VOICE_KEYS},
             "default_engine": env.get("EXPLAPIX_TTS") or "chatterbox",
             "ref": {"exists": ref.exists(), "mtime": ref.stat().st_mtime if ref.exists() else None,
                     "custom": (ROOT / "voices" / "ref_propia.txt").exists()}}
+
+
+VOICE_RATINGS = VOICES_OUT / "calificaciones.json"     # {muestra: {stars 0-5, comment, at}}, junto a los audios
+_OLD_VOICE_RATINGS = STUDIO / "voice_ratings.json"     # ubicación anterior: se lee y se migra
+_RATINGS_LOCK = threading.Lock()
+
+
+def _voice_ratings() -> dict:
+    data = read_json(_OLD_VOICE_RATINGS, {}) or {}
+    data.update(read_json(VOICE_RATINGS, {}) or {})
+    return data
+
+
+@app.put("/api/voices/rating")
+def api_voice_rating(body: dict = Body(...)):
+    """Calificación (1-5 estrellas, 0 = sin calificar) y comentario de Magne para una muestra de voz.
+    Con 0 estrellas y sin comentario se borra la calificación (devuelve stars 0)."""
+    name = str(body.get("name", ""))
+    if not SAFE_FILE_RE.match(name) or not (VOICES_OUT / name).is_file():
+        raise HTTPException(404, "Muestra no encontrada")
+    try:
+        stars = int(body.get("stars", 0))
+    except (TypeError, ValueError):
+        raise HTTPException(422, "Estrellas inválidas") from None
+    if not 0 <= stars <= 5:
+        raise HTTPException(422, "Estrellas entre 0 y 5")
+    comment = str(body.get("comment") or "").strip()[:2000]
+    with _RATINGS_LOCK:     # dos guardados a la vez (estrella + comentario) no deben pisarse
+        data = _voice_ratings()
+        if stars == 0 and not comment:
+            data.pop(name, None)
+            rec = {"stars": 0, "comment": "", "at": None}
+        else:
+            rec = data[name] = {"stars": stars, "comment": comment,
+                                "at": datetime.now().isoformat(timespec="seconds")}
+        VOICE_RATINGS.parent.mkdir(parents=True, exist_ok=True)
+        write_json(VOICE_RATINGS, data)
+        if _OLD_VOICE_RATINGS.exists():
+            _OLD_VOICE_RATINGS.rename(_OLD_VOICE_RATINGS.with_suffix(".json.migrado"))
+        return rec
 
 
 @app.get("/media/voces/{name}")

@@ -139,3 +139,15 @@ code { background: #070818; padding: .1rem .35rem; border-radius: 6px; }
 .navlink:hover { color: var(--ink); background: var(--card2); }
 .track .row label { flex: 1 1 180px; margin: 0; }
 .st-necesita_correccion { background: var(--coral); color: #fff; }
+
+/* calificación de muestras de voz */
+.stars { display: flex; align-items: center; gap: .15rem; margin: .4rem 0 .3rem; }
+.stars .star { background: none; border: 0; padding: .1rem .15rem; font-size: 1.5rem; line-height: 1; color: var(--line); cursor: pointer; width: auto; box-shadow: none; }
+.stars .star.on { color: #FFC83D; }
+.stars .star:hover { transform: scale(1.15); }
+.stars .saved { margin-left: .5rem; color: var(--muted, #9aa); }
+.vcomment { width: 100%; resize: vertical; min-height: 2.6rem; }
+#sampleFilter { width: 100%; margin: .3rem 0 .8rem; }
+#ratingSummary ul { margin: .2rem 0 .8rem 1.1rem; padding: 0; }
+.rate-foot { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-top: .4rem; }
+.rate-foot small { opacity: .7; }

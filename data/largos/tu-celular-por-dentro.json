@@ -1,0 +1,481 @@
+{
+ "id": "tu-celular-por-dentro",
+ "formato": "largo",
+ "topic": "Cómo funciona tu celular por dentro",
+ "title": "¿Qué hay DENTRO de tu celular? Así funciona cada pieza 📱",
+ "description": "💾 Guarda este video para cuidar tu batería y tu dinero.\nAbrimos tu celular pieza por pieza: la pantalla táctil, la batería de litio, la carga inalámbrica, la cámara, el GPS, el wifi, el pago sin contacto (NFC) y el código QR. Física, química y hasta la relatividad de Einstein en el aparato que usas todo el día.\n\n¿Cuál de las ocho piezas te sorprendió más? 👇",
+ "hashtags": [
+  "#FactosDidacticos",
+  "#celular",
+  "#tecnologia",
+  "#ciencia"
+ ],
+ "tags": [
+  "cómo funciona un celular",
+  "celular por dentro",
+  "pantalla táctil",
+  "batería de litio",
+  "carga inalámbrica",
+  "cámara del celular",
+  "cómo funciona el gps",
+  "cómo funciona el wifi",
+  "nfc",
+  "pago sin contacto",
+  "código qr",
+  "tecnología",
+  "ciencia",
+  "factos didácticos"
+ ],
+ "pinned_comment": "¿Cuál de las 8 piezas te sorprendió más: la pantalla, la batería, el GPS…? 👇 Cada tema tiene su short de un minuto en el canal.",
+ "nota_cpm": "Tecnología + pagos/finanzas: nichos de CPM alto en español. Se puede monetizar con anuncios a mitad del video porque dura más de 8 min.",
+ "chapters": [
+  {
+   "id": "intro",
+   "title": "Intro",
+   "short_id": null,
+   "segments": [
+    {
+     "narration": "En tu bolsillo cargas un detector de electricidad, una pila química, un radio que escucha satélites y hasta una tarjeta del banco.",
+     "visual": "Celular con carita gira al centro; a su alrededor aparecen en cascada 4 íconos: rayo, pila, satélite, tarjeta. Mood magia, partículas estrellas.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Hoy vamos a abrir tu celular, pieza por pieza, para ver cómo funciona cada una por dentro.",
+     "visual": "El celular se 'abre' en capas que se separan de lado (vidrio, pantalla, placa, batería) como vista explotada horizontal; cámara acerca.",
+     "beat": "promesa",
+     "cta": ""
+    },
+    {
+     "narration": "La pantalla, la batería, la carga sin cables, la cámara, el GPS, el wifi, el pago con el teléfono y el código QR.",
+     "visual": "Índice: 8 cápsulas (pill) entran en fila de izquierda a derecha, cada una con mini-ícono; brillan una por una al nombrarla.",
+     "beat": "promesa",
+     "cta": ""
+    },
+    {
+     "narration": "Y una de estas piezas nació hace más de sesenta años, mucho antes que el primer celular. ¿Adivinas cuál?",
+     "visual": "Las cápsulas se reacomodan y una queda oculta tras un signo de interrogación gigante que late; mood noche.",
+     "beat": "regancho",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "pantalla",
+   "title": "La pantalla táctil",
+   "short_id": "como-funciona-la-pantalla-tactil",
+   "segments": [
+    {
+     "narration": "Empecemos por lo que más tocas. Tu pantalla no siente presión: siente electricidad.",
+     "visual": "Dedo con carita se acerca a la pantalla; en vez de hundirla, aparecen chispitas eléctricas. Mood energía.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Debajo del vidrio hay una rejilla de líneas transparentes, por lo general de óxido de indio y estaño, que forman miles de cruces diminutos.",
+     "visual": "Corte lateral: vidrio arriba, rejilla de líneas horizontales y verticales brillando en cian debajo; zoom a los cruces.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Un chip mantiene esa rejilla con una carga eléctrica muy pequeña y mide cada cruce muchas veces por segundo.",
+     "visual": "Chip con carita a la izquierda envía pulsos (flow_dots) por las líneas; los cruces parpadean en orden.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Tu dedo conduce la electricidad porque tiene agua y sales. Al acercarlo, altera el campo eléctrico en los cruces que quedan justo debajo.",
+     "visual": "Dedo baja; bajo él, 3-4 cruces cambian de color a coral y emiten ondas; los demás siguen cian.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "El chip compara todos los cruces, encuentra dónde cambió más y calcula el centro: ese es tu toque. Por eso también puede seguir varios dedos a la vez.",
+     "visual": "Mapa de calor sobre la rejilla con un punto central que brilla; luego aparecen dos dedos y dos puntos (pellizco para zoom).",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Por eso también se vuelve loca con gotas de agua: el agua conduce, y el chip la confunde con dedos.",
+     "visual": "Gotas con carita caen en la pantalla y aparecen puntos de toque falsos que parpadean; mood frío.",
+     "beat": "beat4",
+     "cta": ""
+    },
+    {
+     "narration": "Con guantes normales o con la uña no funciona, porque no conducen. Los guantes para pantalla llevan hilos conductores en la punta.",
+     "visual": "Guante gris toca y nada pasa (carita triste); guante con punta dorada toca y aparecen chispas. Mood frío.",
+     "beat": "beat4",
+     "cta": ""
+    },
+    {
+     "narration": "Y aquí está la respuesta: esta idea se publicó en mil novecientos sesenta y cinco, en Inglaterra, para el control de tráfico aéreo.",
+     "visual": "Pantalla redonda de radar con avioncitos; cápsula 'mil novecientos sesenta y cinco' rebota. Mood sol.",
+     "beat": "dato_extra",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "bateria",
+   "title": "La batería de litio",
+   "short_id": "como-funciona-la-bateria-de-litio",
+   "segments": [
+    {
+     "narration": "Todo eso gasta energía, y aquí entra la batería: una pila de iones de litio.",
+     "visual": "Batería con carita aparece con pop; se abre en corte. Mood energía.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Por dentro tiene dos capas: una de grafito y otra de un óxido metálico con litio, separadas por una película con poros diminutos y bañadas en un líquido.",
+     "visual": "Corte horizontal: capa izquierda grafito (hojas grises apiladas), capa derecha óxido (bloques violeta), separador punteado al centro, fondo azul del líquido.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Cuando cargas el celular, el cargador empuja los iones de litio: salen del óxido, cruzan el separador y se acomodan entre las capas del grafito.",
+     "visual": "Bolitas de litio con carita viajan en arco de derecha a izquierda y se meten entre las hojas del grafito; enchufe arriba empuja.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Cuando lo usas, los iones regresan solos al óxido, y por el circuito de afuera viajan los electrones que encienden tu teléfono.",
+     "visual": "Iones regresan a la derecha; por un cable exterior arriba corren flow_dots amarillos hacia un foco/pantalla que se enciende.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Con cada carga, un poquito de litio queda atrapado y deja de participar. Por eso, con los años, la batería dura menos.",
+     "visual": "Algunas bolitas se quedan pegadas y se vuelven grises (carita dormida); medidor de capacidad baja un poco.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Lo que más la desgasta es el calor y pasar mucho tiempo al cien por ciento o vacía.",
+     "visual": "Termómetro sube con partículas de calor; barra de carga llena y vacía parpadean en coral. Mood calor.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Y la carga rápida no va a toda velocidad todo el tiempo: carga rápido hasta cerca de la mitad y después frena para no dañar la batería.",
+     "visual": "Velocímetro de carga en verde rápido hasta la mitad de la barra y luego baja a lento con un freno que hace jelly.",
+     "beat": "beat4",
+     "cta": ""
+    },
+    {
+     "narration": "Guarda este video para cuidar tu batería. Muchos teléfonos ya permiten limitar la carga a alrededor del ochenta por ciento.",
+     "visual": "Barra de carga se detiene en ochenta por ciento con brillo menta y carita feliz. Mood naturaleza.",
+     "beat": "dato_extra",
+     "cta": "guardar"
+    }
+   ]
+  },
+  {
+   "id": "carga-inalambrica",
+   "title": "La carga inalámbrica",
+   "short_id": "como-funciona-la-carga-inalambrica",
+   "segments": [
+    {
+     "narration": "¿Y si no quieres cables? La carga inalámbrica parece magia, pero usa un truco de hace casi doscientos años: la inducción.",
+     "visual": "Celular flota sobre una base redonda; chispas; cápsula 'inducción'. Mood magia.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "En la base hay una bobina de cobre. Por ella pasa una corriente que cambia de sentido más de cien mil veces por segundo.",
+     "visual": "Corte: espiral de cobre en la base; flow_dots que van y vienen; ondas pulsantes.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Esa corriente crea un campo magnético que también va y viene, y dentro de tu celular hay otra bobina.",
+     "visual": "Líneas de campo en arco suben desde la base; segunda espiral en el celular se ilumina al recibirlas.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Ese campo que cambia genera una corriente en la bobina del teléfono. Es como un transformador partido en dos.",
+     "visual": "Ambas bobinas lado a lado con un rayo entre ellas; luego se juntan como transformador y se vuelven a separar.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Si las bobinas no quedan alineadas, se pierde energía en forma de calor. Por eso algunos cargadores traen imanes: para centrar el teléfono.",
+     "visual": "Celular desalineado con partículas de calor (carita sudando); imanes lo jalan al centro con jelly; calor desaparece.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Aun así, cargar sin cable calienta un poco más y aprovecha menos energía que el cable.",
+     "visual": "Balanza: cable de un lado más alto, base inalámbrica del otro con un poco de calor. Mood calor.",
+     "beat": "dato_extra",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "camara",
+   "title": "La cámara",
+   "short_id": "como-funciona-la-camara-del-celular",
+   "segments": [
+    {
+     "narration": "Ahora la cámara. Su sensor es una rejilla de millones de pixeles, y cada uno es una trampita de silicio que convierte la luz en carga eléctrica.",
+     "visual": "Lente con carita; detrás, sensor rectangular; zoom a una cuadrícula de pozos. Mood sol.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Cuando la luz golpea el silicio, libera electrones. Más luz, más electrones atrapados en ese pixel.",
+     "visual": "Rayitos amarillos caen en pozos; bolitas azules (electrones) se acumulan; un pozo con más luz se llena más.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Pero el silicio no ve colores, solo cuenta luz. Por eso encima lleva un mosaico de filtros rojos, verdes y azules.",
+     "visual": "Mosaico tipo tablero de colores cae encima del sensor con cascade.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "La mitad de esos filtros son verdes, porque nuestros ojos son más sensibles al verde.",
+     "visual": "Los cuadros verdes brillan y un ojo con carita asiente; emphasize.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Cada pixel solo mide un color, y el procesador calcula los otros dos mirando a sus vecinos.",
+     "visual": "Un pixel rojo mira a sus vecinos verdes y azules con flechitas; se vuelve de color completo.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Y por eso tu celular trae varias cámaras: cada lente tiene un ángulo distinto, gran angular, normal o acercamiento.",
+     "visual": "Tres lentes con carita en fila; de cada una sale un cono de visión de distinto ancho.",
+     "beat": "beat4",
+     "cta": ""
+    },
+    {
+     "narration": "Y lo sorprendente: al tomar una foto, tu celular suele capturar varias imágenes en una fracción de segundo y las combina para quitar ruido y salvar luces y sombras.",
+     "visual": "Varias fotos semitransparentes se apilan y se funden en una sola nítida con destello. Mood magia.",
+     "beat": "dato_extra",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "gps",
+   "title": "El GPS",
+   "short_id": "como-funciona-el-gps",
+   "segments": [
+    {
+     "narration": "Sal a la calle. ¿Cómo sabe tu celular dónde estás? El GPS no envía nada: solo escucha.",
+     "visual": "Celular con carita y oreja gigante en un mapa; satélites lejos arriba. Mood noche.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Alrededor de la Tierra giran unos treinta satélites GPS, a unos veinte mil kilómetros de altura, y cada uno lleva relojes atómicos.",
+     "visual": "Tierra a la izquierda con satélites en órbita (idle_spin); zoom a un satélite con reloj.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Todo el tiempo transmiten un mensaje: soy este satélite, estoy aquí, y esta es la hora exacta.",
+     "visual": "Ondas salen del satélite con cápsulas 'quién', 'dónde', 'hora'.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Tu celular compara cuándo salió cada señal y cuándo le llegó. Como viajan a la velocidad de la luz, ese retraso le dice a qué distancia está cada satélite.",
+     "visual": "Dos relojitos comparan horas; una regla se estira entre satélite y celular.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Con la distancia a cuatro satélites calcula tu posición y, de paso, corrige su propio reloj.",
+     "visual": "Cuatro esferas de distancia se cruzan en un punto que brilla sobre el celular; reloj del celular se ajusta.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "La precisión es extrema: un error de solo una millonésima de segundo te movería unos trescientos metros.",
+     "visual": "Pin del mapa salta lejos en el mapa con emphasize y regresa.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Y hay un detalle de Einstein: por la relatividad, los relojes de los satélites se adelantan unos treinta y ocho microsegundos al día, y el sistema lo corrige.",
+     "visual": "Reloj del satélite se adelanta con estrellitas; cápsula 'relatividad'; ajuste con jelly. Mood magia.",
+     "beat": "dato_extra",
+     "cta": ""
+    },
+    {
+     "narration": "¿Sabías lo de Einstein? Cuéntamelo en los comentarios.",
+     "visual": "Celular con carita sorprendida; burbujas de comentario flotan. Mood sol.",
+     "beat": "regancho",
+     "cta": "comentar"
+    }
+   ]
+  },
+  {
+   "id": "wifi",
+   "title": "El wifi",
+   "short_id": "como-funciona-el-wifi",
+   "segments": [
+    {
+     "narration": "Y hablando de señales: tu router de wifi es, literalmente, un radio.",
+     "visual": "Router con carita y antenas emite ondas concéntricas. Mood energía.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Transmite con ondas de dos coma cuatro o de cinco gigahercios, y las redes más nuevas también usan seis.",
+     "visual": "Tres ondas de distinto tamaño de izquierda a derecha con cápsulas de frecuencia.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Los datos viajan cambiando la forma de la onda, su fuerza y su fase, millones de veces por segundo.",
+     "visual": "Onda que cambia de altura y se desplaza; unos y ceros salen de ella.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Y como muchos aparatos comparten la misma red, se turnan y se reparten el canal para no hablar todos a la vez.",
+     "visual": "Celular, laptop y tele con caritas se turnan un micrófono; luego se reparten franjas de colores.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "¿Por qué se cae la señal en el baño? El agua y el metal absorben y reflejan estas ondas, y los cinco gigahercios atraviesan peor las paredes, aunque son más rápidos.",
+     "visual": "Ondas chocan con un tinaco de agua y un refrigerador metálico y se debilitan. Mood frío.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Por eso conviene poner el router en alto, al centro de la casa y lejos del refrigerador.",
+     "visual": "Router sube a una repisa al centro de una casa en corte; las ondas llegan a todos los cuartos con brillo menta.",
+     "beat": "dato_extra",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "pago",
+   "title": "El pago sin contacto",
+   "short_id": "como-funciona-pagar-sin-contacto",
+   "segments": [
+    {
+     "narration": "Ahora, lo que convierte a tu celular en una cartera: pagar sin contacto. Funciona con NFC, una radio de alcance muy corto, de unos pocos centímetros.",
+     "visual": "Celular con carita se acerca a una terminal; círculo de alcance pequeño. Mood energía.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "La terminal genera un campo magnético; tu teléfono lo detecta y los dos empiezan a intercambiar datos.",
+     "visual": "Arcos de campo salen de la terminal; flow_dots van y vienen entre ambos.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Lo interesante es que tu número de tarjeta real no viaja. Al registrar la tarjeta, se cambia por otro número, llamado token, que solo vale en ese dispositivo.",
+     "visual": "Tarjeta con número se mete a una caja fuerte; sale una ficha (token) dorada que se guarda en el celular.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "En cada compra, el teléfono crea además un código de un solo uso, que solo sirve para esa transacción.",
+     "visual": "Un candado genera una llave brillante que se usa una vez y se desvanece en partículas.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Así, aunque alguien copiara los datos de un pago, no podría volver a usarlos.",
+     "visual": "Ladrón caricatura (sombra con antifaz) copia la llave; la copia se rompe. Mood frío.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Y si pierdes el teléfono, puedes borrar ese token a distancia sin tener que cancelar tu tarjeta.",
+     "visual": "Celular perdido en un banco del parque; desde otra pantalla una goma borra la ficha dorada; la tarjeta sigue intacta.",
+     "beat": "beat4",
+     "cta": ""
+    },
+    {
+     "narration": "Y antes de pagar, tu celular te pide la huella, la cara o el PIN. Todo esto ocurre en menos de un segundo.",
+     "visual": "Huella, cara y teclado aparecen en cascade; palomita verde y confeti pequeño. Mood naturaleza.",
+     "beat": "dato_extra",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "qr",
+   "title": "El código QR",
+   "short_id": "como-funciona-el-codigo-qr",
+   "segments": [
+    {
+     "narration": "Para pagar o ver un menú también usamos esto: el código QR. Lo inventó en mil novecientos noventa y cuatro una empresa japonesa, Denso Wave, para seguir piezas de autos.",
+     "visual": "Código QR gigante con carita aparece; a un lado una pieza de auto en banda transportadora. Mood sol.",
+     "beat": "gancho",
+     "cta": ""
+    },
+    {
+     "narration": "Los tres cuadros grandes de las esquinas le dicen a la cámara dónde está el código y cómo está girado, aunque lo veas chueco.",
+     "visual": "Las tres esquinas brillan; el QR gira y la cámara lo endereza.",
+     "beat": "beat1",
+     "cta": ""
+    },
+    {
+     "narration": "Cada cuadrito negro o blanco es un uno o un cero, y se leen en un orden fijo, en zigzag.",
+     "visual": "Un recorrido en zigzag ilumina cuadritos y deja una fila de unos y ceros.",
+     "beat": "beat2",
+     "cta": ""
+    },
+    {
+     "narration": "Y aquí está la magia: el código guarda información de respaldo, y con el nivel más alto se puede leer aunque se dañe cerca del treinta por ciento.",
+     "visual": "Una mancha tapa parte del QR y aun así aparece una palomita; luego un logo en el centro.",
+     "beat": "beat3",
+     "cta": ""
+    },
+    {
+     "narration": "Un consejo: antes de abrir un QR en la calle, revisa la dirección que aparece, porque hay estafas que pegan códigos falsos encima.",
+     "visual": "QR en un poste con una calcomanía falsa encima; lupa revela la dirección rara; carita seria. Mood frío.",
+     "beat": "dato_extra",
+     "cta": ""
+    }
+   ]
+  },
+  {
+   "id": "cierre",
+   "title": "Lo que llevas en el bolsillo",
+   "short_id": null,
+   "segments": [
+    {
+     "narration": "Así que cada vez que desbloqueas tu celular usas campos eléctricos, química, radios y hasta la relatividad de Einstein.",
+     "visual": "Celular al centro con las 8 piezas orbitando (orbita); mood magia.",
+     "beat": "cierre",
+     "cta": ""
+    },
+    {
+     "narration": "Suscríbete para más Factos Didácticos.",
+     "visual": "Campana con carita que vibra; el kit pone el ícono.",
+     "beat": "cierre",
+     "cta": "seguir"
+    },
+    {
+     "narration": "La próxima vez que lo saques del bolsillo, recuerda: llevas un detector de electricidad, una pila química y un radio que escucha satélites.",
+     "visual": "Mano mete el celular en el bolsillo; los 4 íconos del inicio destellan una última vez.",
+     "beat": "cierre",
+     "cta": ""
+    },
+    {
+     "narration": "Y si quieres seguir aprendiendo, este video te va a encantar.",
+     "visual": "Pantalla final: end_screen(20).",
+     "beat": "cierre",
+     "cta": ""
+    }
+   ]
+  }
+ ]
+}

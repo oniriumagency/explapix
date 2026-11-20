@@ -24,12 +24,17 @@ def main():
     if meta.get("youtube_id"):
         raise SystemExit(f"Ya estaba subido: {meta['youtube_id']}")
     print("[1/1] Subida", flush=True)
+    largo = meta.get("formato") == "largo"
     vid = youtube.upload(a.folder / "final.mp4", meta["title"], meta["description"],
-                         meta.get("tags", []), a.privacy)
+                         meta.get("tags", []), a.privacy, short=not largo)
     meta.update(youtube_id=vid, privacy=a.privacy,
                 uploaded=datetime.now().isoformat(timespec="seconds"))
     youtube.save_json(meta_f, meta)
-    print(f"Subido: https://youtube.com/shorts/{vid} ({a.privacy})", flush=True)
+    url = f"https://youtu.be/{vid}" if largo else f"https://youtube.com/shorts/{vid}"
+    print(f"Subido: {url} ({a.privacy})", flush=True)
+    if largo:
+        print("Ahora enlaza los shorts: python scripts/corregir_y_enlazar.py --aplicar  (y --youtube con aprobación)",
+              flush=True)
 
 
 if __name__ == "__main__":

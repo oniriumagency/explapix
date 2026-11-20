@@ -283,16 +283,67 @@ EJEMPLO DE REFERENCIA PRINCIPAL (microondas, kit v3: imita su ritmo, dinamismo y
 ```"""
 
 
+def _scene_system_largo() -> str:
+    """Prompt de escena para el video largo horizontal (16:9): el mismo estándar, otro lienzo."""
+    t = SCENE_SYSTEM
+    t = t.replace("""Lienzo vertical \
+9x16 unidades: x∈[-4.5,4.5], y∈[-8,8]. Deja libre y<-5.6 (subtítulos) y usa y>6 para el título.""",
+                  """Lienzo HORIZONTAL 16x9 \
+unidades (YouTube): x∈[-8,8], y∈[-4.5,4.5]. El título va arriba (y≈3.6) y los subtítulos los pone el kit abajo.""")
+    i, j = t.index("ZONA SEGURA (Reels"), t.index("EFECTOS DE SONIDO")
+    t = t[:i] + """ZONA SEGURA (video horizontal, obligatorio):
+- Diseña TODO lo importante dentro de la caja x∈[-7.4, 7.4], y∈[-3.2, 4.0]. El kit la encuadra dentro del
+  margen de TV (5 %) y deja abajo la franja de los subtítulos. Nada de texto cerca de los bordes.
+- Aprovecha el ancho: composiciones lado a lado (antes → después, causa → efecto, dos piezas que se
+  comparan) y diagramas que se van armando de izquierda a derecha. Objetos algo más grandes que en vertical.
+- El EJEMPLO de referencia es vertical: imita su ritmo y estilo, pero adapta las coordenadas a este lienzo.
+
+""" + t[j:]
+    i, j = t.index("CAPÍTULOS (videos de más de 90 s)"), t.index("CTA EN PANTALLA")
+    t = t[:i] + """CAPÍTULO DE VIDEO LARGO (obligatorio):
+- Esta escena es UN capítulo de un video largo de YouTube. Si el segmento 0 trae CAPÍTULO, empieza ese
+  bloque con self.chapter("título", number=<número de capítulo>) (≈1,8 s; es la pausa donde puede ir un anuncio).
+- Al final del último segmento llama self.clear_stage() para que el siguiente capítulo empiece limpio.
+  NO llames self.outro() (solo existe un cierre por video).
+- Si te digo que es el CIERRE: en el último segmento llama self.clear_stage() y luego self.end_screen(20)
+  (pantalla final de 20 s; deja libre la mitad derecha para los elementos de YouTube). No pongas nada después.
+
+""" + t[j:]
+    t = t.replace("10. Cierre: en el último segmento llama self.clear_stage() y luego self.outro() (≈2 s en total).",
+                  "10. Cierre: sigue las reglas de CAPÍTULO DE VIDEO LARGO.")
+    t = t.replace("sobre los subtítulos. No dibujes", "sobre los subtítulos, con una flecha que rebota hacia abajo "
+                  "(los botones están bajo el reproductor). No dibujes")
+    return t + "\n\nREGLAS DEL VIDEO LARGO (config/reglas.yaml):\n" + rules("video_largo")
+
+
 def _text(resp) -> str:
     if resp.stop_reason == "refusal":
         raise RuntimeError("El modelo rechazó la solicitud")
     return "".join(b.text for b in resp.content if b.type == "text")
 
 
-def _cta_context() -> str:
+def _largo_context(topic: str) -> str:
+    """Si el tema es capítulo de un video largo, el CTA final invita a verlo (reglas: enlace_largo)."""
+    try:
+        cal = json.loads((_ROOT / "data" / "calendario.json").read_text(encoding="utf-8"))
+        cid = next((it["id"] for it in cal.get("items", []) if it.get("topic", "").lower() == topic.lower()), "")
+        from explapix import enlaces  # noqa: PLC0415
+        lid, _ = enlaces.largo_for(cid) if cid else ("", "")
+    except (OSError, ValueError):
+        return ""
+    if not lid:
+        return ""
+    import yaml  # noqa: PLC0415
+    r = yaml.safe_load((_ROOT / "config" / "reglas.yaml").read_text(encoding="utf-8"))
+    frase = ((r.get("enlace_largo") or {}).get("parametros") or {}).get("cta_hablado", "")
+    return (f"Este tema es un capítulo del video largo «{lid}». En el CTA de seguir (cerca del final) di "
+            f"«{frase}» en vez de «Síguenos»; márcalo como cta seguir.")
+
+
+def _cta_context(topic: str = "") -> str:
     nxt = os.environ.get("EXPLAPIX_NEXT_TOPIC", "").strip()
     avoid = os.environ.get("EXPLAPIX_AVOID_CTA", "").strip()
-    out = []
+    out = [x for x in [_largo_context(topic) if topic else ""] if x]
     if nxt:
         out.append(f"Siguiente tema del calendario (para el CTA de seguir): {nxt}")
     if avoid:
@@ -301,7 +352,7 @@ def _cta_context() -> str:
 
 
 def storyboard(topic: str, notes: str = "") -> dict:
-    user = f"Tema: {topic}\n{notes}\n{_cta_context()}".strip()
+    user = f"Tema: {topic}\n{notes}\n{_cta_context(topic)}".strip()
     if ENGINE == "claude-code":
         _, data = _claude_code(STORYBOARD_SYSTEM + "\nResponde SOLO con el JSON pedido.", user,
                                STORYBOARD_SCHEMA)
@@ -325,7 +376,7 @@ def expand_storyboard(sb: dict, notes: str = "") -> dict:
     old = json.dumps({k: sb[k] for k in ("topic", "title", "description", "tags", "segments") if k in sb},
                      ensure_ascii=False, indent=1)
     user = (f"Guion anterior:\n{old}\n{('Indicaciones del editor: ' + notes) if notes else ''}\n"
-            f"{_cta_context()}").strip()
+            f"{_cta_context(sb.get('topic', ''))}").strip()
     if ENGINE == "claude-code":
         _, data = _claude_code(EXPAND_SYSTEM + "\nResponde SOLO con el JSON pedido.", user, STORYBOARD_SCHEMA)
     else:
@@ -340,13 +391,16 @@ def expand_storyboard(sb: dict, notes: str = "") -> dict:
 
 
 def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str | None = None,
-               base_scene: str | None = None) -> str:
+               base_scene: str | None = None, formato: str = "vertical", extra: str = "") -> str:
+    system = _scene_system_largo() if formato == "largo" else SCENE_SYSTEM
     segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}]"
                      f"{(' CTA: ' + s['cta']) if s.get('cta') else ''}"
                      f"{(' CAPÍTULO: ' + s['chapter']) if s.get('chapter') else ''} NARRACIÓN: {s['narration']}\n"
                      f"   VISUAL: {s['visual']}"
                      for i, (s, t) in enumerate(zip(sb["segments"], timing["segments"])))
-    content = f"Tema: {sb['topic']}\nSegmentos:\n{segs}"
+    content = f"Tema: {sb['topic']}\n{extra}\nSegmentos:\n{segs}".replace("\n\n", "\n")
+    if formato == "largo" and sb.get("capitulo"):
+        content += f"\nNúmero de capítulo para self.chapter: {sb['capitulo']}"
     if base_scene:
         content += ("\n\nVERSIÓN EXTENDIDA: ya existe esta escena de la versión corta. Reutiliza su código "
                     "(personajes, funciones, estilo, colores) todo lo posible y agrega/reordena segmentos "
@@ -362,13 +416,13 @@ def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str |
         if previous and error:
             user += (f"\n\nTu versión anterior:\n```python\n{previous}\n```\nEl render falló con este "
                      f"error. Devuelve el código completo corregido:\n```\n{error[-4000:]}\n```")
-        txt, _ = _claude_code(SCENE_SYSTEM, user)
+        txt, _ = _claude_code(system, user)
         m = re.search(r"```python\n(.*?)```", txt, re.S)
         code = (m.group(1) if m else txt).strip() + "\n"
         compile(code, "scene.py", "exec")   # SyntaxError -> el render lo reporta y se corrige
         return code
     with _api().messages.stream(
-        model=MODEL, max_tokens=32000, system=[{"type": "text", "text": SCENE_SYSTEM,
+        model=MODEL, max_tokens=32000, system=[{"type": "text", "text": system,
                                                 "cache_control": {"type": "ephemeral"}}],
         output_config={"effort": EFFORT}, messages=messages,
     ) as stream:

@@ -28,7 +28,7 @@ guion:
 cta:
   texto:
     - Nada de llamados a la acción en los primeros 5 s (mata la retención).
-    - "Guardar (~25-35 % del video), justo después del primer dato útil, con la frase que empieza «Guarda este video para…»."
+    - "Guardar (~25-35 % del video), justo después del primer dato útil, con la frase que empieza «Guarda este video para…». Nunca «Guárdalo» (tampoco en captions ni comentarios)."
     - Comentar (~50-65 %) con una pregunta fácil y ligada al tema (opción A/B, «¿lo sabías?», «¿qué otro objeto te intriga?»).
     - Compartir y/o seguir cerca del final pero ANTES de la última frase («Mándaselo a quien…», «Síguenos: mañana explicamos <siguiente tema>»).
     - Máximo 3 CTA hablados, de 8 palabras o menos cada uno, variados y sin repetir los del video anterior.
@@ -39,6 +39,7 @@ cta:
     sin_cta_antes_de_s: 5
     max_hablados: 3
     guardar_frase: "Guarda este video para"
+    guardar_prohibido: ["gu[aá]rdal[oa]\\b"]   # nunca «Guárdalo» (ni en voz, ni en caption, ni en comentario)
     guardar_ventana: [0.20, 0.42]
     comentar_ventana: [0.45, 0.72]
     final_desde: 0.70
@@ -84,3 +85,32 @@ publicacion:
   texto:
     - Nada se publica ni se responde sin la aprobación de Magne en el panel.
     - YouTube sube en privado por defecto; Instagram solo con confirmación explícita.
+
+video_largo:
+  texto:
+    - "Versión larga horizontal (16:9, 1920×1080) para YouTube: une 6-9 temas de un mismo mundo de alto CPM (tecnología, dinero, energía del hogar, seguros, salud) en un solo video."
+    - Duración de 8 a 12 min (desde 8:00 YouTube permite anuncios a mitad del video). Nunca relleno; si no da, se agrega un capítulo con contenido real.
+    - "Estructura: gancho (0-15 s) con la promesa de todo el video → índice rápido → un capítulo por tema (55-90 s, cada uno con mini-título y su propio mini-gancho) → cierre que conecta con el gancho → pantalla final de 20 s."
+    - Cada capítulo corresponde a un short del calendario (mismo tema) y empieza con una pausa natural (tarjeta de capítulo) para que quepa un anuncio.
+    - "La descripción lleva los capítulos de YouTube (0:00 primero, al menos 3, cada uno de 10 s o más) y los enlaces a los shorts de cada tema."
+    - "CTA hablados (máximo 4): guardar con «Guarda este video para…» en el primer tercio, comentar a mitad, suscribirse antes del cierre y «mira este otro video» en la pantalla final. En horizontal los íconos apuntan hacia abajo, a la fila de botones bajo el reproductor."
+    - "La pantalla final (últimos 20 s) deja libre la mitad derecha para los elementos de YouTube (video sugerido y suscribirse); se configuran a mano en YouTube Studio."
+  parametros:
+    duracion_min_s: 480
+    duracion_max_s: 720
+    capitulos_min: 3
+    capitulo_min_s: 10
+    pantalla_final_s: 20
+    max_hablados: 4
+    anuncio_cada_min_s: 120     # pausas sugeridas para anuncios: inicios de capítulo separados al menos 2 min
+
+enlace_largo:
+  texto:
+    - "Cada short cuyo tema forma parte de un video largo lo enlaza en tres lugares:"
+    - "1) «Video relacionado» del short en YouTube Studio (la API no lo permite; se hace a mano, el panel lo recuerda)."
+    - "2) Primera línea de la descripción: «▶️ Video completo: <enlace>»."
+    - "3) Comentario fijado con el enlace al video completo (y la pregunta del CTA de comentar)."
+    - "En la voz, el CTA final del short puede ser «La versión completa está en el enlace» en vez de «Síguenos»."
+  parametros:
+    linea_descripcion: "▶️ Video completo: {url}"
+    cta_hablado: "La versión completa está en el enlace."

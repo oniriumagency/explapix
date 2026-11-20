@@ -7,16 +7,18 @@ import subprocess
 import sys
 from pathlib import Path
 
-QUALITY = {  # (ancho, alto, fps) en vertical
+QUALITY = {  # (ancho, alto, fps) en vertical; en formato "largo" se intercambian ancho y alto (16:9)
     "draft": (540, 960, 24),
     "hd": (1080, 1920, 30),
 }
 
 
 def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
-                 scene_name: str = "Video") -> tuple[bool, str, Path | None]:
+                 scene_name: str = "Video", formato: str = "vertical") -> tuple[bool, str, Path | None]:
     w, h, fps = QUALITY[quality]
-    env = dict(os.environ, EXPLAPIX_TIMING=str((workdir / "timing.json").resolve()),
+    if formato == "largo":
+        w, h = h, w
+    env = dict(os.environ, EXPLAPIX_FORMATO=formato, EXPLAPIX_TIMING=str((workdir / "timing.json").resolve()),
                EXPLAPIX_SFX_EVENTS=str((workdir / "sfx_events.json").resolve()),
                EXPLAPIX_STORYBOARD=str((workdir / "storyboard.json").resolve()))
     root = Path(__file__).resolve().parent.parent
