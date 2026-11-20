@@ -106,7 +106,7 @@ video_largo:
 
 enlace_largo:
   texto:
-    - Cada short cuyo tema forma parte de un video largo lo enlaza en tres lugares: 
+    - "Cada short cuyo tema forma parte de un video largo lo enlaza en tres lugares:"
     - "1) «Video relacionado» del short en YouTube Studio (la API no lo permite; se hace a mano, el panel lo recuerda)."
     - "2) Primera línea de la descripción: «▶️ Video completo: <enlace>»."
     - "3) Comentario fijado con el enlace al video completo (y la pregunta del CTA de comentar)."
