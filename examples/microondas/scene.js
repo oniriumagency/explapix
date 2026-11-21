@@ -105,7 +105,7 @@ function escena(k) {
     bLbl = k.pill("Rebotan en el metal", C.SUN, { size: 36, x: 468, y: 432 });
     k.play(k.popIn(bLbl, { dur: 0.45 }));
     k.idleWiggle(bLbl, { deg: 3, period: 1.3 });
-    k.camTo(null, { angle: 4, zoom: 1.08, dur: 1.5 });
+    k.camTo(null, { angle: 4, dur: 1.5 });
   });
 
   // ---------- 3. La molécula de agua ----------
