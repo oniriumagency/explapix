@@ -13,5 +13,7 @@ voz, audio o publicación:
 3. **Nada se publica ni se responde sin la aprobación de Magne** en el panel (http://100.96.241.48:8097).
 4. Parámetros técnicos (voz, dB, cámara): `config/estilo.yaml`. Ejemplo de referencia de escena:
    `examples/microondas/scene.py`. Escenas escritas a mano: `data/escenas/`.
+   Motor alternativo HyperFrames (escenas `.js`, kit `hyperframes/kit.js`, ejemplo `examples/microondas/scene.js`):
+   se elige por video con `--motor hyperframes`; Manim sigue siendo el de por defecto.
 5. Tests del panel: `.venv/bin/python -m pytest -q`. El panel corre como `systemctl --user explapix-studio`;
    no lo reinicies mientras la Cola tiene un trabajo corriendo (lo interrumpe).

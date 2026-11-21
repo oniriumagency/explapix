@@ -1,0 +1,12 @@
+{
+  "name": "factos-hyperframes",
+  "private": true,
+  "description": "Motor de animación alternativo (HyperFrames) para Factos Didácticos. Versiones fijas: no actualizar sin probar.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "gsap": "3.15.0",
+    "hyperframes": "0.9.74",
+    "puppeteer-core": "25.18.1"
+  }
+}

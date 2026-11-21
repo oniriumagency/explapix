@@ -104,7 +104,7 @@ async function openVideo(id) {
         </div>
       </div>
       <div>
-        <div class="bar" style="margin-bottom:.4rem">${pill(v.status)} <small>${fmtDate(v.created)} · ${fmtDur(v.duration)} · voz ${esc(v.engine)}</small> ${yt}</div>
+        <div class="bar" style="margin-bottom:.4rem">${pill(v.status)} <small>${fmtDate(v.created)} · ${fmtDur(v.duration)} · voz ${esc(v.engine)}${v.motor === "hyperframes" ? " · animación HyperFrames" : ""}</small> ${yt}</div>
         ${v.scheduled ? `<p class="hint">📅 Programado en el calendario: ${esc(v.scheduled)}</p>` : ""}
         ${statsHtml}
         ${v.qa ? `<details class="card" ${v.qa.ok ? "" : "open"}><summary>Verificación automática: ${v.qa.passed}/${v.qa.total} ${v.qa.ok ? "✓" : "✗"}</summary>
@@ -127,7 +127,7 @@ async function openVideo(id) {
           <div class="seg"><div class="n">${i + 1}</div><div><p>${esc(s.narration)}</p><small>🎬 ${esc(s.visual)}</small>${s.duration ? `<small>${s.duration.toFixed(1)} s</small>` : ""}</div></div>`).join("") || "<p class='hint'>Sin guion.</p>"}
         </div>
         ${v.error_log ? `<details open><summary>Error de render</summary><pre>${esc(v.error_log)}</pre></details>` : ""}
-        ${v.scene ? `<details><summary>Código de la animación (scene.py)</summary><pre>${esc(v.scene)}</pre></details>` : ""}
+        ${v.scene ? `<details><summary>Código de la animación (${v.motor === "hyperframes" ? "scene.js" : "scene.py"})</summary><pre>${esc(v.scene)}</pre></details>` : ""}
       </div>
     </div>`;
   const reload = () => openVideo(id);
@@ -257,9 +257,14 @@ async function loadCreate() {
   engineOptions($("#engine"), s.tts);
   $("#nokey").hidden = s.llm_ready;
   $("#btnCreate").disabled = !s.llm_ready;
+  const hf = s.hyperframes || {};
+  $("#motor").value = hf.default_motor || "manim";
+  $("#motor").querySelector('[value="hyperframes"]').disabled = !hf.ready;
+  $("#nohf").hidden = !!hf.ready;
+  $("#nohf").textContent = hf.ready ? "" : `HyperFrames no está instalado en el servidor: ${hf.detail || ""}`;
 }
 $("#btnCreate").onclick = async () => {
-  const r = await act(() => api("/api/jobs", { method: "POST", body: { kind: "video", topics: $("#topics").value, notes: $("#notes").value, engine: $("#engine").value, quality: $("#quality").value } }));
+  const r = await act(() => api("/api/jobs", { method: "POST", body: { kind: "video", topics: $("#topics").value, notes: $("#notes").value, engine: $("#engine").value, quality: $("#quality").value, motor: $("#motor").value } }));
   if (r) { toast(`${r.length} video(s) en cola ✓`); $("#topics").value = ""; location.hash = "cola"; refreshRunning(); }
 };
 $("#btnExample").onclick = async () => {
@@ -504,6 +509,7 @@ async function loadSystem() {
   const g = s.gpu, q = s.quota;
   const yn = (b, y = "Configurada", n = "Falta") => `<span class="${b ? "yes" : "no"}">${b ? "✓ " + y : "✗ " + n}</span>`;
   $("#sys").innerHTML = `
+    <div class="tile"><div class="k">Animación HyperFrames (prueba)</div><div class="v">${yn(s.hyperframes?.ready, "Instalado", "No instalado")}</div><small>${esc(s.hyperframes?.ready ? "por defecto: " + (s.hyperframes.default_motor || "manim") : (s.hyperframes?.detail || ""))}</small></div>
     <div class="tile"><div class="k">Motor de IA (guiones y escenas)</div><div class="v">${yn(s.llm_ready, esc(s.llm === "claude-code" ? "Suscripción Claude" : "API Anthropic"), s.llm === "api" ? "Falta clave" : "Falta CLI")}</div><small>${esc(s.llm)}${s.llm === "api" ? "" : " · sin costo aparte, con pausas para no agotar límites"}</small></div>
     <div class="tile"><div class="k">Calendario</div><div class="v">${s.calendar.total} temas</div><small>${Object.entries(s.calendar.by_status).map(([k, n]) => `${esc(STATUS[k] || k)}: ${n}`).join(" · ")}${s.calendar.auto ? " · auto ON" : ""}</small></div>
     <div class="tile"><div class="k">YouTube</div><div class="v">${yn(s.youtube_token, "Conectado", s.youtube_client ? "Sin conectar" : "Falta client_secret")}</div></div>

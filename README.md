@@ -131,6 +131,28 @@ python scripts/corregir_y_enlazar.py [--aplicar] [--youtube]                  # 
 
 Sale en `out/largo-<id>/` con `final.mp4` (1920×1080) y `meta.json` (descripción con capítulos, `ad_breaks` sugeridos, `end_screen_from`). Escenas a mano: `data/largos/<id>/<NN-id>.py`. En YouTube Studio quedan a mano: elementos de la pantalla final, pausas publicitarias (usar `ad_breaks`), «Video relacionado» de cada short y fijar el comentario.
 
+## Motor de animación alternativo: HyperFrames (prueba)
+
+Además de Manim, los shorts verticales se pueden animar con [HyperFrames](https://hyperframes.heygen.com)
+(HTML/SVG + GSAP renderizado con Chrome, Apache-2.0). Es opcional y convive con Manim: una escena `.py` se
+renderiza con Manim y una `.js` con HyperFrames.
+
+- Kit: `hyperframes/kit.js` copia la estética y los principios de `explapix/kit.py` (moods, cámara viva, caritas,
+  partículas, CTA con flecha, subtítulos, capítulos, cierre) y lee la zona segura de `config/reglas.yaml`.
+  Ejemplo de referencia: `examples/microondas/scene.js`.
+- Elegirlo: en el panel (Nuevo video → Animación), con `--motor hyperframes`, con `EXPLAPIX_MOTOR=hyperframes`
+  o con `visual.motor` en `config/estilo.yaml` (por defecto `manim`).
+- Después de construir la escena se revisa en Chrome que ningún texto quede fuera de la zona segura; si algo
+  se sale, Claude la corrige (cuenta como intento) y si no, el verificador lo marca.
+- Instalación: `setup_server.sh` instala Node 22, los paquetes fijados (`hyperframes/package-lock.json`) y Chrome.
+  Telemetría y avisos de actualización apagados. Versiones fijas: no actualizar sin probar.
+- También hace el video largo horizontal: `python make_long.py data/largos/<id>.json --motor hyperframes` (va a `out/largo-<id>-hyperframes/`, reutiliza la voz del largo de Manim si el guion no cambió; capítulos con `k.chapter(titulo, { numero })` y pantalla final con `k.endScreen(20)`).
+
+```bash
+python make_video.py --storyboard examples/microondas/storyboard.json --scene examples/microondas/scene.js  # sin IA
+python make_video.py --topic "Por qué el pan se tuesta" --motor hyperframes
+```
+
 ## Instagram (Reels y comentarios)
 
 Usa la «API de Instagram con inicio de sesión de Instagram» de Meta (cuenta profesional: empresa o creador).

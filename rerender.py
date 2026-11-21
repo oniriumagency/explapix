@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Re-renderiza la animación de videos ya generados con el kit actual (zona segura, efectos), usando
-su scene.py y su voz existentes: sin tokens y sin volver a sintetizar la voz.
+su escena (scene.py con Manim o scene.js con HyperFrames) y su voz existentes: sin tokens y sin volver a sintetizar la voz.
 
   python rerender.py out/<carpeta> [out/<otra> ...]
 """
@@ -15,9 +15,9 @@ from explapix import render
 
 
 def rerender(folder: Path) -> str:
-    scene = folder / "scene.py"
-    if not scene.exists() or not (folder / "timing.json").exists():
-        return f"{folder.name}: falta scene.py o timing.json"
+    scene = render.scene_file(folder)
+    if scene is None or not (folder / "timing.json").exists():
+        return f"{folder.name}: falta la escena o timing.json"
     old_media = folder / "media"
     if old_media.exists():
         shutil.rmtree(old_media)

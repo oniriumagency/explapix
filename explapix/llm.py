@@ -316,6 +316,120 @@ unidades (YouTube): x∈[-8,8], y∈[-4.5,4.5]. El título va arriba (y≈3.6) y
     return t + "\n\nREGLAS DEL VIDEO LARGO (config/reglas.yaml):\n" + rules("video_largo")
 
 
+HF_KIT = (_ROOT / "hyperframes" / "kit.js").read_text(encoding="utf-8")
+HF_EXAMPLE = (_ROOT / "examples" / "microondas" / "scene.js").read_text(encoding="utf-8")
+
+SCENE_SYSTEM_HF = f"""Escribes escenas para el canal Factos Didácticos con HyperFrames (HTML/SVG + GSAP que se \
+renderiza a video con Chrome). Usa SOLO el kit siguiente (objeto k). La escena es un archivo JavaScript con UNA \
+función `function escena(k) {{ ... }}` (sin import/export, sin módulos).
+Lienzo de diseño 1080×1920 px, origen arriba a la izquierda, y crece hacia ABAJO. Todo lo importante dentro de \
+x∈[24, 1056], y∈[84, 1560]: el kit lo encuadra solo en la zona segura y pone los subtítulos en su franja, debajo. \
+El título va arriba (k.titulo, y≈230).
+Reglas duras:
+- Un bloque `k.segmento(i, {{ mood: "..." }}, (d) => {{ ... }})` por segmento, en orden, i=0..N-1. Dentro, la suma \
+de lo que avanzan k.play(...) y k.wait(...) debe ser <= d - 0.3 (d es la duración real del audio, abajo te paso cada una).
+- k.play(a, b, ...) pone animaciones EN PARALELO en el cursor y avanza lo que dure la más larga; k.wait(s) avanza. \
+k.camTo, k.camReset, k.mood y los idle NO avanzan el cursor.
+- Determinista: nada de Math.random, Date, fetch, setTimeout ni requestAnimationFrame. Para azar usa \
+const R = k.rng(semilla). Para animación continua propia usa k.cadaCuadro((t) => ...) (t = segundo del video).
+- Objetos: k.obj(svg, {{x, y}}) donde svg es una cadena con formas de k.s (blob, bola, corazon, gota, forma, cara, \
+destello, brillo, rayos, tubo) o SVG propio, dibujado centrado en (0,0). Textos con k.titulo, k.pill, k.texto. \
+Nada de imágenes, emojis ni archivos externos. El texto dentro de un SVG usa font-family Fredoka.
+- Un objeto que salió con k.exitOut no vuelve: créalo de nuevo. No combines en un mismo k.play dos animaciones \
+de cuerpo (popIn/jelly/emphasize/exitOut/squashBounce) del mismo objeto.
+- Si quieres seguir un objeto que se mueve, usa su posición o.pos(t) (no leas el DOM).
+
+ESTILO VISUAL (obligatorio):
+- El fondo vivo (moods + estrellas) ya lo pone el kit; no pongas fondos propios.
+- Formas con volumen de k.s (sombra tonal + luz de borde); nada de contornos blancos ni rectángulos planos sueltos \
+para objetos principales. Colores de la paleta k.C (BLUE, CYAN, VIOLET, PINK, CORAL, SUN, MINT, INK para texto, \
+MUTED). Lo importante brilla: k.s.brillo(...) antes de la forma; k.s.rayos para presentar un protagonista.
+- Etiquetas con k.pill (máx. 3-4 palabras, size 36-48). Protagonistas con k.s.cara(...) (los ojos parpadean solos) \
+y k.alive/idle* en 1-3 objetos para que nada se vea congelado.
+
+PRINCIPIOS DE ANIMACIÓN (los mismos del kit de Manim):
+1. Los objetos ENTRAN con k.popIn (nunca fade para objetos sólidos); golpes y llegadas terminan con k.jelly.
+2. Anticipación: desplazamientos importantes con k.anticipateMove; salidas con k.exitOut; saltos con k.squashBounce.
+3. Slow in/slow out: eases de GSAP ("power2.inOut", "back.out(2)", "sine.inOut"); lineal solo para flujos continuos.
+4. Arcos: si algo viaja de A a B, k.moveArc.
+5. Overlapping action: varios objetos con k.cascada([...], {{ lag: 0.1-0.25 }}).
+6. Staging: en el momento clave de cada idea k.camTo(obj, {{ zoom: 1.3-1.8, angle: -8..8 }}) y luego k.camReset(); \
+o k.play(k.dimOthers(obj)) y después k.play(k.undim()).
+7. Exageración: el dato sorprendente de cada segmento recibe k.emphasize.
+8. Timing variado: golpes rápidos (0.25-0.45 s) y movimientos lentos (0.8-1.2 s); 0.3-0.8 s de pausa tras cada idea.
+9. Acción secundaria: k.flujo en circuitos, idle en personajes, k.particulas de apoyo.
+10. Cierre: en el último segmento k.clearStage() y luego k.outro() (≈2 s en total).
+
+DINAMISMO (obligatorio):
+- Cada segmento lleva un mood acorde a la idea (noche, energia, calor, frio, naturaleza, sol, magia); al menos 3 cambios.
+- k.camSway(1.2, 7) al inicio; 3-4 movimientos de cámara clave (giros máx. ±10°).
+- Partículas en TODOS los segmentos: k.particulas(tipo, {{x, y, w, h, n}}) con tipo chispas, burbujas, calor, \
+estrellas, confeti, frio, orbita o polvo; sigue: obj para que sigan a un objeto. Se quitan con k.exitOut o k.fadeOut.
+- Nada quieto: alive, idleWiggle (etiquetas), idlePulse (energía), idleSpin (engranes, moléculas), idleFloat. \
+Antes de mover un objeto con otra animación de cuerpo llama k.stopIdle(obj).
+CAPÍTULOS (videos de más de 90 s): si un segmento trae CAPÍTULO, empieza ese bloque con k.chapter("mini-título").
+
+CTA EN PANTALLA: si un segmento trae CTA, el kit muestra solo el ícono animado (con flecha a los botones) sobre los \
+subtítulos. No dibujes íconos de CTA ni ocupes ese espacio (abajo del lienzo de diseño, y > 1450).
+
+ZONA SEGURA: después de cada render se revisa que ningún texto visible se salga de la zona segura (con la cámara \
+sin acercar). Deja margen en los bordes y no pongas texto cerca de y < 150 ni de x > 1000.
+
+EFECTOS DE SONIDO: popIn, exitOut, jelly, emphasize, squashBounce, moveArc, anticipateMove, drawIn, camTo, mood y las \
+partículas ya suenan solos. Para un acento extra: k.sfx("pop"|"woosh"|"blip"|"shimmer"|"thud", delay, gain) \
+(máximo 1-2 por segmento).
+- Devuelve únicamente el código JavaScript en un bloque ```javascript.
+
+KIT (hyperframes/kit.js):
+```javascript
+{HF_KIT}
+```
+
+REGLAS DEL CANAL (config/reglas.yaml), respétalas:
+{rules("marca", "estilo_visual", "zona_segura", "cta")}
+
+EJEMPLO DE REFERENCIA PRINCIPAL (microondas: imita su ritmo, dinamismo y estructura):
+```javascript
+{HF_EXAMPLE}
+```"""
+
+
+def _scene_system_hf_largo() -> str:
+    """Prompt HyperFrames para el video largo horizontal (16:9): el mismo estándar, otro lienzo."""
+    t = SCENE_SYSTEM_HF
+    pairs = [
+        ("Lienzo de diseño 1080×1920 px", "Lienzo de diseño HORIZONTAL 1920×1080 px (YouTube)"),
+        ("x∈[24, 1056], y∈[84, 1560]: el kit", "x∈[72, 1848], y∈[60, 924]: el kit"),
+        ("El título va arriba (k.titulo, y≈230).", "El título va arriba (k.titulo, y≈170; no más arriba)."),
+        ("10. Cierre: en el último segmento k.clearStage() y luego k.outro() (≈2 s en total).",
+         "10. Cierre: sigue las reglas de CAPÍTULO DE VIDEO LARGO."),
+        ("subtítulos. No dibujes íconos de CTA ni ocupes ese espacio (abajo del lienzo de diseño, y > 1450).",
+         "subtítulos, con una flecha que rebota hacia abajo (los botones están bajo el reproductor). No dibujes "
+         "íconos de CTA ni ocupes ese espacio (abajo del lienzo de diseño, y > 840)."),
+        ("no pongas texto cerca de y < 150 ni de x > 1000.", "no pongas texto cerca de y < 90 ni de los lados (x < 110 o x > 1810)."),
+    ]
+    for a_, b_ in pairs:
+        assert a_ in t, a_
+        t = t.replace(a_, b_)
+    i, j = t.index("CAPÍTULOS (videos de más de 90 s)"), t.index("CTA EN PANTALLA")
+    t = t[:i] + """LIENZO HORIZONTAL:
+- Aprovecha el ancho: composiciones lado a lado (antes → después, causa → efecto, dos piezas que se comparan)
+  y diagramas que se van armando de izquierda a derecha. Objetos algo más grandes que en vertical.
+- El EJEMPLO de referencia es vertical: imita su ritmo y estilo, pero adapta las coordenadas a este lienzo
+  (centro del lienzo ≈ (960, 490)). Partículas y cámara funcionan igual.
+
+CAPÍTULO DE VIDEO LARGO (obligatorio):
+- Esta escena es UN capítulo de un video largo de YouTube. Si el segmento 0 trae CAPÍTULO, empieza ese bloque
+  con k.chapter("título", { numero: <número de capítulo> }) (≈1,8 s; es la pausa donde puede ir un anuncio).
+- Al final del último segmento llama k.clearStage() para que el siguiente capítulo empiece limpio.
+  NO llames k.outro() (solo existe un cierre por video).
+- Si te digo que es el CIERRE: en el último segmento llama k.clearStage() y luego k.endScreen(20)
+  (pantalla final de 20 s; deja libre la mitad derecha para los elementos de YouTube). No pongas nada después.
+
+""" + t[j:]
+    return t + "\n\nREGLAS DEL VIDEO LARGO (config/reglas.yaml):\n" + rules("video_largo")
+
+
 def _text(resp) -> str:
     if resp.stop_reason == "refusal":
         raise RuntimeError("El modelo rechazó la solicitud")
@@ -391,8 +505,14 @@ def expand_storyboard(sb: dict, notes: str = "") -> dict:
 
 
 def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str | None = None,
-               base_scene: str | None = None, formato: str = "vertical", extra: str = "") -> str:
-    system = _scene_system_largo() if formato == "largo" else SCENE_SYSTEM
+               base_scene: str | None = None, formato: str = "vertical", extra: str = "",
+               motor: str = "manim") -> str:
+    hf = motor == "hyperframes"
+    if formato == "largo":
+        system = _scene_system_hf_largo() if hf else _scene_system_largo()
+    else:
+        system = SCENE_SYSTEM_HF if hf else SCENE_SYSTEM
+    lang = "javascript" if hf else "python"
     segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}]"
                      f"{(' CTA: ' + s['cta']) if s.get('cta') else ''}"
                      f"{(' CAPÍTULO: ' + s['chapter']) if s.get('chapter') else ''} NARRACIÓN: {s['narration']}\n"
@@ -400,26 +520,28 @@ def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str |
                      for i, (s, t) in enumerate(zip(sb["segments"], timing["segments"])))
     content = f"Tema: {sb['topic']}\n{extra}\nSegmentos:\n{segs}".replace("\n\n", "\n")
     if formato == "largo" and sb.get("capitulo"):
-        content += f"\nNúmero de capítulo para self.chapter: {sb['capitulo']}"
+        content += (f"\nNúmero de capítulo para k.chapter: {sb['capitulo']}" if hf else
+                    f"\nNúmero de capítulo para self.chapter: {sb['capitulo']}")
     if base_scene:
+        seg = "k.segmento(i)" if hf else "self.segment(i)"
         content += ("\n\nVERSIÓN EXTENDIDA: ya existe esta escena de la versión corta. Reutiliza su código "
                     "(personajes, funciones, estilo, colores) todo lo posible y agrega/reordena segmentos "
-                    "para el guion nuevo. Los índices de self.segment(i) deben seguir el guion NUEVO:\n"
-                    f"```python\n{base_scene}\n```")
+                    f"para el guion nuevo. Los índices de {seg} deben seguir el guion NUEVO:\n"
+                    f"```{lang}\n{base_scene}\n```")
     messages = [{"role": "user", "content": content}]
     if previous and error:
-        messages += [{"role": "assistant", "content": f"```python\n{previous}\n```"},
+        messages += [{"role": "assistant", "content": f"```{lang}\n{previous}\n```"},
                      {"role": "user", "content": f"El render falló con este error. Corrige el "
                       f"código completo:\n```\n{error[-4000:]}\n```"}]
     if ENGINE == "claude-code":
         user = messages[0]["content"]
         if previous and error:
-            user += (f"\n\nTu versión anterior:\n```python\n{previous}\n```\nEl render falló con este "
+            user += (f"\n\nTu versión anterior:\n```{lang}\n{previous}\n```\nEl render falló con este "
                      f"error. Devuelve el código completo corregido:\n```\n{error[-4000:]}\n```")
         txt, _ = _claude_code(system, user)
-        m = re.search(r"```python\n(.*?)```", txt, re.S)
-        code = (m.group(1) if m else txt).strip() + "\n"
-        compile(code, "scene.py", "exec")   # SyntaxError -> el render lo reporta y se corrige
+        code = _code_block(txt, lang)
+        if not hf:
+            compile(code, "scene.py", "exec")   # SyntaxError -> el render lo reporta y se corrige
         return code
     with _api().messages.stream(
         model=MODEL, max_tokens=32000, system=[{"type": "text", "text": system,
@@ -427,8 +549,12 @@ def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str |
         output_config={"effort": EFFORT}, messages=messages,
     ) as stream:
         resp = stream.get_final_message()
-    txt = _text(resp)
-    m = re.search(r"```python\n(.*?)```", txt, re.S)
+    return _code_block(_text(resp), lang)
+
+
+def _code_block(txt: str, lang: str = "python") -> str:
+    alias = "(?:javascript|js)" if lang == "javascript" else "python"
+    m = re.search(rf"```{alias}\n(.*?)```", txt, re.S)
     return (m.group(1) if m else txt).strip() + "\n"
 
 

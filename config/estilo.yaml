@@ -26,6 +26,7 @@ voz:
   pausas_s: {coma: 0.18, punto: 0.35, pregunta: 0.45, fin_segmento: 0.5}
 
 visual:
+  motor: manim              # manim | hyperframes (prueba: hyperframes/kit.js; EXPLAPIX_MOTOR o --motor lo cambian por video)
   ejemplo_referencia: examples/microondas/scene.py
   moods: [noche, energia, calor, frio, naturaleza, sol, magia]
   cambios_de_mood_min: 3

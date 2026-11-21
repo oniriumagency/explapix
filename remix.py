@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent
 
 
 def remix(folder: Path, music: Path | None = None) -> str:
-    silent = next(folder.glob("media/videos/*/*/silent.mp4"), None)
+    silent = render.silent_file(folder)
     voice = folder / "audio" / "narration.wav"
     if not silent or not voice.exists():
         return f"{folder.name}: falta silent.mp4 o narration.wav, omitido"

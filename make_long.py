@@ -5,13 +5,16 @@
   python make_long.py data/largos/tu-celular-por-dentro.json --quality draft
   python make_long.py data/largos/tu-celular-por-dentro.json --redo 03-bateria   # rehace un capítulo
   python make_long.py data/largos/tu-celular-por-dentro.json --textos     # solo descripción/capítulos
+  python make_long.py data/largos/tu-celular-por-dentro.json --motor hyperframes   # animación con HyperFrames
 
 Cada capítulo se narra y se anima por separado (out/<largo>/caps/NN-id/), así un fallo o un límite de
 uso no obliga a rehacer todo: lo que ya está renderizado y no cambió se reutiliza. Al final se unen
 los capítulos, se mezcla el audio una sola vez, se escriben los capítulos de YouTube en la descripción,
 las pausas sugeridas para anuncios y la pantalla final, y corre el verificador (config/reglas.yaml).
 
-Escenas escritas a mano: data/largos/<id>/<NN-id>.py (tienen prioridad sobre las de Claude).
+Escenas escritas a mano: data/largos/<id>/<NN-id>.py (o .js con HyperFrames; tienen prioridad sobre las de Claude).
+Con --motor hyperframes el video va a out/largo-<id>-hyperframes/ (no pisa el de Manim); la voz se reutiliza
+si ya existe la del largo con Manim y el guion no cambió.
 """
 from __future__ import annotations
 
@@ -88,7 +91,8 @@ def ad_breaks(chapters: list[dict], total: float, gap: float) -> list[float]:
     return out
 
 
-def build_chapter(k: int, ch: dict, d: Path, lsb: dict, quality: str, retries: int, force: bool) -> Path:
+def build_chapter(k: int, ch: dict, d: Path, lsb: dict, quality: str, retries: int, force: bool,
+                  motor: str = "manim", voz_de: Path | None = None) -> Path:
     """Voz + escena + render de un capítulo. Devuelve su silent.mp4 (reutiliza si nada cambió)."""
     from explapix import llm  # noqa: PLC0415
     d.mkdir(parents=True, exist_ok=True)
@@ -99,8 +103,9 @@ def build_chapter(k: int, ch: dict, d: Path, lsb: dict, quality: str, retries: i
         segs[0]["chapter"] = ch["title"]
     sb = {"topic": f"{lsb['topic']} · {ch['title']}", "formato": FORMATO, "capitulo": k,
           "capitulo_titulo": ch["title"], "pantalla_final": last, "segments": segs}
-    manual = ROOT / "data" / "largos" / lsb["id"] / f"{d.name}.py"
-    key = hashlib.sha1(json.dumps([sb, quality, manual.read_text(encoding="utf-8") if manual.exists() else ""],
+    manual = ROOT / "data" / "largos" / lsb["id"] / (d.name + render.SCENE_FILES[motor][len("scene"):])
+    key = hashlib.sha1(json.dumps([sb, quality, manual.read_text(encoding="utf-8") if manual.exists() else ""]
+                                  + ([motor] if motor != "manim" else []),
                                   ensure_ascii=False).encode()).hexdigest()
     done = _read(d / "done.json", {}) or {}
     silent = next((d / "media").rglob("silent.mp4"), None) if (d / "media").exists() else None
@@ -108,12 +113,20 @@ def build_chapter(k: int, ch: dict, d: Path, lsb: dict, quality: str, retries: i
         print(f"   capítulo {k} ({ch['title']}): ya estaba hecho", flush=True)
         return silent
     _write(d / "storyboard.json", sb)
-    if done.get("narration") != json.dumps(segs, ensure_ascii=False) or not (d / "timing.json").exists() or force:
+    narr = json.dumps(segs, ensure_ascii=False)
+    prev = (_read(voz_de / "done.json", {}) or {}) if voz_de else {}
+    if (not force and done.get("narration") != narr and prev.get("narration") == narr
+            and (voz_de / "timing.json").exists() and (voz_de / "audio" / "narration.wav").exists()):
+        print(f"   capítulo {k} ({ch['title']}): voz reutilizada de {voz_de.parent.parent.name}", flush=True)
+        shutil.copytree(voz_de / "audio", d / "audio", dirs_exist_ok=True)
+        shutil.copy(voz_de / "timing.json", d / "timing.json")
+        done["narration"] = narr
+    if done.get("narration") != narr or not (d / "timing.json").exists() or force:
         print(f"   capítulo {k} ({ch['title']}): voz", flush=True)
         tts.narrate([s["narration"] for s in segs], d / "audio")
         shutil.copy(d / "audio" / "timing.json", d / "timing.json")
     timing = _read(d / "timing.json")
-    scene_file = d / "scene.py"
+    scene_file = d / render.SCENE_FILES[motor]
     shutil.rmtree(d / "media", ignore_errors=True)
     print(f"   capítulo {k} ({ch['title']}): animación", flush=True)
     if manual.exists():
@@ -125,7 +138,7 @@ def build_chapter(k: int, ch: dict, d: Path, lsb: dict, quality: str, retries: i
                  + (" Es la INTRO: sin tarjeta de capítulo." if k == 0 else "")
                  + (" Es el CIERRE: termina con la pantalla final." if last else ""))
         for attempt in range(retries + 1):
-            code = llm.scene_code(sb, timing, previous=code, error=err, formato=FORMATO, extra=extra)
+            code = llm.scene_code(sb, timing, previous=code, error=err, formato=FORMATO, extra=extra, motor=motor)
             scene_file.write_text(code, encoding="utf-8")
             ok, log, silent = render.render_scene(scene_file, d, quality, formato=FORMATO)
             if ok:
@@ -136,7 +149,7 @@ def build_chapter(k: int, ch: dict, d: Path, lsb: dict, quality: str, retries: i
     if not ok:
         (d / "render_error.log").write_text(log, encoding="utf-8")
         raise SystemExit(f"Render del capítulo {k} falló, ver {d / 'render_error.log'}")
-    _write(d / "done.json", {"key": key, "narration": json.dumps(segs, ensure_ascii=False),
+    _write(d / "done.json", {"key": key, "narration": narr,
                              "at": datetime.now().isoformat(timespec="seconds")})
     return silent
 
@@ -204,13 +217,17 @@ def main():
     ap.add_argument("--retries", type=int, default=3)
     ap.add_argument("--redo", action="append", default=[], help="carpeta de capítulo a rehacer (p. ej. 03-bateria)")
     ap.add_argument("--textos", action="store_true", help="solo rehacer descripción, capítulos y anuncios")
+    ap.add_argument("--motor", choices=render.MOTORES, default=None,
+                    help="motor de animación (por defecto el de config/estilo.yaml, visual.motor)")
     ap.add_argument("--music", type=Path)
     ap.add_argument("--upload", action="store_true", help="subir a YouTube al terminar (solo si pasa la verificación)")
     ap.add_argument("--privacy", choices=["private", "unlisted", "public"], default="private")
     a = ap.parse_args()
 
     lsb = json.loads(a.storyboard.read_text(encoding="utf-8"))
-    work = ROOT / "out" / f"largo-{lsb['id']}"
+    motor = a.motor or render.motor_default()
+    base = ROOT / "out" / f"largo-{lsb['id']}"
+    work = base if motor == "manim" else ROOT / "out" / f"largo-{lsb['id']}-{motor}"
     work.mkdir(parents=True, exist_ok=True)
     if a.textos:
         meta = write_texts(lsb, work)
@@ -219,7 +236,9 @@ def main():
 
     caps = chapter_dirs(lsb, work)
     print(f"[1/4] Capítulos: {len(caps)} ({lsb['title']})", flush=True)
-    silents = [build_chapter(k, ch, d, lsb, a.quality, a.retries, d.name in a.redo) for k, ch, d in caps]
+    print(f"   motor de animación: {motor}", flush=True)
+    silents = [build_chapter(k, ch, d, lsb, a.quality, a.retries, d.name in a.redo, motor,
+                             base / "caps" / d.name if work != base else None) for k, ch, d in caps]
 
     print("[2/4] Unión de capítulos", flush=True)
     asm = assemble(lsb, work, silents)
@@ -232,7 +251,7 @@ def main():
     sfx.build_track(ev, asm["duration"], wav)
     final = render.mux(asm["silent"], work / "audio" / "narration.wav", work / "final.mp4", m, wav)
     meta = _read(work / "meta.json", {}) or {}
-    meta.update({"file": str(final), "duration": round(asm["duration"], 2), "chapters": asm["chapters"],
+    meta.update({"file": str(final), "duration": round(asm["duration"], 2), "chapters": asm["chapters"], "motor": motor,
                  "quality": a.quality, "music": m.name if m else None, "sfx": bool(ev),
                  "engine": tts.engine_name(), "created": datetime.now().isoformat(timespec="seconds")})
     _write(work / "meta.json", meta)
