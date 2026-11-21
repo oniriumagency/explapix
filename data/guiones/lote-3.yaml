@@ -1,0 +1,263 @@
+# Lote 3 (temas 21-30 de 50). Formato: ver scripts/guiones_lote.py
+- id: como-funcionan-las-bolsas-de-aire
+  topic: "Cómo funcionan las bolsas de aire"
+  category: "transporte"
+  hook: "La bolsa de aire se infla más rápido que un parpadeo."
+  title: "Se infla más rápido que un parpadeo 🚗💨"
+  summary: "Un sensor detecta el frenazo del choque y enciende una pequeña carga química que produce gas. La bolsa se infla en unas centésimas de segundo y luego se desinfla para frenarte suave."
+  question: "¿Siempre usas el cinturón, hasta en trayectos cortos?"
+  pinned: "El polvito que sale de la bolsa no es humo: suele ser talco o fécula para que se despliegue sin pegarse 🤍"
+  hashtags: ["#autos", "#seguridadvial"]
+  guardar_para: "cuidar a tu familia en el auto"
+  justificacion: "El sensor, la química del gas, el desinflado y la seguridad con niños necesitan capítulos y unos cien segundos."
+  segments:
+    - {b: gancho, n: "En un choque, la bolsa de aire se infla más rápido de lo que tardas en parpadear.", v: "Volante con carita; un ojo parpadea en cámara lenta mientras la bolsa ya está inflada. Mood energía."}
+    - {b: promesa, n: "Te explico cómo sabe que chocaste, de dónde sale el gas y por qué se desinfla enseguida.", v: "Tres burbujas con íconos: sensor, nube de gas y bolsa desinflándose."}
+    - {b: beat1, ch: "El sensor", n: "El auto tiene sensores que miden qué tan rápido cambia su velocidad, como el que gira la pantalla de tu celular.", v: "Chip con carita sobre resortitos; celular girando la pantalla al lado."}
+    - {b: beat1, cta: guardar, n: "Un frenazo normal no basta; un choque sí. Guarda este video para cuidar a tu familia.", v: "Gráfica: frenazo pequeño sin alarma, choque con pico rojo enorme; ícono de guardar."}
+    - {b: beat2, ch: "El gas", n: "Al detectar el choque, una chispa enciende una pequeña carga química guardada en el volante.", v: "Chispa entra al volante; pastilla química con carita se enciende. Mood calor."}
+    - {b: beat2, n: "La reacción produce sobre todo nitrógeno, el mismo gas que forma la mayor parte del aire que respiras.", v: "Nubes de nitrógeno con caritas salen disparadas llenando la bolsa."}
+    - {b: beat2, n: "La bolsa se llena en unas tres centésimas de segundo, justo antes de que tu cuerpo se vaya hacia adelante.", v: "Bolsa se despliega en cámara lenta; persona con carita apenas empieza a moverse."}
+    - {b: beat3, cta: comentar, n: "Y en cuanto la tocas, se desinfla por unos agujeros. ¿Siempre usas el cinturón?", v: "Cabeza con carita llega a la bolsa; chorritos de gas salen por agujeros laterales; signo de pregunta."}
+    - {b: beat3, n: "Así no rebotas: te frena poco a poco, repartiendo el golpe en una superficie grande.", v: "Comparación: pelota que rebota en pared dura contra pelota que se hunde suave en almohada."}
+    - {b: beat3, n: "Pero está pensada para trabajar junto con el cinturón. Sin él, puedes llegar demasiado pronto y demasiado cerca.", v: "Cinturón con carita sujetando a la persona en posición; sin cinturón la persona sale adelantada."}
+    - {b: dato_extra, n: "Por esa fuerza, los niños deben ir atrás y nunca en un asiento para bebé frente a una bolsa encendida.", v: "Asiento infantil en el asiento trasero con estrellitas; adelante una señal de prohibido. Mood frío."}
+    - {b: cierre, cta: compartir, n: "Un dato que salva vidas. Mándaselo a quien maneja con niños.", v: "Familia en el auto recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que, en un choque, la bolsa de aire se infla y se desinfla antes de que termines de parpadear.", v: "Regreso al volante con carita del inicio; ojo parpadeando; guiño."}
+
+- id: como-funciona-el-interruptor-de-pastilla
+  topic: "Cómo funciona el interruptor de pastilla"
+  category: "hogar"
+  hook: "Ese interruptor que se bota te salvó de un incendio."
+  title: "Por qué se bota la pastilla de la luz ⚡"
+  summary: "La pastilla corta la luz por dos razones: si pasa demasiada corriente por mucho rato, una lámina se calienta y se dobla; si hay un cortocircuito, un electroimán la dispara al instante."
+  question: "¿A ti se te bota la pastilla seguido?"
+  pinned: "Nunca la amarres ni la cambies por una más grande: está protegiendo los cables de tu casa 🔥"
+  hashtags: ["#hogar", "#electricidad"]
+  guardar_para: "la próxima vez que se vaya la luz"
+  justificacion: "Explica los dos mecanismos (térmico y magnético) y qué hacer en casa; con capítulos ronda los cien segundos."
+  segments:
+    - {b: gancho, n: "Cuando se bota la pastilla de la luz, molesta. Pero acaba de evitar que tus cables se calienten de más.", v: "Tablero con carita; una pastilla salta a apagado; cable con carita aliviado. Mood energía."}
+    - {b: promesa, n: "Adentro tiene dos guardianes distintos. Te explico cómo trabaja cada uno.", v: "Dos personajes guardianes con caritas dentro de la pastilla transparente."}
+    - {b: beat1, ch: "El guardián lento", n: "Cada cable aguanta cierta corriente. Si conectas demasiados aparatos, pasa más de la cuenta y el cable se calienta.", v: "Regleta con muchos aparatos; el cable se pone rojo y suda. Mood calor."}
+    - {b: beat1, cta: guardar, n: "Dentro de la pastilla, esa corriente pasa por una lámina de dos metales pegados. Guarda este video para la próxima.", v: "Lámina bicolor con carita; corriente con flow_dots atravesándola; ícono de guardar."}
+    - {b: beat1, n: "Con el calor, un metal se estira más que el otro, y la lámina se dobla hasta soltar un gatillo.", v: "La lámina se curva poco a poco y empuja un gatillo; ¡clac!, la palanca salta."}
+    - {b: beat2, ch: "El guardián rápido", n: "Pero en un cortocircuito, la corriente se dispara de golpe, y esperar a que algo se caliente sería demasiado lento.", v: "Dos cables se tocan; chispazo enorme; reloj con carita alarmado."}
+    - {b: beat2, cta: comentar, n: "Para eso hay una bobina que se vuelve imán y jala el gatillo al instante. ¿A ti se te bota seguido?", v: "Bobina con carita se ilumina y jala una pieza metálica de golpe; signo de pregunta."}
+    - {b: beat2, n: "Todo pasa en milésimas de segundo, antes de que el cable alcance a calentarse.", v: "Cámara lenta: chispa, imán, corte; el cable sigue fresco y sonríe. Mood frío."}
+    - {b: beat3, n: "Si se bota una y otra vez, no la amarres ni la cambies por una más grande. Algo está pidiendo demasiada corriente.", v: "Pastilla con cinta encima tachada con X roja; señal de alerta."}
+    - {b: dato_extra, n: "Antes se usaban fusibles: un alambre delgado que se derretía para cortar la luz, y había que cambiarlo cada vez.", v: "Fusible antiguo con carita derritiéndose; cajita de repuestos al lado. Mood magia."}
+    - {b: cierre, cta: compartir, n: "Ahora ya sabes por qué se apaga. Mándaselo a quien tiene la regleta llena.", v: "Regleta con muchos enchufes recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que, la próxima vez que se bote la pastilla, dale las gracias: acaba de proteger tu casa.", v: "Regreso al tablero con carita del inicio; la pastilla saluda; guiño."}
+
+- id: como-detectar-un-billete-falso
+  topic: "Cómo detectar un billete falso"
+  category: "dinero"
+  hook: "Tu billete tiene trucos que una impresora no puede copiar."
+  title: "3 trucos para detectar un billete falso 💵"
+  summary: "Los billetes tienen relieves que se sienten al tacto, zonas transparentes o marcas de agua que se ven a contraluz y tintas o hilos que cambian al inclinarlos. El método es tocar, mirar y girar."
+  question: "¿Alguna vez te dieron un billete falso?"
+  pinned: "México empezó a usar billetes de polímero en 2002 con el de 20 pesos 🇲🇽"
+  hashtags: ["#dinero", "#mexico"]
+  guardar_para: "revisar tu próximo cambio"
+  justificacion: "Necesita mostrar tres comprobaciones con su porqué, más el dato del polímero; unos cien segundos con capítulos."
+  segments:
+    - {b: gancho, n: "Tu billete esconde trucos que ninguna impresora de casa puede copiar. Y los puedes revisar en segundos.", v: "Billete con carita orgullosa; impresora con carita frustrada atrás. Mood energía."}
+    - {b: promesa, n: "El método es sencillo: tocar, mirar y girar. Te explico qué buscar en cada paso.", v: "Tres íconos en cascada: mano, ojo y flecha circular."}
+    - {b: beat1, ch: "Tocar", n: "Primero, tócalo. Algunas partes se imprimen con tinta gruesa que deja relieve, y se siente rasposa.", v: "Dedo con carita recorriendo el billete; zonas en relieve brillan."}
+    - {b: beat1, cta: guardar, n: "Una impresora normal deja todo plano y liso. Guarda este video para revisar tu cambio.", v: "Billete falso liso como espejo; dedo con carita confundida; ícono de guardar."}
+    - {b: beat1, n: "El material también cuenta: unos billetes son de polímero, como plástico flexible, y otros de un papel especial de algodón.", v: "Dos billetes con caritas: uno plástico brillante y otro de algodón rugoso."}
+    - {b: beat2, ch: "Mirar", n: "Segundo, míralo a contraluz. Los de algodón tienen una marca de agua que aparece como fantasma.", v: "Billete frente a una lámpara; aparece una figura tenue con carita. Mood magia."}
+    - {b: beat2, cta: comentar, n: "Los de polímero tienen una ventana transparente que no se puede falsificar fácil. ¿Alguna vez te dieron uno falso?", v: "Ventana transparente en el billete; a través se ve el fondo; signo de pregunta."}
+    - {b: beat3, ch: "Girar", n: "Tercero, inclínalo. Hay tintas y franjas que cambian de color o parecen moverse según el ángulo.", v: "Billete girando; un elemento pasa de un color a otro y una franja brilla en movimiento."}
+    - {b: beat3, n: "Esas tintas reflejan la luz de forma distinta según cómo la miras, y una fotocopia no puede imitarlas.", v: "Rayos de luz rebotando en distintos colores; fotocopia gris con carita triste."}
+    - {b: dato_extra, n: "Dato curioso: México empezó a usar billetes de polímero en dos mil dos, y aguantan mucho más que el papel.", v: "Billete de polímero con carita resistiendo agua y dobleces. Mood sol."}
+    - {b: cierre, cta: compartir, n: "Tres segundos bastan. Mándaselo a quien maneja efectivo todos los días.", v: "Tendero con carita recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Toca, mira y gira: esos trucos son la firma que ninguna impresora de casa puede copiar.", v: "Regreso al billete con carita del inicio; mano, ojo y flecha giran a su alrededor; guiño."}
+
+- id: como-funcionan-los-cerillos
+  topic: "Cómo funcionan los cerillos"
+  category: "química"
+  hook: "Un cerillo enciende gracias a una reacción en cadena."
+  title: "La química escondida en un cerillo 🔥"
+  summary: "La cabeza del cerillo tiene un oxidante y un combustible; la tira de la caja, fósforo rojo y vidrio molido. Al frotar, el calor enciende un poco de fósforo y eso prende la cabeza."
+  question: "¿Cerillos o encendedor?"
+  pinned: "Los primeros cerillos se prendían con cualquier superficie… y eran muy peligrosos ☠️"
+  hashtags: ["#quimica", "#cienciaencasa"]
+  guardar_para: "explicárselo a tus hijos"
+  justificacion: "Tres pasos químicos y el dato histórico; cabe en unos noventa segundos con dos capítulos."
+  segments:
+    - {b: gancho, n: "Un cerillo no prende solo con la fricción. Lo que hace es iniciar una reacción en cadena en un instante.", v: "Cerillo con carita frotándose; chispita que salta en cadena. Mood calor."}
+    - {b: promesa, n: "Te enseño qué hay en la cabeza del cerillo y por qué necesita su cajita para encender.", v: "Cerillo y caja con caritas tomados de la mano."}
+    - {b: beat1, ch: "Dos mitades", n: "Los cerillos de seguridad tienen el secreto partido en dos: una parte en la cabeza y otra en la tira de la caja.", v: "Cabeza roja y tira café brillando por separado; flecha que las une."}
+    - {b: beat1, cta: guardar, n: "La tira tiene fósforo rojo y vidrio molido. Guarda este video para explicárselo a tus hijos.", v: "Zoom a la tira: cristalitos de vidrio y bolitas rojas con caritas; ícono de guardar."}
+    - {b: beat1, n: "La cabeza tiene un combustible, como el azufre, y un oxidante, una sustancia que aporta oxígeno extra.", v: "Cabeza del cerillo transparente: bolitas amarillas de azufre y bolitas azules de oxígeno."}
+    - {b: beat2, ch: "La chispa", n: "Al frotar, el vidrio crea fricción y calor, y una pizca de fósforo de la tira se enciende en el aire.", v: "Frotada en cámara lenta; chispitas blancas saltan de la tira. Mood energía."}
+    - {b: beat2, cta: comentar, n: "Esa chispa calienta la cabeza, el oxidante suelta su oxígeno y el combustible arde de golpe. ¿Cerillos o encendedor?", v: "La cabeza se enciende en una bola de fuego; burbujas de oxígeno alimentándola; signo de pregunta."}
+    - {b: beat2, n: "Luego la llama pasa a la madera, que viene tratada con parafina para que se quede encendida.", v: "Llama bajando por el palito; capa de cera brillando."}
+    - {b: dato_extra, n: "Dato oscuro: los primeros cerillos usaban fósforo blanco, que prendía con casi cualquier roce y enfermaba a los obreros que los hacían.", v: "Fábrica antigua en sepia; cerillos que se prenden solos; obrero con carita preocupada. Mood noche."}
+    - {b: dato_extra, n: "Por eso se inventaron los de seguridad: separar los ingredientes evita que se prendan en tu bolsillo.", v: "Cerillo y caja separados con un escudo brillante entre ellos."}
+    - {b: cierre, cta: compartir, n: "Pura química en una cajita. Mándaselo a quien siempre trae cerillos.", v: "Persona con cajita recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que cada cerillo encendido es una pequeña reacción en cadena que tú disparas con un solo movimiento.", v: "Regreso al cerillo con carita del inicio encendiéndose; guiño."}
+
+- id: como-funciona-el-desbloqueo-facial
+  topic: "Cómo funciona el desbloqueo facial"
+  category: "tecnología"
+  hook: "Tu celular lanza miles de puntos invisibles a tu cara."
+  title: "Tu celular dibuja puntos en tu cara 🤳"
+  summary: "Algunos celulares proyectan miles de puntos infrarrojos sobre tu cara y una cámara especial mide cómo se deforman. Así arman un mapa en 3D que una foto no puede imitar."
+  question: "¿Te ha reconocido con lentes o cubrebocas?"
+  pinned: "Funciona en total oscuridad porque usa luz infrarroja, invisible para tus ojos 🌙"
+  hashtags: ["#celular", "#tecnologia"]
+  guardar_para: "elegir tu próximo celular"
+  justificacion: "Compara el método en 2D y en 3D, explica la luz infrarroja y la seguridad; con capítulos ronda los dos minutos."
+  segments:
+    - {b: gancho, n: "Cada vez que tu celular te reconoce, puede estar lanzando miles de puntos invisibles sobre tu cara.", v: "Cara con carita sorprendida cubierta de puntitos rojos brillantes; celular con carita. Mood magia."}
+    - {b: promesa, n: "Te explico cómo funciona, y por qué algunos se engañan con una foto y otros no.", v: "Foto impresa con carita pícara frente a dos celulares."}
+    - {b: beat1, ch: "Dos tipos", n: "Algunos celulares solo usan la cámara de adelante. Toman una imagen plana de tu cara y la comparan.", v: "Cámara frontal capta una imagen plana; se compara con una guardada."}
+    - {b: beat1, n: "Son rápidos y sencillos, pero una buena foto a veces los engaña.", v: "Foto impresa desbloquea un celular sencillo; alerta roja; ícono de guardar."}
+    - {b: beat1, cta: guardar, n: "Otros miden tu cara en tres dimensiones. Guarda este video para elegir tu próximo celular.", v: "La cara se convierte en una malla 3D que gira. Mood energía."}
+    - {b: beat2, ch: "Los puntos invisibles", n: "Un pequeño proyector lanza miles de puntos de luz infrarroja, una luz que tus ojos no pueden ver.", v: "Proyector diminuto con carita dispara una lluvia de puntitos sobre la cara."}
+    - {b: beat2, n: "Sobre una superficie plana, los puntos quedan ordenados. Sobre tu nariz, tus mejillas y tus ojos, se deforman.", v: "Puntos ordenados en una pared; sobre la cara se curvan siguiendo nariz y pómulos."}
+    - {b: beat2, cta: comentar, n: "Una cámara infrarroja mide esa deformación y arma un mapa en relieve de tu cara. ¿Te reconoce con lentes?", v: "Mapa de relieve brillante se construye punto por punto; signo de pregunta."}
+    - {b: beat3, ch: "La seguridad", n: "Ese mapa se convierte en números y se guarda cifrado en un chip aparte, no como foto.", v: "Mapa se transforma en una cadena de números que entra a una caja fuerte con carita."}
+    - {b: beat3, n: "Una foto es plana, así que no tiene relieve que deformar los puntos. Por eso no lo engaña.", v: "Puntos sobre una foto quedan rectos; celular niega con la cabeza."}
+    - {b: dato_extra, n: "Dato curioso: como usa luz infrarroja, funciona en total oscuridad, aunque tú no veas nada.", v: "Cuarto oscuro; la cara con puntitos brillando y el celular desbloqueándose. Mood noche."}
+    - {b: dato_extra, n: "Lo que sí puede confundirlo es un gemelo idéntico, porque su relieve es casi igual al tuyo.", v: "Dos gemelos con caritas iguales; el celular confundido con signos de pregunta."}
+    - {b: cierre, cta: compartir, n: "Es tecnología que no puedes ver. Mándaselo a quien tiene un gemelo.", v: "Gemelos reciben el video; ícono de compartir."}
+    - {b: cierre, n: "Así que la próxima vez que mires tu celular, recuerda: te está pintando miles de puntos invisibles.", v: "Regreso a la cara con puntitos del inicio; guiño."}
+
+- id: como-funcionan-los-antibioticos
+  topic: "Cómo funcionan los antibióticos"
+  category: "salud"
+  hook: "Los antibióticos no sirven para la gripe."
+  title: "Por qué el antibiótico no cura tu gripa 💊"
+  summary: "Los antibióticos atacan piezas que tienen las bacterias pero no nuestras células, como su pared. Los virus no tienen esas piezas, por eso no les hacen nada."
+  question: "¿Sabías que no sirven contra los virus?"
+  pinned: "La penicilina se descubrió porque Fleming dejó platos sucios antes de irse de vacaciones 🍄"
+  hashtags: ["#salud", "#medicina"]
+  guardar_para: "tu próxima visita al médico"
+  justificacion: "Necesita explicar el blanco del antibiótico, por qué no sirve con virus, la resistencia y el dato de Fleming; unos dos minutos con capítulos."
+  segments:
+    - {b: gancho, n: "Si tienes gripa, un antibiótico no te va a curar. Y tomarlo de más puede salir caro.", v: "Pastilla con carita frente a un virus con carita burlona; el virus ni se inmuta. Mood frío."}
+    - {b: promesa, n: "Te explico cómo atacan a las bacterias, y por qué no les hacen nada a los virus.", v: "Bacteria con carita y virus con carita lado a lado; lupa encima."}
+    - {b: beat1, ch: "Un ataque preciso", n: "Las bacterias son seres vivos de una sola célula, y tienen piezas que tus células no tienen.", v: "Bacteria con carita mostrando su pared gruesa; célula humana con carita sin pared."}
+    - {b: beat1, n: "Por ejemplo, una pared rígida que las protege como si fuera una armadura.", v: "Armadura brillante alrededor de la bacteria; ícono de guardar."}
+    - {b: beat1, cta: guardar, n: "La penicilina bloquea esa pared y la bacteria revienta. Guarda este video para tu próxima consulta.", v: "Ladrillos de la pared no encajan; la bacteria se infla y estalla en confeti. Mood energía."}
+    - {b: beat2, n: "Otros antibióticos frenan las fábricas de proteínas de la bacteria, que son distintas a las tuyas.", v: "Fábrica diminuta dentro de la bacteria se detiene; engranes con carita dormidos."}
+    - {b: beat2, ch: "Los virus son otra cosa", n: "Los virus son mucho más pequeños, no tienen pared ni fábricas propias. Se meten en tus células y usan las tuyas.", v: "Virus diminuto con carita se cuela en una célula humana y usa sus máquinas."}
+    - {b: beat2, cta: comentar, n: "No hay nada que el antibiótico pueda atacar. ¿Sabías que no sirven contra los virus?", v: "Pastilla buscando con linterna; el virus escondido dentro de la célula; signo de pregunta."}
+    - {b: beat3, ch: "La resistencia", n: "Y tomarlos sin necesidad tiene un riesgo: entre millones de bacterias, unas pocas pueden resistirlos.", v: "Multitud de bacterias; una con casco brillante. Mood noche."}
+    - {b: beat3, n: "El antibiótico elimina a las demás, y las resistentes se quedan con todo el espacio para multiplicarse.", v: "Las bacterias normales desaparecen; la del casco se multiplica en muchas con casco."}
+    - {b: beat3, n: "Por eso hay que tomarlos solo con receta, y siguiendo las indicaciones del médico hasta el final.", v: "Receta con carita y calendario de dosis con palomitas verdes."}
+    - {b: dato_extra, n: "Dato histórico: en mil novecientos veintiocho, Alexander Fleming volvió de vacaciones y encontró un hongo matando bacterias en un plato olvidado.", v: "Laboratorio desordenado; plato con un hongo verde con carita y un círculo vacío alrededor. Mood magia."}
+    - {b: cierre, cta: compartir, n: "Un descubrimiento que cambió la medicina. Mándaselo a quien se automedica.", v: "Persona con botiquín recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que la próxima gripa, recuerda: los antibióticos atacan bacterias, no virus.", v: "Regreso a la pastilla y el virus del inicio; la pastilla se encoge de hombros; guiño."}
+
+- id: como-funcionan-los-eclipses
+  topic: "Cómo funcionan los eclipses"
+  category: "espacio"
+  hook: "La Luna tapa al Sol por una coincidencia increíble."
+  title: "La coincidencia que hace posibles los eclipses 🌑"
+  summary: "El Sol es unas 400 veces más grande que la Luna, pero también está unas 400 veces más lejos. Por eso desde la Tierra se ven casi del mismo tamaño y la Luna puede taparlo justo."
+  question: "¿Has visto un eclipse total?"
+  pinned: "La Luna se aleja casi cuatro centímetros por año: en un futuro muy lejano ya no habrá eclipses totales 🌍🌙"
+  hashtags: ["#espacio", "#eclipse"]
+  guardar_para: "el próximo eclipse"
+  justificacion: "Explica la coincidencia de tamaños, los dos tipos de eclipse, por qué no hay cada mes y el dato del futuro; unos dos minutos con capítulos."
+  segments:
+    - {b: gancho, n: "Un eclipse total de Sol es posible gracias a una coincidencia casi perfecta.", v: "Sol y Luna con caritas se alinean y encajan como piezas; corona brillante. Mood noche."}
+    - {b: promesa, n: "Te explico esa coincidencia, por qué la Luna se pone roja y por qué no hay eclipses cada mes.", v: "Luna roja con carita y un calendario con signo de pregunta."}
+    - {b: beat1, ch: "La gran coincidencia", n: "El Sol es unas cuatrocientas veces más ancho que la Luna. Pero también está unas cuatrocientas veces más lejos.", v: "Sol gigante lejos y Luna pequeña cerca; reglas mostrando las dos proporciones."}
+    - {b: beat1, n: "Por eso, desde aquí, los dos se ven casi exactamente del mismo tamaño.", v: "Vista desde la Tierra: Sol y Luna como dos monedas iguales; ícono de guardar."}
+    - {b: beat1, cta: guardar, n: "En un eclipse de Sol, la Luna lo tapa casi exacto. Guarda este video para el próximo eclipse.", v: "Alineación Sol, Luna, Tierra; sombra de la Luna cae sobre una franja de la Tierra."}
+    - {b: beat2, n: "Solo la franja donde cae la sombra ve el eclipse total. Ahí se hace de noche en pleno día por unos minutos.", v: "Pueblito con caritas mirando arriba; cielo oscuro y estrellas al mediodía."}
+    - {b: beat2, ch: "La Luna roja", n: "En un eclipse de Luna pasa al revés: la Tierra se pone entre el Sol y la Luna, y le hace sombra.", v: "Alineación Sol, Tierra, Luna; la Luna entra en la sombra."}
+    - {b: beat2, cta: comentar, n: "Pero no desaparece: se pone roja, porque le llega la luz de todos los atardeceres de la Tierra. ¿Has visto uno?", v: "Anillo naranja alrededor de la Tierra ilumina a la Luna de rojo; signo de pregunta. Mood calor."}
+    - {b: beat3, ch: "No cada mes", n: "Si la Luna da una vuelta al mes, ¿por qué no hay eclipses cada mes? Porque su órbita está un poco inclinada.", v: "Órbita de la Luna como aro ladeado respecto a la Tierra; la sombra pasa por arriba o por abajo."}
+    - {b: beat3, n: "Casi siempre pasa un poco arriba o abajo de la línea con el Sol. Solo algunas veces al año se alinean.", v: "Animación de varios meses: fallas arriba y abajo; una vez encaja con destello."}
+    - {b: dato_extra, n: "Dato del futuro: la Luna se aleja de nosotros casi cuatro centímetros al año.", v: "Luna con carita alejándose despacio con una cinta métrica. Mood magia."}
+    - {b: dato_extra, n: "En cientos de millones de años se verá tan pequeña que ya no podrá tapar al Sol por completo.", v: "Luna pequeña frente al Sol dejando un anillo de fuego alrededor."}
+    - {b: cierre, cta: compartir, n: "Disfrútalos mientras duren. Mándaselo a tu compañero de observar el cielo.", v: "Dos amigos con lentes de eclipse reciben el video; ícono de compartir."}
+    - {b: cierre, n: "Así que cada eclipse total es una coincidencia casi perfecta, y somos afortunados de poder verla.", v: "Regreso al Sol y la Luna con caritas del inicio encajando; corona brillante; guiño."}
+
+- id: como-funciona-el-auto-electrico
+  topic: "Cómo funciona el auto eléctrico"
+  category: "transporte"
+  hook: "Un auto eléctrico se recarga un poco cada vez que frena."
+  title: "El auto que se carga al frenar 🔋🚗"
+  summary: "Un auto eléctrico usa una batería grande y un motor de imanes con muy pocas piezas móviles. Al frenar, el motor se vuelve generador y devuelve energía a la batería."
+  question: "¿Te comprarías un auto eléctrico?"
+  pinned: "Hacia 1900, cerca de un tercio de los autos en Estados Unidos eran eléctricos ⚡"
+  hashtags: ["#autoelectrico", "#energia"]
+  guardar_para: "tu próxima compra de auto"
+  justificacion: "Batería, motor, freno regenerativo y comparación con el motor de gasolina; unos dos minutos con capítulos."
+  segments:
+    - {b: gancho, n: "Un auto eléctrico recupera energía cada vez que frena. Algo que un auto de gasolina no puede hacer.", v: "Auto eléctrico con carita frenando; rayitos regresan a una batería. Mood energía."}
+    - {b: promesa, n: "Te explico qué tiene bajo el piso, cómo se mueve y ese truco del freno.", v: "Auto transparente; piso lleno de celdas brillantes."}
+    - {b: beat1, ch: "La batería", n: "En el piso lleva una batería enorme hecha de miles de celdas, parecidas a las de tu celular.", v: "Cientos de pilas con caritas alineadas en el piso del auto."}
+    - {b: beat1, n: "Esa energía pasa por un control que decide cuánta mandar al motor en cada momento.", v: "Cajita controladora con carita repartiendo flow_dots; ícono de guardar."}
+    - {b: beat2, cta: guardar, ch: "El motor de imanes", n: "El motor no tiene explosiones: usa electroimanes que jalan una pieza que gira. Guarda este video para tu próxima compra.", v: "Anillo de bobinas que se encienden en secuencia; rotor con carita persiguiéndolas."}
+    - {b: beat2, n: "Tiene muy pocas piezas que se mueven, así que no necesita cambio de aceite ni caja de velocidades complicada.", v: "Motor de gasolina lleno de piezas contra motor eléctrico sencillo; aceite tachado."}
+    - {b: beat2, n: "Y da toda su fuerza desde que arranca. Por eso acelera tan rápido en los primeros metros.", v: "Semáforo en verde; el auto eléctrico sale disparado con jelly. Mood energía."}
+    - {b: beat3, ch: "El freno que carga", n: "Al frenar, el motor cambia de papel: las ruedas lo hacen girar y funciona como generador.", v: "Ruedas empujan al motor; el motor cambia su carita a modo generador."}
+    - {b: beat3, cta: comentar, n: "Esa energía regresa a la batería en lugar de perderse como calor. ¿Te comprarías uno?", v: "Rayitos regresando a la batería que sube su nivel; signo de pregunta."}
+    - {b: beat3, n: "En una ciudad con muchos semáforos, ese freno recupera buena parte de lo que gastas al acelerar.", v: "Ciudad con semáforos; el auto frena y su batería brilla cada vez."}
+    - {b: dato_extra, n: "Dato histórico: hacia mil novecientos, cerca de un tercio de los autos en Estados Unidos eran eléctricos.", v: "Auto eléctrico antiguo con carita y sombrero de copa; foto en sepia. Mood magia."}
+    - {b: dato_extra, n: "La gasolina ganó porque era barata y daba más alcance. Hoy las baterías mejores cambiaron la historia.", v: "Gasolinera antigua con carita gana una carrera; luego una batería moderna rebasa."}
+    - {b: cierre, cta: seguir, n: "Una idea vieja con tecnología nueva. Síguenos: mañana, cómo funciona tu boiler.", v: "Calentador de agua con carita humeando; ícono de seguir."}
+    - {b: cierre, n: "Así que, en un auto eléctrico, cada frenada también es una pequeña recarga.", v: "Regreso al auto con carita del inicio frenando; rayitos a la batería; guiño."}
+
+- id: como-funciona-el-boiler
+  topic: "Cómo funciona el boiler"
+  category: "hogar"
+  hook: "Tu boiler tiene una pieza que se sacrifica por él."
+  title: "La pieza que se sacrifica en tu boiler 🚿"
+  summary: "El boiler de depósito calienta el agua con un quemador abajo y la guarda en un tanque aislado. El agua caliente sube y sale por arriba. Una barra de magnesio se oxida para proteger el tanque."
+  question: "¿Tu boiler es de depósito o de paso?"
+  pinned: "Si tu boiler es de gas, siempre debe estar en un lugar ventilado: el monóxido no huele 🚨"
+  hashtags: ["#hogar", "#ahorrodeenergia"]
+  guardar_para: "el mantenimiento de tu boiler"
+  justificacion: "Explica el boiler de depósito, el de paso, la barra de sacrificio y la seguridad con el gas; unos dos minutos con capítulos."
+  segments:
+    - {b: gancho, n: "Dentro de tu boiler hay una barra de metal que se deja oxidar para que el tanque no se pique.", v: "Boiler con carita; adentro una barra con carita valiente oxidándose. Mood calor."}
+    - {b: promesa, n: "Vamos a abrirlo para ver cómo calienta el agua, y por qué el agua caliente siempre sale de arriba.", v: "Boiler se vuelve transparente; flechas de agua subiendo."}
+    - {b: beat1, ch: "El tanque", n: "El boiler de depósito es un tanque aislado, con un quemador de gas abajo, como una estufa encendida bajo una olla.", v: "Corte del tanque; llama azul abajo con carita; capa de aislante alrededor."}
+    - {b: beat1, n: "El agua caliente es más ligera, así que sube. El agua fría, más pesada, se queda abajo.", v: "Burbujitas rojas suben y azules bajan; capas de colores. Mood calor."}
+    - {b: beat1, cta: guardar, n: "Por eso el agua caliente sale por arriba y la fría entra por un tubo hasta el fondo. Guarda este video para el mantenimiento.", v: "Tubo de entrada llega al fondo; salida arriba con agua roja; ícono de guardar."}
+    - {b: beat1, n: "Un termostato apaga el quemador al llegar a la temperatura elegida, y lo vuelve a prender cuando baja.", v: "Termostato con carita girando una perilla; llama que se apaga y prende."}
+    - {b: beat2, ch: "El sacrificio", n: "El agua y el metal del tanque, con el tiempo, provocan óxido. Ahí entra la barra de sacrificio.", v: "Pared del tanque con manchitas de óxido amenazando; barra con capa de héroe."}
+    - {b: beat2, cta: comentar, n: "Es de magnesio, un metal que se oxida más fácil, así que el óxido la ataca a ella primero. ¿Tu boiler es de depósito o de paso?", v: "Partículas de óxido se lanzan contra la barra y no contra el tanque; signo de pregunta."}
+    - {b: beat2, n: "Cuando se gasta, conviene cambiarla. Así el tanque puede durar muchos años más.", v: "Barra gastada con carita cansada; mano pone una nueva brillante."}
+    - {b: beat3, ch: "El de paso", n: "El boiler de paso no guarda agua. Al abrir la llave, un sensor detecta el flujo y enciende el quemador.", v: "Calentador delgado con carita; agua entra fría por un serpentín y sale caliente."}
+    - {b: beat3, n: "El agua pasa por un serpentín sobre la flama y sale caliente al momento. Solo gasta mientras lo usas.", v: "Serpentín brillante sobre llamas; medidor de gas que se mueve solo con la llave abierta."}
+    - {b: dato_extra, n: "Muy importante: si es de gas, debe estar en un lugar ventilado. El monóxido de carbono no huele y es peligroso.", v: "Boiler afuera con aire circulando; nube gris tachada dentro de casa. Mood noche."}
+    - {b: cierre, cta: compartir, n: "Revísalo y estarás más tranquilo. Mándaselo a quien tiene el boiler adentro.", v: "Casa con boiler recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que, mientras te bañas, una barra de metal se está oxidando para cuidar tu boiler.", v: "Regreso a la barra con carita valiente del inicio; guiño."}
+
+- id: como-funciona-un-cajero-automatico
+  topic: "Cómo funciona un cajero automático"
+  category: "dinero"
+  hook: "El cajero cuenta tus billetes y además los mide."
+  title: "Lo que hace el cajero antes de darte dinero 🏧"
+  summary: "El cajero lee tu tarjeta, manda tu NIP cifrado a tu banco y espera la autorización. Luego saca los billetes de unos cartuchos y mide su grosor para no darte dos pegados."
+  question: "¿Siempre tapas el teclado al poner tu NIP?"
+  pinned: "El primer cajero automático se instaló en Londres en 1967 🇬🇧"
+  hashtags: ["#dinero", "#seguridad"]
+  guardar_para: "tu próximo retiro"
+  justificacion: "Recorre tarjeta, autorización, conteo y seguridad con el dato histórico; unos dos minutos con capítulos."
+  segments:
+    - {b: gancho, n: "Antes de darte dinero, el cajero automático mide el grosor de cada billete. Y tiene una buena razón.", v: "Cajero con carita sosteniendo una reglita junto a un billete. Mood energía."}
+    - {b: promesa, n: "Vamos a ver todo lo que pasa en esos segundos, desde que metes la tarjeta hasta que sale el dinero.", v: "Tarjeta con carita entra al cajero; cronómetro empieza."}
+    - {b: beat1, ch: "La pregunta al banco", n: "Primero lee el chip de tu tarjeta, que guarda datos de tu cuenta y ayuda a probar que no es una copia.", v: "Chip dorado con carita brillando; datos saliendo en burbujas."}
+    - {b: beat1, cta: guardar, n: "Luego escribes tu número secreto, que viaja cifrado. Guarda este video para tu próximo retiro.", v: "Teclado; los números se convierten en un candado que viaja por un cable; ícono de guardar."}
+    - {b: beat1, n: "El cajero manda la solicitud por una red hasta tu banco, aunque el cajero sea de otro banco.", v: "Mapa con líneas brillantes del cajero a varios bancos con caritas."}
+    - {b: beat1, n: "Tu banco revisa la clave y tu saldo, y responde sí o no en un par de segundos.", v: "Banco con carita revisa una libreta; manda una palomita verde."}
+    - {b: beat2, ch: "Contar y medir", n: "Adentro, los billetes esperan en cartuchos, cada uno con una denominación diferente.", v: "Cajas apiladas con billetes de distintos colores con caritas."}
+    - {b: beat2, cta: comentar, n: "Unos rodillos los sacan uno por uno y un sensor mide su grosor. ¿Siempre tapas el teclado?", v: "Rodillos jalando billetes; sensor con carita midiendo; signo de pregunta."}
+    - {b: beat2, n: "Si detecta dos billetes pegados, los aparta en otra caja, para no darte de más ni de menos.", v: "Dos billetes pegados con caritas apenadas van a una caja de rechazo."}
+    - {b: beat3, ch: "Tu seguridad", n: "Para protegerte, tapa el teclado al poner tu número y revisa que la ranura no tenga piezas sueltas o raras.", v: "Mano tapando el teclado; lupa sobre una ranura con una pieza extraña. Mood noche."}
+    - {b: dato_extra, n: "Dato histórico: el primer cajero automático se instaló en Londres, en mil novecientos sesenta y siete.", v: "Cajero antiguo con carita y sombrero en una calle de Londres en sepia. Mood magia."}
+    - {b: dato_extra, n: "Y su inventor contó que eligió claves de cuatro dígitos porque su esposa solo recordaba cuatro números con facilidad.", v: "Señora con carita sonriente contando con los dedos hasta cuatro."}
+    - {b: cierre, cta: compartir, n: "Ahora ya sabes qué pasa adentro. Mándaselo a quien nunca tapa el teclado.", v: "Amigo frente al cajero recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que, antes de darte tu dinero, el cajero ya habló con tu banco y midió cada billete.", v: "Regreso al cajero con carita del inicio midiendo un billete; guiño."}

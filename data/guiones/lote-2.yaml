@@ -1,0 +1,267 @@
+# Lote 2 (temas 11-20 de 50). Formato: ver scripts/guiones_lote.py
+- id: por-que-pica-el-chile
+  topic: "Por qué pica el chile"
+  category: "cocina"
+  hook: "El chile no quema, pero tu cerebro cree que sí."
+  title: "El chile engaña a tu cerebro 🌶️🔥"
+  summary: "La capsaicina del chile activa el mismo sensor que detecta el calor. Tu cerebro recibe una alarma de quemadura aunque no haya fuego. El agua no la quita; la leche sí ayuda."
+  question: "¿Agua o leche cuando te enchilas?"
+  pinned: "Lo que más pica no son las semillas, son las venas blancas de adentro 🌶️ ¿Lo sabías?"
+  hashtags: ["#chile", "#cienciaencasa"]
+  guardar_para: "tu próxima enchilada"
+  justificacion: "Explica el sensor del calor, por qué el agua no sirve y el dato de las aves; con dos capítulos cabe en unos cien segundos."
+  segments:
+    - {b: gancho, n: "El chile no quema tu boca. Pero tu cerebro está completamente seguro de que sí.", v: "Chile con carita traviesa; lengua con carita echando fuego imaginario. Mood calor."}
+    - {b: promesa, n: "Te explico el engaño químico, y qué hacer cuando te enchilas de verdad.", v: "Molécula con antifaz entra rebotando; vaso de leche con carita heroica al fondo."}
+    - {b: beat1, ch: "El engaño", n: "El picor viene de una molécula llamada capsaicina. Se concentra sobre todo en las venas blancas de adentro del chile.", v: "Corte de un chile: venas blancas brillando; bolitas de capsaicina con antifaz."}
+    - {b: beat1, n: "En tu lengua hay sensores que avisan cuando algo está demasiado caliente, como una sopa recién servida.", v: "Lengua con sensores en forma de campanitas; sopa humeante hace sonar una campanita."}
+    - {b: beat1, cta: guardar, n: "La capsaicina encaja justo en esos sensores y los enciende. Guarda este video para tu próxima enchilada.", v: "Capsaicina entra como llave en una campanita que se pone roja y suena; ícono de guardar."}
+    - {b: beat2, n: "El sensor manda al cerebro la misma alarma que mandaría una quemadura, aunque la temperatura no haya cambiado.", v: "Señal roja viaja por un nervio al cerebro con carita alarmada; termómetro quieto."}
+    - {b: beat2, n: "Por eso sudas, te pones rojo y te lloran los ojos: tu cuerpo intenta enfriarse de un fuego que no existe.", v: "Persona con carita sudando, cachetes rojos y lágrimas; ventilador imaginario. Mood calor."}
+    - {b: beat3, ch: "Cómo apagarlo", n: "El agua casi no ayuda, porque la capsaicina no se disuelve en agua. Solo la mueve de un lado a otro.", v: "Vaso de agua lanza chorro; las bolitas con antifaz se ríen y se resbalan."}
+    - {b: beat3, cta: comentar, n: "La leche sí funciona: su grasa y sus proteínas atrapan la capsaicina y la arrastran. ¿Agua o leche cuando te enchilas?", v: "Vaso de leche con capa atrapa las bolitas en una red blanca; signo de pregunta. Mood frío."}
+    - {b: beat3, n: "También ayudan la tortilla o el pan, que absorben parte del picante mientras los masticas.", v: "Tortilla con carita barre la lengua como esponja."}
+    - {b: dato_extra, n: "Dato curioso: las aves no sienten el picor. Sus sensores no reaccionan a la capsaicina.", v: "Pajarito con carita come chiles tranquilo, sin sudar; brillos. Mood naturaleza."}
+    - {b: dato_extra, n: "Y les conviene a las plantas: las aves tragan las semillas enteras y las llevan lejos, mientras que muchos mamíferos las mastican.", v: "Pajarito vuela soltando semillas que se vuelven plantitas de chile."}
+    - {b: cierre, cta: compartir, n: "Ya sabes qué servir en la próxima comida. Mándaselo a quien siempre se enchila.", v: "Amigo con carita roja recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que el chile no quema: solo convence a tu cerebro de que hay fuego en tu boca.", v: "Regreso al chile con carita traviesa del inicio; guiño."}
+
+- id: como-funciona-el-lector-de-huella
+  topic: "Cómo funciona el lector de huella"
+  category: "tecnología"
+  hook: "Tu celular no guarda la foto de tu huella."
+  title: "Lo que tu celular guarda de tu huella 👆"
+  summary: "El sensor mide las crestas y los valles de tu dedo con electricidad, luz o ultrasonido. Luego guarda solo un mapa de puntos clave, cifrado en un chip aparte."
+  question: "¿Desbloqueas con huella o con cara?"
+  pinned: "Los koalas tienen huellas tan parecidas a las nuestras que podrían confundir a un experto 🐨"
+  hashtags: ["#celular", "#tecnologia"]
+  guardar_para: "cuando no te reconozca el dedo"
+  justificacion: "Cubre cómo se lee la huella, qué se guarda y la seguridad, más el dato de los koalas; con capítulos ronda los dos minutos."
+  segments:
+    - {b: gancho, n: "Tu celular no guarda la foto de tu huella. Guarda algo mucho más difícil de robar.", v: "Dedo con carita toca un celular con carita; aparece un cofre con candado. Mood magia."}
+    - {b: promesa, n: "Vamos a ver cómo la lee en menos de un segundo, y qué guarda exactamente.", v: "Cronómetro con carita marcando un instante; huella brillando."}
+    - {b: beat1, ch: "Crestas y valles", n: "Tu huella está hecha de líneas en relieve, llamadas crestas, separadas por pequeños valles.", v: "Zoom extremo a la piel: montañitas y valles con caritas, como un paisaje."}
+    - {b: beat1, n: "Muchos lectores tienen una rejilla de miles de sensores diminutos que funcionan con electricidad.", v: "Rejilla de puntitos cian bajo el dedo; chispitas."}
+    - {b: beat1, cta: guardar, n: "Las crestas tocan el sensor y los valles dejan aire. Guarda este video para cuando no te reconozca.", v: "Crestas pegadas a la rejilla brillan; valles con aire quedan oscuros; ícono de guardar."}
+    - {b: beat1, n: "Esa diferencia cambia la carga eléctrica en cada punto, y así se dibuja un mapa de tu dedo.", v: "Mapa de la huella aparece punto por punto en pantalla. Mood energía."}
+    - {b: beat2, n: "Otros lectores, bajo la pantalla, iluminan tu dedo y toman una imagen, o lo escanean con ultrasonido.", v: "Pantalla con lucecita y una cámara diminuta; ondas de sonido rebotando en las crestas."}
+    - {b: beat2, ch: "Lo que se guarda", n: "Pero no guarda esa imagen. Busca puntos clave: dónde termina una línea, dónde se divide en dos.", v: "Sobre la huella aparecen marcadores brillantes en los finales y bifurcaciones."}
+    - {b: beat2, cta: comentar, n: "Con esos puntos arma un mapa matemático y lo cifra en un chip separado. ¿Desbloqueas con huella o con cara?", v: "Los puntos se convierten en una constelación que entra a una caja fuerte con carita; signo de pregunta."}
+    - {b: beat3, n: "Cada vez que tocas, compara el nuevo mapa con el guardado. Si coinciden lo suficiente, abre.", v: "Dos constelaciones se superponen y encajan; candado se abre con confeti."}
+    - {b: beat3, n: "Por eso un dedo mojado o con una cortada puede fallar: cambian las crestas que el sensor lee.", v: "Dedo con gotitas o curita; constelación incompleta y cara de confusión."}
+    - {b: dato_extra, n: "Dato curioso: hasta los gemelos idénticos tienen huellas distintas, porque se forman con la presión dentro del vientre.", v: "Dos gemelos con caritas iguales muestran huellas diferentes. Mood magia."}
+    - {b: dato_extra, n: "Y los koalas tienen huellas tan parecidas a las nuestras que, al microscopio, podrían confundir a un experto.", v: "Koala con carita pícara deja una huella junto a una humana; lupa confundida."}
+    - {b: cierre, cta: compartir, n: "Ahora ya sabes qué protege tu celular. Mándaselo a quien desbloquea con huella.", v: "Celular enviando el video; ícono de compartir."}
+    - {b: cierre, n: "Así que tu celular no guarda tu huella: guarda un mapa secreto de sus puntos clave.", v: "Regreso al dedo y al celular con caritas del inicio; cofre brillando; guiño."}
+
+- id: como-funcionan-los-rayos-x
+  topic: "Cómo funcionan los rayos X"
+  category: "salud"
+  hook: "Los rayos X atraviesan tu cuerpo, pero no tus huesos."
+  title: "Cómo los rayos X ven tus huesos 🦴"
+  summary: "Los rayos X son luz invisible con mucha energía. Pasan fácil por la piel y los músculos, pero el calcio de los huesos los frena. Lo que no pasa, deja una sombra blanca."
+  question: "¿Alguna vez te has roto un hueso?"
+  pinned: "La primera radiografía de la historia fue la mano de la esposa de Röntgen, con todo y anillo 💍"
+  hashtags: ["#salud", "#radiografia"]
+  guardar_para: "tu próxima radiografía"
+  justificacion: "Cómo se producen, por qué los huesos salen blancos y el tema de la seguridad; necesita capítulos y unos dos minutos."
+  segments:
+    - {b: gancho, n: "Los rayos X atraviesan tu piel como si fuera vidrio. Pero con tus huesos chocan de frente.", v: "Mano con carita frente a un haz violeta; la piel se vuelve transparente y los huesos brillan blancos. Mood magia."}
+    - {b: promesa, n: "Te explico cómo se fabrican, y por qué los huesos salen blancos en la radiografía.", v: "Placa de radiografía con carita entra rebotando."}
+    - {b: beat1, ch: "Luz invisible", n: "Los rayos X son luz, como la de un foco, pero con tanta energía que tus ojos no pueden verla.", v: "Espectro de colores; más allá del violeta aparece una onda apretada con carita traviesa."}
+    - {b: beat1, n: "Para fabricarlos, el aparato dispara electrones a gran velocidad contra un pedacito de metal.", v: "Tubo con carita: electrones salen disparados y golpean un metal brillante. Mood energía."}
+    - {b: beat1, cta: guardar, n: "Al frenar de golpe, sueltan su energía como rayos X. Guarda este video para tu próxima radiografía.", v: "Electrones chocan y salen destellos violetas en abanico; ícono de guardar."}
+    - {b: beat2, ch: "Sombras de calcio", n: "Esos rayos atraviesan con facilidad la piel, la grasa y los músculos, porque están hechos de átomos ligeros.", v: "Haz violeta cruza capas de piel y músculo casi sin detenerse."}
+    - {b: beat2, n: "Pero los huesos tienen mucho calcio, un átomo más pesado que frena gran parte de los rayos.", v: "Átomos de calcio grandes con caritas serias bloquean los rayos como portero."}
+    - {b: beat2, n: "Detrás de ti hay un detector. Donde llegan muchos rayos se pone oscuro, y donde no llegan queda blanco.", v: "Placa detrás de la mano: fondo oscuro y silueta blanca de huesos aparece poco a poco."}
+    - {b: beat3, cta: comentar, n: "Por eso los huesos salen blancos: son sombras de calcio. ¿Alguna vez te has roto un hueso?", v: "Radiografía con una fractura marcada con brillo; signo de pregunta."}
+    - {b: beat3, n: "Una radiografía de pecho da una dosis parecida a la radiación natural que recibes en unos días de vida normal.", v: "Balanza: radiografía de un lado y un calendario con soles y rocas del otro; equilibrio. Mood sol."}
+    - {b: beat3, n: "Aun así, se usan solo cuando hacen falta, y por eso te ponen un chaleco de plomo en otras partes.", v: "Chaleco gris con carita protegiendo el torso; rayos rebotando."}
+    - {b: dato_extra, ch: "La primera foto", n: "Dato histórico: en mil ochocientos noventa y cinco, Wilhelm Röntgen los descubrió casi por accidente.", v: "Laboratorio antiguo; pantalla que brilla sola; científico con carita sorprendida."}
+    - {b: dato_extra, n: "Y la primera radiografía famosa fue la mano de su esposa, con todo y su anillo de bodas.", v: "Radiografía antigua de una mano con un anillo oscuro brillando; destello."}
+    - {b: cierre, cta: seguir, n: "Así empezó la medicina por imágenes. Síguenos: mañana, por qué flota un barco.", v: "Barco con carita flotando; ícono de seguir."}
+    - {b: cierre, n: "Así que en cada radiografía, tus huesos son la sombra que los rayos X no pudieron atravesar.", v: "Regreso a la mano transparente del inicio; huesos blancos brillando; guiño."}
+
+- id: por-que-flotan-los-barcos
+  topic: "Por qué flotan los barcos"
+  category: "física"
+  hook: "Un barco de acero pesa miles de toneladas y flota."
+  title: "¿Cómo flota un barco de acero? 🚢"
+  summary: "Un barco flota porque empuja hacia un lado una cantidad de agua que pesa lo mismo que él. Su forma hueca hace que, en promedio, sea más ligero que el agua."
+  question: "¿Has subido a un barco grande?"
+  pinned: "Un barco flota un poco más alto en el mar que en un río, porque el agua salada empuja más 🌊"
+  hashtags: ["#fisica", "#barcos"]
+  guardar_para: "tu próximo viaje en barco"
+  justificacion: "El principio de Arquímedes con un ejemplo, la forma hueca y el dato del agua salada; con dos capítulos ronda los cien segundos."
+  segments:
+    - {b: gancho, n: "Un tornillo de acero se hunde. Un barco hecho del mismo acero, de miles de toneladas, flota. ¿Cómo?", v: "Tornillo con carita se hunde triste; barco gigante con carita flota orgulloso. Mood frío."}
+    - {b: promesa, n: "La respuesta la descubrió un griego en una bañera, hace más de dos mil años.", v: "Señor con toga y carita en una bañera; agua desbordándose."}
+    - {b: beat1, ch: "El empujón del agua", n: "Cuando algo entra al agua, la aparta para hacerse espacio. Y el agua empuja de regreso hacia arriba.", v: "Pelota con carita entra al agua; el agua se hace a un lado y flechas suben empujando."}
+    - {b: beat1, cta: guardar, n: "Ese empujón es igual al peso del agua apartada. Guarda este video para tu próximo viaje.", v: "Bloque de agua apartada en una balanza contra flecha de empuje; equilibrio; ícono de guardar."}
+    - {b: beat1, n: "Si el objeto pesa menos que el agua que puede apartar, flota. Si pesa más, se hunde.", v: "Corcho flota y piedra se hunde, cada uno con su bloque de agua comparado."}
+    - {b: beat2, ch: "El secreto es el aire", n: "El tornillo es pequeño y macizo: aparta poquita agua, y esa agua pesa menos que él.", v: "Tornillo con un cubito de agua diminuto al lado; la balanza se inclina hacia el tornillo."}
+    - {b: beat2, n: "El barco, en cambio, es una cáscara de acero con casi todo aire por dentro.", v: "Corte del barco: casco delgado y enorme espacio vacío con brillitos; signo de pregunta."}
+    - {b: beat2, cta: comentar, n: "Así aparta muchísima agua y se hunde solo hasta igualar su peso. ¿Has subido a un barco grande?", v: "Barco baja un poco y se detiene; el bloque de agua apartada crece hasta igualarlo."}
+    - {b: beat3, n: "Por eso, si le llenas el casco de agua, el aire ya no ayuda y el barco se hunde.", v: "Agujero en el casco; agua entra; el barco con carita preocupada baja. Mood noche."}
+    - {b: dato_extra, n: "Dato curioso: un barco flota más alto en el mar que en un río, porque el agua salada pesa más y empuja más.", v: "Mismo barco en dos aguas: en el río va más hundido, en el mar más alto; marcas en el casco."}
+    - {b: dato_extra, n: "Por eso los barcos llevan pintadas unas líneas que marcan hasta dónde pueden hundirse en cada tipo de agua.", v: "Acercamiento a las líneas de carga pintadas en el casco brillando."}
+    - {b: cierre, cta: compartir, n: "Ahora ya sabes el truco. Mándaselo a quien le teme a los barcos.", v: "Persona nerviosa en el muelle recibe el video y sonríe; ícono de compartir."}
+    - {b: cierre, n: "Así que un barco de acero flota porque, en el fondo, es una enorme burbuja de aire.", v: "Regreso al barco con carita del inicio; se vuelve una burbuja brillante y guiña."}
+
+- id: como-funciona-una-cerradura
+  topic: "Cómo funciona una cerradura"
+  category: "hogar"
+  hook: "Tu llave es un código secreto tallado en metal."
+  title: "El código secreto de tu llave 🔑"
+  summary: "Dentro de la cerradura hay pares de pernos con resortes. Los picos de tu llave los suben a la altura exacta para que el cilindro pueda girar. Una llave distinta deja alguno trabado."
+  question: "¿Alguna vez te quedaste afuera de tu casa?"
+  pinned: "Hace unos cuatro mil años, en Egipto, ya usaban cerraduras de madera con el mismo principio 🏺"
+  hashtags: ["#hogar", "#ingenio"]
+  guardar_para: "cuando se atore tu cerradura"
+  justificacion: "Necesita mostrar los pernos, la línea de corte y qué pasa con la llave incorrecta, más el dato egipcio; unos cien segundos con capítulos."
+  segments:
+    - {b: gancho, n: "Tu llave es un código secreto tallado en metal. Y la cerradura lo lee en un instante.", v: "Llave con carita; sus picos brillan como un código de barras. Mood magia."}
+    - {b: promesa, n: "Vamos a abrir una cerradura por dentro para ver cómo reconoce tu llave y no otra.", v: "Cerradura con carita se vuelve transparente."}
+    - {b: beat1, ch: "Los pernos", n: "Dentro hay un cilindro que debe girar para abrir. Pero unos pernitos de metal lo mantienen trabado.", v: "Corte: cilindro con carita atrapado por cinco columnitas que cruzan el borde."}
+    - {b: beat1, n: "Cada columna tiene dos pernos, uno encima del otro, y un resorte que los empuja hacia abajo.", v: "Pares de pernos de colores distintos con resortes saltarines encima."}
+    - {b: beat1, cta: guardar, n: "Sin llave, los pernos de arriba cruzan el borde y bloquean el giro. Guarda este video para cuando se atore.", v: "Pernos superiores atravesando la frontera entre cilindro y carcasa; candadito rojo; ícono de guardar."}
+    - {b: beat2, ch: "La llave correcta", n: "Al meter tu llave, cada pico empuja un par de pernos hacia arriba a una altura distinta.", v: "La llave entra deslizándose; los pernos suben y bajan como teclas de piano."}
+    - {b: beat2, n: "Con la llave correcta, la unión entre cada par queda justo en el borde del cilindro, todas en línea.", v: "Línea brillante de corte; todas las uniones se alinean exactamente en ella con destello."}
+    - {b: beat2, cta: comentar, n: "Ya nada estorba, y el cilindro gira con la llave. ¿Alguna vez te quedaste afuera de tu casa?", v: "Cilindro gira suave; cerrojo se abre con confeti; signo de pregunta. Mood sol."}
+    - {b: beat3, n: "Con otra llave, aunque sea casi igual, basta un perno mal alineado para que todo siga trabado.", v: "Llave impostora con bigote entra; un perno queda chueco y brilla rojo; cilindro no gira."}
+    - {b: beat3, n: "Con cinco o seis pernos y varias alturas posibles, hay miles de combinaciones distintas.", v: "Combinaciones de picos volando como cartas; contador que sube."}
+    - {b: dato_extra, n: "Dato curioso: hace unos cuatro mil años, en Egipto, ya usaban cerraduras con este mismo principio, pero de madera.", v: "Puerta egipcia con cerrojo de madera gigante y llave de madera con carita. Mood calor."}
+    - {b: dato_extra, n: "La versión pequeña de metal que usas hoy la perfeccionó Linus Yale, en Estados Unidos, en el siglo diecinueve.", v: "Taller antiguo; la cerradura de madera se encoge y se vuelve de metal brillante."}
+    - {b: cierre, cta: seguir, n: "Un invento milenario que sigue en tu puerta. Síguenos: mañana, qué es la inflación.", v: "Monedas con caritas encogiéndose; ícono de seguir."}
+    - {b: cierre, n: "Así que cada vez que abres tu puerta, tu llave está diciendo su código secreto en metal.", v: "Regreso a la llave con carita del inicio; picos brillando; guiño."}
+
+- id: como-funciona-la-inflacion
+  topic: "Cómo funciona la inflación"
+  category: "dinero"
+  hook: "Tu dinero se encoge aunque no lo gastes."
+  title: "Por qué tu dinero alcanza cada vez menos 💸"
+  summary: "La inflación es la subida general de los precios. Pasa cuando hay más dinero persiguiendo los mismos productos o cuando producir cuesta más. El banco central sube las tasas para frenarla."
+  question: "¿Qué producto has visto subir más este año?"
+  pinned: "En Hungría, en 1946, los precios llegaron a duplicarse cada quince horas 😱"
+  hashtags: ["#finanzaspersonales", "#economia"]
+  guardar_para: "entender las noticias de economía"
+  justificacion: "Necesita definir la inflación, dar sus dos causas, explicar cómo se frena y el dato de Hungría; con capítulos ronda los dos minutos."
+  segments:
+    - {b: gancho, n: "Tu dinero se puede encoger aunque no lo saques de la cartera. Se llama inflación.", v: "Billete con carita en una cartera se va encogiendo poco a poco. Mood frío."}
+    - {b: promesa, n: "Te explico de dónde sale, por qué preocupa tanto y qué se hace para frenarla.", v: "Gráfica de precios subiendo con un freno con carita al lado."}
+    - {b: beat1, ch: "Qué es", n: "La inflación es cuando casi todos los precios suben al mismo tiempo, no solo el de un producto.", v: "Carrito de súper: tortillas, pan, gasolina, cada uno con flechita hacia arriba."}
+    - {b: beat1, n: "Con el mismo billete, compras menos cosas que el año pasado. Tu dinero perdió poder de compra.", v: "Billete compra cinco manzanas; un año después solo cuatro; la quinta se despide."}
+    - {b: beat1, cta: guardar, n: "Por eso el ahorro bajo el colchón pierde valor. Guarda este video para entender las noticias.", v: "Colchón con billetes que se desinflan; ícono de guardar."}
+    - {b: beat2, ch: "De dónde sale", n: "Una causa: hay más dinero circulando, pero la misma cantidad de productos para comprar.", v: "Muchas manos con billetes y un solo pastel en la mesa; precio subiendo. Mood calor."}
+    - {b: beat2, n: "Como todos quieren comprar, los vendedores pueden subir los precios y aun así se lo llevan.", v: "Subasta: el pastel con carita orgullosa; las pujas suben."}
+    - {b: beat2, cta: comentar, n: "Otra causa: producir se vuelve más caro, por ejemplo cuando sube la gasolina. ¿Qué producto has visto subir más?", v: "Camión con carita cargando gasolina más cara; costos que se suman a cada producto; signo de pregunta."}
+    - {b: beat3, ch: "Cómo se frena", n: "Para frenarla, el banco central sube la tasa de interés, y pedir prestado se vuelve más caro.", v: "Edificio del banco central con carita sube una palanca; candado en los préstamos."}
+    - {b: beat3, n: "Con menos préstamos, la gente y las empresas gastan menos, y los precios dejan de correr tan rápido.", v: "Gráfica de precios se calma y baja la pendiente. Mood sol."}
+    - {b: beat3, n: "La meta no es cero. En México, el Banco de México busca una inflación de alrededor de tres por ciento al año.", v: "Diana con carita; dardo cerca del centro marcado como tres."}
+    - {b: dato_extra, n: "Dato extremo: en Hungría, en mil novecientos cuarenta y seis, los precios llegaron a duplicarse cada quince horas.", v: "Montaña de billetes con muchísimos ceros; reloj girando a toda velocidad. Mood noche."}
+    - {b: cierre, cta: compartir, n: "Entenderla te ayuda a cuidar tu dinero. Mándaselo a quien todavía ahorra bajo el colchón.", v: "Abuelito con colchón recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que tu dinero no desaparece: simplemente cada año compra un poquito menos.", v: "Regreso al billete con carita del inicio encogiéndose; guiño."}
+
+- id: como-funciona-la-levadura
+  topic: "Cómo funciona la levadura"
+  category: "cocina"
+  hook: "Tu pan está esponjoso gracias a millones de seres vivos."
+  title: "Seres vivos inflan tu pan 🍞"
+  summary: "La levadura es un hongo microscópico. Come los azúcares de la harina y suelta gas, que queda atrapado en la red elástica del gluten y hace crecer la masa."
+  question: "¿Cuál es tu pan favorito?"
+  pinned: "Un gramo de levadura tiene miles de millones de células vivas 🤯"
+  hashtags: ["#pan", "#cienciaencasa"]
+  guardar_para: "cuando hagas pan en casa"
+  justificacion: "Cubre qué es la levadura, la fermentación, el gluten y el horno; con dos capítulos cabe en unos cien segundos."
+  segments:
+    - {b: gancho, n: "Tu pan está esponjoso gracias a millones de seres vivos que comieron y soltaron gas.", v: "Pan con carita esponjosa; diminutas bolitas con carita saliendo de sus huecos. Mood calor."}
+    - {b: promesa, n: "Te presento a la levadura, el ingrediente vivo que come, respira y trabaja dentro de la masa.", v: "Célula de levadura con carita saluda; brillos."}
+    - {b: beat1, ch: "Un hongo hambriento", n: "La levadura es un hongo microscópico. En el sobre está dormida, pero con agua tibia despierta.", v: "Sobre con bolitas dormidas; cae agua tibia y abren los ojos."}
+    - {b: beat1, cta: guardar, n: "Si el agua está muy caliente, la matas. Guarda este video para cuando hagas pan.", v: "Termómetro: zona tibia verde, zona muy caliente roja con levadura desmayada; ícono de guardar."}
+    - {b: beat1, n: "Ya despierta, come los azúcares que salen del almidón de la harina.", v: "Levaduras con carita masticando cubitos de azúcar."}
+    - {b: beat2, n: "Al comer, suelta dos cosas: un gas, el dióxido de carbono, y un poquito de alcohol.", v: "Levadura eructa burbujitas de gas y una gotita; burbujas con caritas. Mood energía."}
+    - {b: beat2, ch: "Globos de gluten", n: "Al amasar, las proteínas de la harina forman el gluten, una red elástica como chicle.", v: "Manos amasando; hilos elásticos se entrelazan formando una red brillante."}
+    - {b: beat2, cta: comentar, n: "El gas queda atrapado en esa red y la infla como miles de globitos. ¿Cuál es tu pan favorito?", v: "Burbujas inflando la red; masa crece en el tazón; signo de pregunta."}
+    - {b: beat3, n: "En el horno, el gas se expande con el calor y la masa sube todavía más.", v: "Masa en el horno sube de golpe; ondas de calor. Mood calor."}
+    - {b: beat3, n: "Con el calor, la levadura muere, el alcohol se evapora y la red se endurece, dejando los huecos fijos.", v: "Levaduras saludan y desaparecen; vapor sale; corte de pan con agujeros congelados."}
+    - {b: dato_extra, n: "Dato curioso: en un solo gramo de levadura hay miles de millones de células vivas.", v: "Gramo de levadura en una balanza; zoom muestra multitud de caritas. Mood magia."}
+    - {b: cierre, cta: compartir, n: "Ya conoces al chef secreto. Mándaselo a quien hornea los domingos.", v: "Panadero con carita recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que cada hueco de tu pan es un globito inflado por millones de seres vivos.", v: "Regreso al pan con carita del inicio; huequitos brillando; guiño."}
+
+- id: como-funciona-el-internet-bajo-el-mar
+  topic: "Cómo funciona el internet bajo el mar"
+  category: "tecnología"
+  hook: "Tu internet viaja por el fondo del mar."
+  title: "Tu internet viaja bajo el mar 🌊🌐"
+  summary: "Casi todo el tráfico de internet entre continentes viaja por cables de fibra óptica tendidos en el fondo del océano. La información va como pulsos de luz."
+  question: "¿Creías que el internet venía de satélites?"
+  pinned: "El primer cable transatlántico (1858) duró unas tres semanas y un mensaje tardó horas en llegar 🐢"
+  hashtags: ["#internet", "#tecnologia"]
+  guardar_para: "presumirlo en tu próxima plática"
+  justificacion: "Explica el recorrido, la fibra, los repetidores y el dato histórico; necesita capítulos y unos dos minutos."
+  segments:
+    - {b: gancho, n: "Cuando ves un video de otro continente, casi seguro viajó por el fondo del mar.", v: "Celular con carita; el video baja por un cable hasta el fondo del océano oscuro. Mood frío."}
+    - {b: promesa, n: "Vamos a seguir ese viaje por cables que cruzan océanos enteros, a miles de metros de profundidad.", v: "Mapa del mundo con líneas brillantes cruzando los océanos."}
+    - {b: beat1, ch: "El viaje", n: "Mucha gente cree que el internet viene de satélites. Pero casi todo el tráfico entre continentes va por cables submarinos.", v: "Satélite con carita encogiéndose de hombros; cables brillando en el lecho marino."}
+    - {b: beat1, n: "Hay cientos de esos cables, tendidos por barcos especiales que los van soltando poco a poco.", v: "Barco con carita soltando cable desde un carrete gigante; el cable baja ondulando."}
+    - {b: beat1, cta: guardar, n: "En lo profundo, son apenas del grosor de una manguera. Guarda este video para presumirlo.", v: "Corte de un cable del grosor de una manguera; pez con carita sorprendido; ícono de guardar."}
+    - {b: beat2, ch: "Luz en el fondo", n: "Por dentro llevan fibras de vidrio, más delgadas que un cabello, protegidas por capas de metal y plástico.", v: "Corte del cable por capas; en el centro hilos de vidrio brillantes."}
+    - {b: beat2, n: "Tu información viaja por ellas como pulsos de luz: encendido es uno, apagado es cero.", v: "Pulsos de luz con caritas corriendo por la fibra, prendiendo y apagando. Mood energía."}
+    - {b: beat2, cta: comentar, n: "La luz cruza un océano en una fracción de segundo. ¿Creías que el internet venía de satélites?", v: "Pulso de luz cruzando el Atlántico en un destello; signo de pregunta."}
+    - {b: beat3, n: "Pero la luz se debilita en el camino. Por eso, cada tantos kilómetros, hay repetidores que la vuelven a amplificar.", v: "Pulso se apaga poco a poco; caja repetidora con carita lo recarga y sale brillante."}
+    - {b: beat3, n: "Al llegar a la costa, el cable sale del mar y se conecta a la red de cada país, hasta tu casa.", v: "Cable sale a una playa, entra a un edificio y se ramifica hasta un router con carita."}
+    - {b: dato_extra, ch: "El primer cable", n: "Dato histórico: el primer cable entre Europa y América se tendió en mil ochocientos cincuenta y ocho, para el telégrafo.", v: "Barco antiguo con carita; cable grueso de cobre; mapa en sepia. Mood magia."}
+    - {b: dato_extra, n: "Un mensaje de unas cien palabras tardó horas en llegar, y el cable dejó de funcionar a las pocas semanas.", v: "Tortuga con carita cargando una carta por el cable; el cable echa chispas y se apaga."}
+    - {b: cierre, cta: seguir, n: "Hoy cruza todo al instante. Síguenos: mañana, por qué nos da hipo.", v: "Persona con carita haciendo hipo con burbujita; ícono de seguir."}
+    - {b: cierre, n: "Así que el video que estás viendo pudo haber viajado como luz por el fondo del mar.", v: "Regreso al celular con carita del inicio; cable brillando abajo; guiño."}
+
+- id: por-que-nos-da-hipo
+  topic: "Por qué nos da hipo"
+  category: "salud"
+  hook: "El hipo es un espasmo de un músculo que no controlas."
+  title: "Qué es el hipo, de verdad 😮‍💨"
+  summary: "El hipo es un espasmo del diafragma que te hace jalar aire de golpe. Justo después, la glotis se cierra y suena el hic. Nadie sabe con certeza para qué sirve."
+  question: "¿Cuál es tu remedio para el hipo?"
+  pinned: "Un señor tuvo hipo durante 68 años seguidos 😳"
+  hashtags: ["#salud", "#cuerpohumano"]
+  guardar_para: "tu próximo ataque de hipo"
+  justificacion: "Un mecanismo corto, sus causas y el misterio de para qué sirve; cabe en unos ochenta segundos con dos capítulos."
+  segments:
+    - {b: gancho, n: "Ese hic que no puedes controlar es un músculo enorme dentro de ti teniendo un pequeño espasmo.", v: "Persona con carita brinca con un hic; una burbujita sale de su boca. Mood energía."}
+    - {b: promesa, n: "Te explico qué pasa en tu cuerpo, y el misterio que nadie ha resuelto.", v: "Signo de pregunta gigante con carita detrás del pecho."}
+    - {b: beat1, ch: "El espasmo", n: "Bajo tus pulmones está el diafragma, un músculo en forma de cúpula que te ayuda a respirar.", v: "Corte del pecho: pulmones con caritas y una cúpula rosa debajo, subiendo y bajando."}
+    - {b: beat1, cta: guardar, n: "A veces se contrae de golpe, sin avisar, y jalas aire de repente. Guarda este video para tu próximo hipo.", v: "La cúpula da un tirón brusco; flecha de aire entrando; ícono de guardar."}
+    - {b: beat1, n: "Una fracción de segundo después, la entrada de tu tráquea se cierra de golpe. Ese cierre es el sonido del hic.", v: "Compuerta en la garganta se cierra con un clac; onda de sonido sale."}
+    - {b: beat2, n: "Puede dispararlo comer muy rápido, tomar refresco, reír mucho o un cambio brusco de temperatura.", v: "Íconos en cascada: plato rápido, refresco con burbujas, risa, helado."}
+    - {b: beat2, cta: comentar, n: "Aguantar la respiración ayuda a algunas personas, pero ningún remedio está comprobado del todo. ¿Cuál es el tuyo?", v: "Persona inflando cachetes; vaso de agua al revés; cucharada de azúcar; signo de pregunta."}
+    - {b: dato_extra, ch: "El misterio", n: "Lo curioso es que nadie sabe para qué sirve. Hasta los bebés tienen hipo antes de nacer.", v: "Bebé con carita en el vientre haciendo hic con burbujita. Mood magia."}
+    - {b: dato_extra, n: "Y un señor en Estados Unidos tuvo hipo durante sesenta y ocho años seguidos.", v: "Calendario volando por décadas; señor con carita resignada haciendo hic."}
+    - {b: cierre, cta: seguir, n: "Por suerte, casi siempre se va solo. Síguenos: mañana, cómo nace un volcán.", v: "Volcán con carita humeando; ícono de seguir."}
+    - {b: cierre, n: "Así que la próxima vez que te dé hipo, ya sabes: es tu diafragma con un pequeño espasmo.", v: "Regreso a la persona del inicio; la cúpula da un brinquito; guiño."}
+
+- id: como-funcionan-los-volcanes
+  topic: "Cómo funcionan los volcanes"
+  category: "naturaleza"
+  hook: "Un volcán es como un refresco agitado gigante."
+  title: "Un volcán es un refresco agitado 🌋"
+  summary: "El magma sube porque es más ligero que la roca que lo rodea. Lleva gases disueltos que, al bajar la presión, forman burbujas y lo empujan hacia afuera, como un refresco agitado."
+  question: "¿Has visto un volcán de cerca?"
+  pinned: "El Paricutín nació en 1943 en medio de un campo de maíz en Michoacán 🌽🌋"
+  hashtags: ["#volcanes", "#mexico"]
+  guardar_para: "tu próxima visita a un volcán"
+  justificacion: "Explica el magma, los gases, los tipos de erupción y el Paricutín; con capítulos ronda los dos minutos."
+  segments:
+    - {b: gancho, n: "Un volcán funciona como un refresco agitado. La diferencia es que el líquido está a mil grados.", v: "Botella de refresco con carita agitada junto a un volcán con carita; ambos burbujeando. Mood calor."}
+    - {b: promesa, n: "Vamos a bajar al fondo de la Tierra para ver de dónde sale el magma y por qué explota.", v: "Cámara baja por un corte de la Tierra: corteza, manto brillante."}
+    - {b: beat1, ch: "Roca derretida", n: "Varios kilómetros bajo tus pies, el calor y la presión derriten parte de la roca. Eso es el magma.", v: "Rocas con caritas sudando se derriten en gotas naranjas."}
+    - {b: beat1, n: "El magma es más ligero que la roca sólida que lo rodea, así que sube poco a poco, como una burbuja de aceite en el agua.", v: "Gota de magma con carita sube como globo entre rocas oscuras."}
+    - {b: beat1, cta: guardar, n: "Se acumula en una cámara bajo el volcán. Guarda este video para tu próxima visita.", v: "Cámara de magma brillante debajo del cono; ícono de guardar."}
+    - {b: beat2, ch: "El refresco agitado", n: "El magma lleva gases disueltos, como el gas de un refresco cerrado, sobre todo vapor de agua.", v: "Magma con burbujitas escondidas; refresco cerrado al lado. Mood energía."}
+    - {b: beat2, n: "Al subir, la presión baja, y esos gases forman burbujas que crecen y empujan todo hacia arriba.", v: "Burbujas creciendo en el magma; la presión empuja la tapa del cráter."}
+    - {b: beat2, cta: comentar, n: "Cuando la presión vence a la roca, el volcán erupciona. ¿Has visto un volcán de cerca?", v: "Erupción con chispas y ceniza; signo de pregunta."}
+    - {b: beat3, n: "Si el magma es espeso, como el del Popocatépetl, los gases quedan atrapados y salen con explosiones y ceniza.", v: "Volcán con carita lanzando columnas de ceniza; magma pegajoso como miel. Mood noche."}
+    - {b: beat3, n: "Si es muy líquido, como en Hawái, los gases escapan fácil y la lava corre como ríos.", v: "Volcán tranquilo con ríos de lava naranja bajando; carita relajada."}
+    - {b: dato_extra, ch: "Un volcán bebé", n: "Dato increíble: en mil novecientos cuarenta y tres, un volcán nació en medio de un campo de maíz en Michoacán.", v: "Campo de maíz con carita; del suelo sale humo y crece un cono. Mood magia."}
+    - {b: dato_extra, n: "Es el Paricutín. En un año ya medía más de trescientos metros, y lo vieron crecer en vivo.", v: "Cono creciendo en cámara rápida; campesino con carita sorprendida mirando."}
+    - {b: cierre, cta: compartir, n: "Un volcán que nació ante testigos. Mándaselo a quien vive cerca de uno.", v: "Casa con volcán al fondo recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que cada erupción es eso: un refresco agitado gigante, con roca derretida en vez de refresco.", v: "Regreso a la botella y el volcán con caritas del inicio; ambos destapan a la vez; guiño."}

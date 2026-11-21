@@ -1,0 +1,270 @@
+# Lote 1 (temas 1-10 de 50). Formato: ver scripts/guiones_lote.py
+- id: como-funciona-el-aire-acondicionado
+  topic: "Cómo funciona el aire acondicionado"
+  category: "hogar"
+  hook: "Tu aire acondicionado no fabrica frío."
+  title: "Tu aire acondicionado no fabrica frío ❄️"
+  summary: "Un gas refrigerante se evapora adentro robándole calor al aire, y afuera el compresor lo aprieta para soltar ese calor a la calle. Es una bomba de calor."
+  question: "¿Alguna vez sentiste el aire caliente que sale de la unidad de afuera?"
+  pinned: "El primer aire acondicionado (1902) no era para personas, era para una imprenta 🖨️ ¿Lo sabías?"
+  hashtags: ["#aireacondicionado", "#hogar"]
+  guardar_para: "tu próximo mantenimiento"
+  justificacion: "Es un ciclo de cuatro pasos (evaporar, comprimir, condensar, expandir) más el dato de la humedad; necesita unos dos minutos."
+  segments:
+    - {b: gancho, n: "Tu aire acondicionado no fabrica frío. Lo que hace es sacar el calor de tu casa y tirarlo afuera.", v: "Aparato de aire con carita guiña el ojo; flechas rojas de calor salen de una casita hacia la calle. Mood frío."}
+    - {b: promesa, n: "En dos minutos vas a entender el viaje de un gas que se enfría y se calienta sin parar.", v: "Gotita de refrigerante con carita sube a un tobogán de tubos; ruta brillante dibujándose."}
+    - {b: beat1, ch: "El gas viajero", n: "Todo depende de un líquido especial, el refrigerante, que corre por tubos entre la unidad de adentro y la de afuera.", v: "Corte de la casa: unidad interior y exterior unidas por dos tubos; la gotita viaja por ellos."}
+    - {b: beat1, n: "Adentro pasa por un serpentín muy frío. Ahí hierve a baja temperatura y se vuelve gas, robándole calor al aire.", v: "Serpentín cian brillante; la gotita burbujea y se vuelve nubecita; chispas rojas del aire entran en ella. Acercar cámara."}
+    - {b: beat1, n: "Un ventilador sopla el aire de tu cuarto sobre ese serpentín, y el aire sale fresco del otro lado.", v: "Ventilador girando; partículas de aire entran rojas y salen azules; persona con carita sonriente."}
+    - {b: beat2, cta: guardar, n: "Si el filtro está sucio, pasa menos aire y enfría peor. Guarda este video para tu próximo mantenimiento.", v: "Filtro lleno de pelusitas con caritas tosiendo; se limpia con un destello y el flujo crece."}
+    - {b: beat2, ch: "El corazón de afuera", n: "Ahora el gas, cargado de calor, viaja afuera hasta el compresor, el corazón del aparato.", v: "La nubecita viaja por el tubo hacia la unidad exterior; compresor con carita seria latiendo. Mood energía."}
+    - {b: beat2, n: "El compresor lo aprieta con fuerza. Al comprimirlo, el gas se calienta todavía más, mucho más que el aire de la calle.", v: "Pistón aplasta la nubecita (squash); se pone roja y brillante; termómetro sube. Mood calor."}
+    - {b: beat3, n: "En la unidad de afuera, otro ventilador le quita ese calor. El gas se enfría y vuelve a ser líquido.", v: "Ventilador exterior soplando ondas rojas hacia la calle; la nubecita se condensa en gotita."}
+    - {b: beat3, cta: comentar, n: "Por eso de esa caja sale aire caliente. ¿Alguna vez sentiste ese aire caliente?", v: "Persona con carita sorprendida junto a la unidad exterior, pelo volando por el aire caliente."}
+    - {b: beat4, n: "Por último, el líquido pasa por una válvula muy estrecha. Al salir, su presión cae de golpe y se enfría muchísimo.", v: "Gotita se aprieta por un embudo diminuto y sale congelada con escarcha; destello azul. Mood frío."}
+    - {b: beat4, n: "Y vuelve adentro, listo para robar más calor. El ciclo se repite una y otra vez, sin gastar el refrigerante.", v: "Circuito completo animado con flow_dots: azul adentro, rojo afuera, girando en bucle."}
+    - {b: dato_extra, ch: "El dato oculto", n: "Dato que casi nadie conoce: el aire acondicionado no se inventó para la gente, sino para una imprenta.", v: "Imprenta antigua con carita sudando; hojas onduladas por la humedad. Mood magia."}
+    - {b: dato_extra, n: "En mil novecientos dos, Willis Carrier lo diseñó para controlar la humedad, porque el papel se deformaba y la tinta se corría.", v: "Pergamino con el año escrito en letras; máquina de Carrier secando el aire y hojas que se alisan."}
+    - {b: cierre, n: "Por eso también seca el aire: el vapor se condensa en el serpentín frío y escurre por esa manguerita que gotea.", v: "Gotas formándose en el serpentín y saliendo por una manguera; charquito con carita."}
+    - {b: cierre, cta: seguir, n: "Ahora ya sabes de dónde sale. Síguenos: mañana, por qué el cielo es azul.", v: "Cielo azul con un sol con carita asomándose; ícono de seguir."}
+    - {b: cierre, n: "Así que tu aire no fabrica frío: solo saca el calor de tu casa y lo tira afuera.", v: "Regreso al aparato con carita del inicio, guiña el ojo; flechas de calor saliendo de la casita."}
+
+- id: por-que-el-cielo-es-azul
+  topic: "Por qué el cielo es azul"
+  category: "naturaleza"
+  hook: "La luz del sol es blanca, pero el cielo es azul."
+  title: "¿Por qué el cielo es azul y no blanco? 🌤️"
+  summary: "Las moléculas del aire desvían mucho más la luz azul que la roja. Esa luz azul rebota por todo el cielo y nos llega desde todas direcciones."
+  question: "¿Qué te gusta más, el cielo de mediodía o el atardecer?"
+  pinned: "En Marte pasa al revés: el cielo es rojizo de día y los atardeceres son azules 🔴🔵"
+  hashtags: ["#cielo", "#fisica"]
+  guardar_para: "explicárselo a un niño"
+  justificacion: "Una idea central (dispersión) con dos consecuencias (atardecer y Marte); cabe en poco más de un minuto."
+  segments:
+    - {b: gancho, n: "La luz del sol es blanca. Entonces, ¿por qué el cielo se ve azul y no blanco?", v: "Sol con carita lanza un rayo blanco; el cielo se pinta de azul; signo de pregunta rebotando. Mood sol."}
+    - {b: promesa, n: "La culpa la tienen moléculas diminutas del aire que juegan con la luz.", v: "Zoom al aire: moléculas de nitrógeno y oxígeno con caritas traviesas flotando."}
+    - {b: beat1, ch: "La luz escondida", n: "La luz blanca es una mezcla de todos los colores. Cada color viaja como una onda de distinto tamaño.", v: "Rayo blanco pasa por un prisma y se abre en arcoíris; ondas largas rojas y cortas azules."}
+    - {b: beat1, cta: guardar, n: "El rojo tiene ondas largas y el azul, cortas. Guarda este video para explicárselo a un niño.", v: "Onda roja estirada y perezosa junto a una onda azul apretada y nerviosa."}
+    - {b: beat2, n: "Cuando la luz choca con las moléculas del aire, las ondas cortas rebotan mucho más que las largas.", v: "Rayos azules rebotan como pelotitas de pinball entre moléculas; los rojos siguen derecho."}
+    - {b: beat2, n: "Esa luz azul se esparce por todo el cielo y te llega desde todas direcciones.", v: "Persona con carita mirando arriba; flechas azules llegan desde todo el cielo. Mood frío."}
+    - {b: beat3, cta: comentar, ch: "El cielo de fuego", n: "Al atardecer, la luz cruza mucho más aire y el azul se pierde por el camino. ¿Tú prefieres el atardecer?", v: "Sol bajo en el horizonte; los rayos azules se quedan atrás y llegan naranjas y rojos. Mood calor."}
+    - {b: beat3, n: "Solo sobreviven los rojos y naranjas, que pintan las nubes de colores.", v: "Nubes con caritas se tiñen de naranja y rosa; destellos."}
+    - {b: dato_extra, n: "Y en Marte pasa al revés: su polvo tiñe el cielo de rojizo y los atardeceres son azules.", v: "Planeta rojo con carita; cielo ocre y un atardecer azul. Mood magia."}
+    - {b: cierre, cta: compartir, n: "Ya tienes la respuesta. Mándaselo a quien siempre pregunta por qué.", v: "Niño con carita curiosa recibiendo un mensaje; ícono de compartir."}
+    - {b: cierre, n: "Así que el cielo no es azul: es luz blanca que rebota tanto, que solo vemos su parte azul.", v: "Regreso al sol con carita del inicio; el cielo azul brilla y el sol guiña."}
+
+- id: como-funciona-una-tarjeta-de-credito
+  topic: "Cómo funciona una tarjeta de crédito"
+  category: "dinero"
+  hook: "Tu tarjeta de crédito no es tu dinero."
+  title: "Lo que tu banco no te explica de tu tarjeta 💳"
+  summary: "Cada compra con tarjeta de crédito es un préstamo del banco. Si pagas el total antes de la fecha límite no pagas intereses; si pagas solo el mínimo, la deuda crece mes a mes."
+  question: "¿Tú pagas el total o el mínimo?"
+  pinned: "El pago mínimo está pensado para que la deuda dure años 😬 ¿Lo sabías?"
+  hashtags: ["#finanzaspersonales", "#tarjetadecredito"]
+  guardar_para: "tu próximo estado de cuenta"
+  justificacion: "Explica préstamo, corte, fecha límite, pago mínimo e interés; con menos tiempo quedaría incompleto y podría confundir."
+  segments:
+    - {b: gancho, n: "Tu tarjeta de crédito no es tu dinero. Cada vez que la pasas, el banco te presta.", v: "Tarjeta con carita guiña; detrás un banco con carita entrega monedas con una cuerdita atada."}
+    - {b: promesa, n: "Te explico qué pasa en cada compra, y el truco para usarla sin pagar ni un peso de intereses.", v: "Lupa sobre la tarjeta; monedas brillando. Mood energía."}
+    - {b: beat1, ch: "La compra", n: "Al pagar, la terminal le pregunta al banco si tienes crédito disponible. La respuesta llega en un par de segundos.", v: "Terminal con carita manda un rayo al banco; regresa una palomita verde."}
+    - {b: beat1, n: "El banco le paga a la tienda por ti, y anota que ahora tú le debes esa cantidad.", v: "Monedas viajan del banco a la tienda; una libreta anota la deuda junto a la tarjeta."}
+    - {b: beat1, n: "Tu límite de crédito es el máximo que el banco está dispuesto a prestarte al mismo tiempo.", v: "Barra de límite llenándose con cada compra; se pone ámbar al acercarse al tope."}
+    - {b: beat2, cta: guardar, ch: "Las dos fechas", n: "Hay dos fechas clave: la de corte y la límite de pago. Guarda este video para tu estado de cuenta.", v: "Calendario con dos días brillando, uno violeta y otro coral; ícono de guardar."}
+    - {b: beat2, n: "En la fecha de corte, el banco suma todo lo que compraste en el mes y te manda tu estado de cuenta.", v: "Compras con caritas entran a un sobre que se cierra con un sello."}
+    - {b: beat2, n: "Luego tienes unos días hasta la fecha límite. Si pagas el total antes de ese día, no pagas intereses.", v: "Reloj de arena; persona con carita feliz paga y aparece un escudo dorado. Mood sol."}
+    - {b: beat3, ch: "La trampa del mínimo", n: "Pero el estado de cuenta también te muestra un pago mínimo, una cantidad mucho más pequeña y tentadora.", v: "Número pequeño con carita inocente y brillos; debajo, sombra de un monstruo."}
+    - {b: beat3, cta: comentar, n: "Si pagas solo el mínimo, lo que falta se vuelve deuda con intereses. ¿Tú pagas el total o el mínimo?", v: "Bola de nieve con carita rodando y creciendo cuesta abajo. Mood calor."}
+    - {b: beat3, n: "Y esos intereses también se suman a la deuda, que sigue creciendo mes tras mes.", v: "Pila de monedas que se multiplica; dos botones: total y mínimo, el mínimo tiembla."}
+    - {b: dato_extra, n: "Dato que pocos saben: el pago mínimo está calculado para que una deuda grande pueda durar años.", v: "Calendarios volando uno tras otro; tortuga con carita cargando la deuda."}
+    - {b: dato_extra, n: "En cambio, si pagas el total cada mes, el banco te prestó gratis durante varias semanas.", v: "Tarjeta con capa de superhéroe; banco con carita sorprendida."}
+    - {b: cierre, cta: compartir, n: "Usa esto a tu favor. Mándaselo a quien solo paga el mínimo.", v: "Celular enviando el video a un amigo con carita preocupada; ícono de compartir."}
+    - {b: cierre, n: "Recuerda: tu tarjeta no es tu dinero. Es un préstamo que, bien usado, sale gratis.", v: "Regreso a la tarjeta con carita del inicio; la cuerdita se corta y queda libre con confeti."}
+
+- id: por-que-la-cebolla-te-hace-llorar
+  topic: "Por qué la cebolla te hace llorar"
+  category: "cocina"
+  hook: "La cebolla te hace llorar como defensa."
+  title: "Por qué la cebolla te hace llorar 🧅😭"
+  summary: "Al cortarla, rompes sus células y se mezclan dos sustancias que estaban separadas. Forman un gas que irrita tus ojos y ellos se defienden con lágrimas."
+  question: "¿Cuál es tu truco para no llorar?"
+  pinned: "Truco que sí funciona: cebolla fría y cuchillo bien afilado 🔪❄️"
+  hashtags: ["#cebolla", "#cienciaencasa"]
+  guardar_para: "tu próxima salsa"
+  justificacion: "Una reacción química y dos trucos prácticos; cabe en poco más de un minuto sin relleno."
+  segments:
+    - {b: gancho, n: "La cebolla no te hace llorar por accidente. Es su arma secreta para que no te la comas.", v: "Cebolla con carita traviesa se cruza de brazos; persona con lágrimas. Mood naturaleza."}
+    - {b: promesa, n: "Te enseño qué pasa cuando la cortas, y cómo ganarle la batalla.", v: "Cuchillo con carita entra rebotando junto a la cebolla; chispas."}
+    - {b: beat1, ch: "El arma secreta", n: "Dentro de sus células hay unas moléculas con azufre, y en otro compartimento, una enzima que las transforma.", v: "Zoom a células: dos cajitas separadas, una con bolitas amarillas de azufre y otra con una enzima con carita."}
+    - {b: beat1, cta: guardar, n: "Mientras la cebolla está entera, nunca se tocan. Guarda este video para tu próxima salsa.", v: "Pared entre las dos cajitas; ícono de guardar."}
+    - {b: beat2, n: "Al cortarla, rompes las paredes, se mezclan y en segundos se forma un gas muy volátil.", v: "Cuchillo rompe las paredes; bolitas y enzima chocan y sale una nubecita verde con carita traviesa. Mood energía."}
+    - {b: beat2, n: "Ese gas sube hasta tus ojos y activa los nervios que detectan irritación.", v: "Nubecita flota hacia un ojo gigante; el ojo pone cara de alarma; destello."}
+    - {b: beat3, cta: comentar, n: "Tus ojos responden con lágrimas para lavarlo. ¿Cuál es tu truco para no llorar?", v: "Ojo soltando chorritos de lágrimas que barren la nubecita; signo de pregunta."}
+    - {b: beat3, ch: "Cómo ganarle", n: "Lo que sí funciona: enfriar la cebolla antes, porque el frío frena la reacción y el gas sale más despacio.", v: "Cebolla en el refrigerador con bufanda y carita temblando; la nubecita se mueve lento. Mood frío."}
+    - {b: dato_extra, n: "Y usar un cuchillo bien afilado: rompe menos células, así que se forma menos gas.", v: "Cuchillo afilado brilla y corta limpio; casi no sale nube; cuchillo chato aplasta y sale una nube enorme."}
+    - {b: cierre, cta: compartir, n: "Ahora ya conoces su secreto. Mándaselo a quien siempre llora picando cebolla.", v: "Persona llorando recibe el video y sonríe; ícono de compartir."}
+    - {b: cierre, n: "Así que esas lágrimas no son de tristeza: son la defensa química de una cebolla muy lista.", v: "Regreso a la cebolla con carita del inicio, guiña el ojo; confeti."}
+
+- id: como-funciona-el-bluetooth
+  topic: "Cómo funciona el bluetooth"
+  category: "tecnología"
+  hook: "Tu bluetooth cambia de canal mil seiscientas veces por segundo."
+  title: "El truco que hace funcionar tu bluetooth 🎧"
+  summary: "El bluetooth manda datos con ondas de radio de corto alcance y salta entre decenas de canales muchísimas veces por segundo para no chocar con otras señales."
+  question: "¿Cuántos aparatos tienes conectados por bluetooth?"
+  pinned: "Se llama así por un rey vikingo del siglo X que unió a Dinamarca y Noruega 👑"
+  hashtags: ["#bluetooth", "#tecnologia"]
+  guardar_para: "cuando no se conecten tus audífonos"
+  justificacion: "Explica ondas, emparejamiento y salto de frecuencia, más el origen del nombre; necesita cerca de dos minutos."
+  segments:
+    - {b: gancho, n: "Tu bluetooth cambia de canal mil seiscientas veces por segundo. Y gracias a eso, tu música no se corta.", v: "Audífonos con carita brincando entre carriles de colores a toda velocidad. Mood energía."}
+    - {b: promesa, n: "Vamos a ver cómo viaja tu canción del celular al oído, sin un solo cable.", v: "Nota musical con carita sale del celular y vuela hacia un oído."}
+    - {b: beat1, ch: "Ondas invisibles", n: "El bluetooth usa ondas de radio, como el wifi, pero con muy poca potencia para gastar poca batería.", v: "Celular lanza ondas suaves cian; batería con carita tranquila."}
+    - {b: beat1, n: "Por eso su alcance normal es de unos diez metros. Más lejos, la señal se vuelve muy débil.", v: "Círculo de alcance alrededor del celular; persona con carita sale del círculo y la nota se desvanece."}
+    - {b: beat1, n: "Tu canción se convierte en unos y ceros, y esas ondas los llevan en paquetitos.", v: "Nota musical se rompe en cubitos de 1 y 0 que suben a las ondas como vagones."}
+    - {b: beat2, cta: guardar, ch: "El apretón de manos", n: "La primera vez, los aparatos se emparejan e intercambian una clave. Guarda este video para cuando no conecten.", v: "Celular y audífonos con caritas se dan la mano; aparece una llavecita dorada; ícono de guardar."}
+    - {b: beat2, n: "Con esa clave se reconocen solos la próxima vez, y cifran lo que se mandan para que nadie más lo lea.", v: "Candado brillante envuelve los paquetitos; un intruso con carita no puede abrirlos."}
+    - {b: beat2, n: "Si no conectan, olvidar el aparato y emparejarlo de nuevo crea una clave nueva y suele arreglarlo.", v: "Botón de olvidar; la llavecita se rompe y se forja una nueva con destello."}
+    - {b: beat3, ch: "El salto mágico", n: "Pero hay un problema: en tu casa, el wifi, el microondas y otros aparatos usan las mismas frecuencias.", v: "Autopista de ondas saturada: router, microondas y bocina con caritas empujándose. Mood calor."}
+    - {b: beat3, cta: comentar, n: "La solución: saltar entre decenas de canales, siguiendo un orden que solo esos dos aparatos conocen. ¿Cuántos aparatos conectas?", v: "Paquetito con carita brincando de carril en carril esquivando obstáculos; signo de pregunta."}
+    - {b: beat3, n: "Si un canal está ocupado, lo evitan y siguen saltando. Así casi nunca chocan con otras señales.", v: "Carril ocupado se pone rojo con X; los paquetitos lo saltan sin perder ritmo."}
+    - {b: dato_extra, n: "Dato curioso: se llama así por Harald Diente Azul, un rey vikingo que unió a pueblos de Dinamarca y Noruega.", v: "Rey vikingo con carita, barba y un diente azul brillante. Mood magia."}
+    - {b: dato_extra, n: "Su logo junta las dos runas de sus iniciales. La idea era unir aparatos, como él unió reinos.", v: "Dos runas se juntan y forman el logo; destello."}
+    - {b: cierre, cta: seguir, n: "Por eso funciona tan bien en todas partes. Síguenos: mañana, la cafeína en tu cerebro.", v: "Taza de café con carita despierta entrando; ícono de seguir."}
+    - {b: cierre, n: "Así que, mientras escuchas música, tu bluetooth está saltando de canal mil seiscientas veces por segundo.", v: "Regreso a los audífonos con carita del inicio brincando entre carriles; guiño."}
+
+- id: como-funciona-la-cafeina
+  topic: "Cómo funciona la cafeína"
+  category: "salud"
+  hook: "El café no te da energía."
+  title: "El café no te da energía (te engaña) ☕"
+  summary: "La cafeína se parece a la adenosina, la molécula que acumula tu cansancio. Ocupa sus receptores en el cerebro y bloquea la señal de sueño, pero no la borra."
+  question: "¿Cuántos cafés te tomas al día?"
+  pinned: "Por eso a veces te llega el \"bajón\" cuando se pasa el efecto 😴 ¿Te ha pasado?"
+  hashtags: ["#cafe", "#cerebro"]
+  guardar_para: "tu próxima desvelada"
+  justificacion: "Mecanismo de la adenosina, el efecto rebote y la vida media; cabe en un minuto y medio largo con capítulos."
+  segments:
+    - {b: gancho, n: "El café no te da energía. Lo que hace es engañar a tu cerebro para que no sienta el cansancio.", v: "Taza de café con carita pícara le tapa los ojos a un cerebro con carita. Mood energía."}
+    - {b: promesa, n: "Te muestro el truco molecular, y por qué después te llega ese bajón.", v: "Molécula de cafeína con capa de mago entra rebotando; brillos."}
+    - {b: beat1, ch: "La molécula del sueño", n: "Mientras estás despierto, tus neuronas trabajan y van dejando una molécula llamada adenosina.", v: "Neuronas con caritas trabajando; van soltando bolitas violetas que se acumulan."}
+    - {b: beat1, n: "La adenosina se pega a unos receptores, como llaves en cerraduras, y le dice al cerebro: ya es hora de descansar.", v: "Bolitas violetas entran en cerraduras sobre una neurona; la neurona bosteza. Mood noche."}
+    - {b: beat1, cta: guardar, n: "Entre más horas despierto, más adenosina y más sueño. Guarda este video para tu próxima desvelada.", v: "Medidor de sueño subiendo; ícono de guardar."}
+    - {b: beat2, ch: "El impostor", n: "La cafeína tiene una forma muy parecida a la adenosina, así que entra en esas mismas cerraduras.", v: "Cafeína con disfraz de bolita violeta se cuela en la cerradura; la adenosina real se queda afuera, confundida."}
+    - {b: beat2, n: "Pero no gira la llave. Solo la tapa, y el mensaje de cansancio ya no llega.", v: "Cerradura bloqueada con un candado de café; mensaje de sueño rebota y se cae."}
+    - {b: beat2, n: "Sin ese freno, tu cerebro se activa más, y hasta sube la adrenalina. Por eso te sientes alerta.", v: "Neurona con carita despierta y chispas; corazón latiendo un poco más rápido. Mood energía."}
+    - {b: beat3, cta: comentar, n: "Pero la adenosina sigue acumulándose afuera, esperando su turno. ¿Cuántos cafés te tomas al día?", v: "Fila de bolitas violetas impacientes golpeando el pie; signo de pregunta."}
+    - {b: beat3, n: "Cuando la cafeína se va, todas entran de golpe. Ese es el famoso bajón.", v: "La cafeína sale; una avalancha de bolitas violetas entra y la neurona cae dormida. Mood noche."}
+    - {b: dato_extra, ch: "El reloj del café", n: "Dato que casi nadie conoce: tu cuerpo tarda unas cinco horas en eliminar la mitad de la cafeína.", v: "Reloj con carita; taza que se vacía a la mitad poco a poco."}
+    - {b: dato_extra, n: "Así que un café a las seis de la tarde todavía está trabajando a las once de la noche.", v: "Persona en la cama con ojos abiertos; tacita con carita bailando en su cabeza."}
+    - {b: cierre, cta: compartir, n: "Ahora ya sabes de dónde viene el bajón. Mándaselo a quien vive a base de café.", v: "Amigo rodeado de tazas recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que el café no te da energía: solo le tapa los oídos a tu cansancio por un rato.", v: "Regreso a la taza con carita del inicio tapándole los ojos al cerebro; guiño."}
+
+- id: como-funciona-el-motor-de-un-auto
+  topic: "Cómo funciona el motor de un auto"
+  category: "transporte"
+  hook: "Tu auto se mueve con miles de explosiones por minuto."
+  title: "Miles de explosiones mueven tu auto 🚗💥"
+  summary: "En cada cilindro pasa un ciclo de cuatro tiempos (admisión, compresión, explosión y escape). Las explosiones empujan pistones que hacen girar el cigüeñal y las ruedas."
+  question: "¿Sabes cuántos cilindros tiene tu auto?"
+  pinned: "A dos mil revoluciones por minuto, un motor de cuatro cilindros hace unas cuatro mil explosiones por minuto 🔥"
+  hashtags: ["#autos", "#motor"]
+  guardar_para: "entender a tu mecánico"
+  justificacion: "Los cuatro tiempos son un paso cada uno, más el cigüeñal y la chispa; necesita un poco más de dos minutos."
+  segments:
+    - {b: gancho, n: "Tu auto se mueve gracias a miles de pequeñas explosiones por minuto, justo debajo del cofre.", v: "Auto con carita; bajo el cofre destellos naranjas rítmicos. Mood calor."}
+    - {b: promesa, n: "Vamos a meternos a un cilindro y ver los cuatro tiempos que convierten gasolina en movimiento.", v: "Cámara atraviesa el cofre hasta un cilindro transparente con un pistón con carita."}
+    - {b: beat1, ch: "Los cuatro tiempos", n: "Primer tiempo, admisión: el pistón baja y jala hacia adentro una mezcla de aire con gasolina muy fina.", v: "Pistón baja; válvula se abre y entra una nube de aire con gotitas doradas."}
+    - {b: beat1, n: "Segundo tiempo, compresión: la válvula se cierra y el pistón sube, apretando esa mezcla en un espacio diminuto.", v: "Pistón sube aplastando la nube (squash); la nube se pone nerviosa y brillante."}
+    - {b: beat1, cta: guardar, n: "Entre más se comprime, más fuerte será el empujón. Guarda este video para entender a tu mecánico.", v: "Medidor de presión subiendo; mecánico con carita asiente; ícono de guardar."}
+    - {b: beat2, n: "Tercer tiempo, explosión: la bujía lanza una chispa y la mezcla se quema de golpe.", v: "Bujía con carita lanza una chispa; explosión naranja con partículas de chispas. Acercar cámara. Mood calor."}
+    - {b: beat2, n: "Los gases calientes se expanden con muchísima fuerza y empujan el pistón hacia abajo.", v: "Pistón sale disparado hacia abajo; flechas de fuerza; jelly al llegar."}
+    - {b: beat2, n: "Cuarto tiempo, escape: el pistón sube otra vez y saca los gases quemados hacia el escape.", v: "Válvula de escape se abre; nubecitas grises con caritas salen hacia el tubo."}
+    - {b: beat3, ch: "De subir y bajar a girar", n: "Pero las ruedas giran, no suben y bajan. El truco está en una pieza llamada cigüeñal.", v: "Pistón conectado a un eje en zigzag con carita; signo de pregunta."}
+    - {b: beat3, cta: comentar, n: "Funciona como tus piernas en los pedales de una bici. ¿Sabes cuántos cilindros tiene tu auto?", v: "Piernas pedaleando junto a pistones moviendo el cigüeñal; misma rotación; signo de pregunta."}
+    - {b: beat3, n: "Varios cilindros explotan por turnos, así el cigüeñal siempre recibe un empujón y gira suave.", v: "Cuatro cilindros con caritas disparando en orden; el cigüeñal gira continuo con flow_dots."}
+    - {b: dato_extra, n: "Dato: a dos mil revoluciones por minuto, un motor de cuatro cilindros hace unas cuatro mil explosiones cada minuto.", v: "Contador girando a toda velocidad; mini explosiones en cascada. Mood energía."}
+    - {b: dato_extra, n: "Y casi dos tercios de la energía de la gasolina se pierden como calor. Por eso el motor necesita radiador.", v: "Pastel de energía: la mayor parte roja de calor sale por el radiador con carita sudando."}
+    - {b: cierre, cta: seguir, n: "Así de ocupado está tu motor. Síguenos: mañana, cómo nace un huracán.", v: "Remolino de nubes con carita girando; ícono de seguir."}
+    - {b: cierre, n: "La próxima vez que arranques, piensa en esas miles de explosiones por minuto trabajando para ti.", v: "Regreso al auto con carita del inicio; destellos rítmicos bajo el cofre; guiño."}
+
+- id: como-se-forman-los-huracanes
+  topic: "Cómo se forman los huracanes"
+  category: "naturaleza"
+  hook: "Un huracán es un motor gigante que funciona con agua caliente."
+  title: "El motor gigante que crea un huracán 🌀"
+  summary: "Los huracanes nacen sobre mar muy caliente. El aire húmedo sube, el vapor se condensa y suelta calor, que hace subir más aire. La rotación de la Tierra lo hace girar."
+  question: "¿Te ha tocado vivir un huracán?"
+  pinned: "En el ojo del huracán puede haber calma y hasta cielo despejado 👁️ ¿Lo sabías?"
+  hashtags: ["#huracanes", "#clima"]
+  guardar_para: "la temporada de huracanes"
+  justificacion: "Requiere explicar calor del mar, condensación, rotación y el ojo; con capítulos cabe en unos dos minutos."
+  segments:
+    - {b: gancho, n: "Un huracán es un motor gigante, y su combustible es el agua caliente del mar.", v: "Remolino de nubes con carita seria girando sobre un mar brillante. Mood calor."}
+    - {b: promesa, n: "Te explico cómo nace, por qué gira, y por qué su centro está en calma.", v: "Tres burbujas con íconos: gota, flecha circular y ojo; entran en cascada."}
+    - {b: beat1, ch: "El combustible", n: "Todo empieza sobre un mar tropical muy caliente, a más de veintiséis grados en la superficie.", v: "Termómetro sobre el mar subiendo; olas con caritas acaloradas."}
+    - {b: beat1, n: "El agua se evapora y el aire cargado de humedad sube, como el vapor de una olla.", v: "Columnas de vapor con caritas subiendo desde el mar; flechas hacia arriba."}
+    - {b: beat1, cta: guardar, n: "Allá arriba se enfría, se forman nubes y el vapor suelta su calor. Guarda este video para la temporada.", v: "Vapor se convierte en nube; destello naranja de calor liberado; ícono de guardar."}
+    - {b: beat2, n: "Ese calor calienta el aire, que sube todavía más rápido. Abajo, el aire de los lados corre a ocupar su lugar.", v: "Ciclo: aire sube por el centro, entra por los lados al nivel del mar; flow_dots. Mood energía."}
+    - {b: beat2, ch: "El giro", n: "Pero ese aire no llega en línea recta. La rotación de la Tierra lo desvía y lo pone a girar.", v: "Tierra con carita girando; flechas de viento se curvan alrededor del centro."}
+    - {b: beat2, n: "En el hemisferio norte gira al contrario de las manecillas del reloj, y en el sur, al revés.", v: "Dos remolinos espejo arriba y abajo del ecuador; relojito con flechas."}
+    - {b: beat3, cta: comentar, n: "Mientras siga sobre agua caliente, el motor se alimenta y crece. ¿Te ha tocado vivir un huracán?", v: "Remolino creciendo y oscureciéndose; signo de pregunta. Mood noche."}
+    - {b: beat3, n: "Los vientos pueden pasar de doscientos cincuenta kilómetros por hora, y la lluvia y el mar suben con fuerza.", v: "Palmeras con caritas doblándose; marejada subiendo a la costa."}
+    - {b: dato_extra, ch: "El ojo", n: "Lo más raro es el centro: el ojo. Ahí el aire baja en lugar de subir, y casi no hay viento.", v: "Acercamiento al centro del remolino; cielo despejado y un sol con carita tranquila. Mood sol."}
+    - {b: dato_extra, n: "Por eso hay gente que cree que ya pasó, y luego llega la otra pared del huracán.", v: "Persona sale de casa; atrás se acerca la pared de nubes con carita enojada."}
+    - {b: cierre, n: "Al tocar tierra o aguas frías pierde su combustible y se debilita poco a poco.", v: "Remolino sobre tierra se encoge y bosteza; mar frío azul. Mood frío."}
+    - {b: cierre, cta: compartir, n: "Entenderlo ayuda a tomarlo en serio. Mándaselo a quien vive cerca de la costa.", v: "Casa en la costa recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Un motor gigante que funciona con agua caliente, y que se apaga cuando se le acaba.", v: "Regreso al remolino con carita del inicio; se calma y guiña."}
+
+- id: como-funciona-el-foco-led
+  topic: "Cómo funciona el foco LED"
+  category: "energía"
+  hook: "Un foco LED convierte electricidad en luz casi sin calentarse."
+  title: "Por qué el foco LED casi no se calienta 💡"
+  summary: "El viejo foco calentaba un filamento hasta que brillaba y casi toda la energía se iba en calor. El LED hace saltar electrones en un cristal, y cada salto suelta luz."
+  question: "¿En tu casa ya todos los focos son LED?"
+  pinned: "Los LED blancos casi siempre son azules por dentro, con una capa amarilla encima 💙💛"
+  hashtags: ["#ahorrodeenergia", "#hogar"]
+  guardar_para: "tu próxima compra de focos"
+  justificacion: "Compara foco viejo y LED, explica el salto de electrones y el truco del blanco; algo más de un minuto y medio con capítulos."
+  segments:
+    - {b: gancho, n: "Toca un foco viejo encendido y te quemas. Un foco LED, en cambio, apenas se entibia.", v: "Foco viejo con carita sudando y rojo junto a un foco LED con carita tranquila. Mood calor."}
+    - {b: promesa, n: "La diferencia está en cómo cada uno fabrica la luz. Y explica por qué el LED gasta mucho menos.", v: "Recibo de luz con carita contenta; brillos."}
+    - {b: beat1, ch: "El foco viejo", n: "El foco tradicional calentaba un hilo de metal hasta que brillaba al rojo blanco, como una estufa encendida.", v: "Filamento en espiral poniéndose naranja y luego blanco; ondas de calor."}
+    - {b: beat1, n: "Pero la mayor parte de esa energía se iba en calor. Solo una pequeña parte salía como luz.", v: "Pastel: casi todo rojo de calor y una rebanada amarilla de luz."}
+    - {b: beat2, cta: guardar, ch: "El salto de luz", n: "El LED no calienta nada para brillar. Guarda este video para comprar focos.", v: "LED con carita en pose de karate; ícono de guardar. Mood energía."}
+    - {b: beat2, n: "Por dentro tiene un cristal diminuto hecho de dos capas: una con electrones de sobra y otra con huecos.", v: "Chip partido en dos: capa azul con bolitas con carita y capa rosa con huecos vacíos."}
+    - {b: beat2, n: "La corriente empuja a los electrones hacia los huecos. Cuando uno cae en un hueco, suelta un destello de luz.", v: "Electrón con carita salta y cae en un hueco; destello brillante sale disparado. Acercar cámara."}
+    - {b: beat3, cta: comentar, n: "Millones de saltos por segundo, y casi sin desperdicio. ¿En tu casa ya todos son LED?", v: "Lluvia de destellos saliendo del chip; casa con focos encendiéndose; signo de pregunta."}
+    - {b: beat3, n: "Por eso un foco LED da la misma luz que uno viejo gastando varias veces menos electricidad.", v: "Dos medidores de luz iguales; medidor de consumo del LED mucho más bajo."}
+    - {b: dato_extra, n: "Dato curioso: casi todos los LED blancos son azules por dentro, cubiertos con una capa amarilla.", v: "Chip azul brillante cubierto por un polvo amarillo; mezcla saliendo blanca. Mood magia."}
+    - {b: dato_extra, n: "Esa capa convierte parte del azul en amarillo, y la mezcla de los dos la vemos blanca.", v: "Rayos azules entran a la capa, salen amarillos; se juntan y forman blanco."}
+    - {b: cierre, cta: seguir, n: "Y eso se nota en el recibo. Síguenos: mañana, el interés compuesto.", v: "Monedas con caritas multiplicándose; ícono de seguir."}
+    - {b: cierre, n: "Por eso el LED casi no se calienta: hace luz con saltos de electrones, no con fuego.", v: "Regreso al LED con carita del inicio, tranquilo; el foco viejo se va sudando."}
+
+- id: como-funciona-el-interes-compuesto
+  topic: "Cómo funciona el interés compuesto"
+  category: "dinero"
+  hook: "Hay un truco para que tu dinero trabaje solo."
+  title: "El truco para que tu dinero crezca solo 💰"
+  summary: "Con el interés compuesto ganas intereses sobre tus intereses. Al principio crece lento, pero con los años la curva se dispara. El tiempo pesa más que la cantidad."
+  question: "¿Tú ya ahorras o inviertes algo cada mes?"
+  pinned: "La misma fuerza juega en tu contra con las deudas de tarjeta 💳 ¿Lo sabías?"
+  hashtags: ["#finanzaspersonales", "#ahorro"]
+  guardar_para: "cuando empieces a ahorrar"
+  justificacion: "Necesita un ejemplo paso a paso y la regla del setenta y dos; con capítulos cabe en unos dos minutos."
+  segments:
+    - {b: gancho, n: "Hay un truco para que tu dinero trabaje solo, y su mejor ingrediente no es el dinero: es el tiempo.", v: "Moneda con carita con casco de obrera trabajando; reloj de arena brillando. Mood sol."}
+    - {b: promesa, n: "Te explico el interés compuesto con un ejemplo sencillo, sin fórmulas raras.", v: "Pizarrón con carita se limpia solo; aparecen monedas en fila."}
+    - {b: beat1, ch: "Intereses de los intereses", n: "Imagina que guardas mil pesos en un lugar que te paga diez por ciento al año.", v: "Montón de monedas con etiqueta mil; alcancía con carita; porcentaje en pill escrito como diez."}
+    - {b: beat1, n: "Al terminar el año tienes mil cien. Hasta aquí, nada mágico.", v: "Aparecen monedas nuevas pequeñas junto al montón; ganancia de cien."}
+    - {b: beat1, cta: guardar, n: "La magia está en no sacar esa ganancia. Guarda este video para cuando empieces a ahorrar.", v: "Mano intenta tomar las monedas nuevas y la alcancía dice no; ícono de guardar."}
+    - {b: beat2, n: "El segundo año, el diez por ciento ya no se calcula sobre mil, sino sobre mil cien. Ganas ciento diez.", v: "Monedas nuevas también dan crías pequeñas; flechas de crecimiento."}
+    - {b: beat2, n: "Cada año, tus intereses generan sus propios intereses. Es como una bola de nieve que rueda y crece.", v: "Bola de nieve dorada con carita rodando y engordando. Mood energía."}
+    - {b: beat2, ch: "La curva que se dispara", n: "Al principio parece lento, pero luego la curva se dispara. Con esa tasa, tu dinero se duplica en unos siete años.", v: "Gráfica: curva casi plana que de pronto sube como cohete; marca de duplicado."}
+    - {b: beat3, cta: comentar, n: "Y en unos veinticinco años, esos mil pesos ya son más de diez mil. ¿Tú ya ahorras algo cada mes?", v: "Montón de monedas gigante con carita sorprendida; signo de pregunta."}
+    - {b: beat3, n: "Por eso empezar temprano con poco suele ganarle a empezar tarde con mucho.", v: "Dos personas: una joven con alcancía chica y otra mayor con alcancía grande; la joven gana la carrera."}
+    - {b: dato_extra, ch: "La regla rápida", n: "Truco que casi nadie conoce: divide setenta y dos entre la tasa de interés y sabrás cuántos años tarda en duplicarse.", v: "Calculadora con carita; división animada; resultado brillando. Mood magia."}
+    - {b: dato_extra, n: "Pero cuidado: esa misma fuerza juega en tu contra con las deudas de tarjeta, que crecen igual de rápido.", v: "Bola de nieve roja con carita enojada rodando hacia una tarjeta; alerta. Mood calor."}
+    - {b: cierre, cta: compartir, n: "Empieza con poco, pero empieza. Mándaselo a quien está por empezar a ahorrar.", v: "Amigo con alcancía recibe el video; ícono de compartir."}
+    - {b: cierre, n: "Así que el mejor momento para que tu dinero trabaje solo fue ayer. El segundo mejor es hoy.", v: "Regreso a la moneda obrera del inicio; reloj de arena; guiño."}
