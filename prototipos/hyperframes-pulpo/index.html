@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<style>
+  /* Paleta de Factos Didácticos (la misma de explapix/kit.py) */
+  :root {
+    --bg: #0B0D26; --ink: #FFF8EE; --muted: #7E86C9; --blue: #2F6BFF; --cyan: #46E0FF;
+    --violet: #8B5CFF; --pink: #FF4FA3; --coral: #FF7A45; --sun: #FFC93C; --mint: #2EE6A8;
+  }
+  @font-face { font-family: "Fredoka"; src: url("assets/Fredoka.ttf"); font-weight: 300 700; }
+  @font-face { font-family: "Nunito"; src: url("assets/Nunito.ttf"); font-weight: 200 1000; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+  #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Fredoka", sans-serif; }
+  .layer { position: absolute; inset: 0; }
+  .mood { position: absolute; inset: 0; opacity: 0; }
+  #world { position: absolute; inset: 0; will-change: transform; }
+  #ui { position: absolute; inset: 0; pointer-events: none; }
+  svg { overflow: visible; }
+
+  .title { position: absolute; top: 236px; left: 0; right: 0; text-align: center; color: var(--ink);
+    font: 700 62px/1.12 "Fredoka"; letter-spacing: 0.5px; text-shadow: 0 5px 0 rgba(0,0,0,.35); }
+  .pill { position: absolute; display: inline-flex; align-items: center; justify-content: center;
+    padding: 14px 34px 16px; border-radius: 999px; font: 700 46px/1 "Fredoka"; white-space: nowrap;
+    box-shadow: 0 9px 0 rgba(0,0,0,.35), inset 0 -8px 0 rgba(0,0,0,.18), inset 0 4px 0 rgba(255,255,255,.28); }
+  #chapter { left: 540px; top: 470px; background: var(--violet); color: var(--ink); }
+  #stop-pill { background: var(--pink); color: var(--bg); font-size: 40px; }
+
+  .cap { position: absolute; left: 70px; right: 70px; top: 1340px; text-align: center; color: var(--ink);
+    font: 900 50px/1.18 "Nunito"; -webkit-text-stroke: 12px #000; paint-order: stroke fill; opacity: 0; }
+
+  #cta { position: absolute; left: 540px; top: 1262px; }
+  #cta .badge { display: flex; align-items: center; gap: 22px; padding: 18px 34px 20px 28px; border-radius: 44px;
+    background: rgba(0,0,0,.45); color: var(--ink); font: 900 40px/1 "Nunito"; white-space: nowrap;
+    -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="12.6" data-width="1080" data-height="1920">
+
+  <!-- Fondo: un div por mood, se cruzan con opacidad -->
+  <div id="bg" class="layer clip" data-start="0" data-duration="12.6">
+    <div class="mood" id="m-energia" style="opacity:1;background:
+      radial-gradient(circle at 50% 46%, rgba(139,92,255,.30) 0, rgba(139,92,255,.10) 330px, transparent 620px),
+      linear-gradient(to top, #0D0B2E 0%, #1B0F4D 55%, #4A1A7A 100%);"></div>
+    <div class="mood" id="m-calor" style="background:
+      radial-gradient(circle at 60% 40%, rgba(255,122,69,.30) 0, rgba(255,122,69,.10) 330px, transparent 640px),
+      linear-gradient(to top, #1F0A1E 0%, #3A0F24 55%, #6B1E2A 100%);"></div>
+    <div class="mood" id="m-frio" style="background:
+      radial-gradient(circle at 50% 46%, rgba(70,224,255,.24) 0, rgba(70,224,255,.08) 330px, transparent 640px),
+      linear-gradient(to top, #06142E 0%, #0A2450 55%, #0F3A6E 100%);"></div>
+  </div>
+
+  <!-- Mundo: todo lo que se mueve con la cámara -->
+  <div id="world" class="clip" data-start="0" data-duration="12.6">
+    <svg id="stars" width="1080" height="1920" style="position:absolute;left:0;top:0"></svg>
+
+    <!-- Electrocardiograma -->
+    <svg id="ecg" width="1080" height="1920" style="position:absolute;left:0;top:0">
+      <defs>
+        <clipPath id="ecg-clip"><rect id="ecg-rect" x="100" y="480" width="0" height="240"/></clipPath>
+        <filter id="glow-o" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g clip-path="url(#ecg-clip)">
+        <path id="ecg-live" d="" fill="none" stroke="#FF7A45" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-o)"/>
+        <path id="ecg-flat" d="M110 600 H730" fill="none" stroke="#A9A3D9" stroke-width="9" stroke-linecap="round" opacity="0"/>
+      </g>
+    </svg>
+
+    <!-- Pulpo -->
+    <div id="octo-pos" style="position:absolute;left:0;top:0;width:0;height:0">
+      <div id="octo-pop" style="position:absolute;left:0;top:0">
+        <svg width="1" height="1">
+          <g id="octo-body">
+            <g id="tentacles"></g>
+            <!-- cabeza con volumen: sombra tonal + cuerpo + luz de borde -->
+            <ellipse cx="0" cy="-95" rx="128" ry="118" fill="#5F37C9"/>
+            <ellipse cx="-6" cy="-102" rx="122" ry="112" fill="#8B5CFF"/>
+            <path d="M-96 -170 C-70 -205 -20 -218 20 -214" fill="none" stroke="#C2A8FF" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+            <circle cx="62" cy="-160" r="16" fill="#A985FF"/><circle cx="88" cy="-120" r="10" fill="#A985FF"/><circle cx="-80" cy="-140" r="11" fill="#A985FF"/>
+            <!-- carita -->
+            <g id="octo-face" transform="translate(-4 -80)">
+              <ellipse cx="-58" cy="20" rx="20" ry="11" fill="#FF4FA3" opacity=".6"/>
+              <ellipse cx="58" cy="20" rx="20" ry="11" fill="#FF4FA3" opacity=".6"/>
+              <g id="octo-eyes">
+                <g transform="translate(-34 -6)"><ellipse rx="11" ry="17" fill="#0B0D26"/><circle cx="3" cy="-6" r="4" fill="#fff"/></g>
+                <g transform="translate(34 -6)"><ellipse rx="11" ry="17" fill="#0B0D26"/><circle cx="3" cy="-6" r="4" fill="#fff"/></g>
+              </g>
+              <path id="octo-smile" d="M-15 20 Q0 34 15 20" fill="none" stroke="#0B0D26" stroke-width="7" stroke-linecap="round"/>
+              <ellipse id="octo-oh" cx="0" cy="26" rx="10" ry="13" fill="#0B0D26" opacity="0"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <svg id="bubbles" width="1080" height="1920" style="position:absolute;left:0;top:0"></svg>
+
+    <!-- Corazón principal -->
+    <div id="heart-pos" style="position:absolute;left:540px;top:880px;width:0;height:0">
+      <div id="heart-pop" style="position:absolute;left:0;top:0">
+        <svg width="1" height="1">
+          <defs>
+            <radialGradient id="halo-g"><stop offset="0" stop-color="#FF7A45" stop-opacity=".55"/><stop offset=".45" stop-color="#FF7A45" stop-opacity=".18"/><stop offset="1" stop-color="#FF7A45" stop-opacity="0"/></radialGradient>
+            <radialGradient id="halo-d"><stop offset="0" stop-color="#A9A3D9" stop-opacity=".35"/><stop offset="1" stop-color="#A9A3D9" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle id="heart-halo" r="260" fill="url(#halo-g)"/>
+          <circle id="heart-halo-d" r="200" fill="url(#halo-d)" opacity="0"/>
+          <g id="sparkles"></g>
+          <g id="heart-beat">
+            <path id="heart-shadow" d="M0 70 C-20 50 -100 10 -100 -35 C-100 -75 -60 -95 -32 -90 C-15 -87 -5 -75 0 -62 C5 -75 15 -87 32 -90 C60 -95 100 -75 100 -35 C100 10 20 50 0 70Z" transform="translate(5 9)" fill="#C24A22"/>
+            <path id="heart-body" d="M0 70 C-20 50 -100 10 -100 -35 C-100 -75 -60 -95 -32 -90 C-15 -87 -5 -75 0 -62 C5 -75 15 -87 32 -90 C60 -95 100 -75 100 -35 C100 10 20 50 0 70Z" fill="#FF7A45"/>
+            <path id="heart-rim" d="M-82 -52 C-80 -74 -58 -84 -38 -80" fill="none" stroke="#FFD0B8" stroke-width="10" stroke-linecap="round"/>
+            <g id="heart-face" transform="translate(0 -18)">
+              <ellipse cx="-44" cy="16" rx="15" ry="8" fill="#FF4FA3" opacity=".6"/>
+              <ellipse cx="44" cy="16" rx="15" ry="8" fill="#FF4FA3" opacity=".6"/>
+              <g id="heart-eyes">
+                <g transform="translate(-24 -4)"><ellipse rx="8" ry="13" fill="#0B0D26"/><circle cx="2" cy="-5" r="3" fill="#fff"/></g>
+                <g transform="translate(24 -4)"><ellipse rx="8" ry="13" fill="#0B0D26"/><circle cx="2" cy="-5" r="3" fill="#fff"/></g>
+              </g>
+              <path id="heart-smile" d="M-11 14 Q0 24 11 14" fill="none" stroke="#0B0D26" stroke-width="6" stroke-linecap="round"/>
+              <path id="heart-sleep" d="M-11 18 H11" fill="none" stroke="#0B0D26" stroke-width="6" stroke-linecap="round" opacity="0"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div id="stop-pill" class="pill" style="left:740px;top:770px">¡Se detiene!</div>
+  </div>
+
+  <!-- Interfaz fija (no gira con la cámara) -->
+  <div id="ui" class="clip" data-start="0" data-duration="12.6">
+    <div class="title">¿POR QUÉ EL PULPO<br/>TIENE 3 CORAZONES?</div>
+    <div id="chapter" class="pill">El corazón que se apaga</div>
+    <div id="caps"></div>
+    <div id="cta">
+      <div class="badge">
+        <svg width="46" height="62" viewBox="-23 -31 46 62"><path d="M-19 -27 H19 V27 L0 9 L-19 27Z" fill="#FFC93C" stroke="#000" stroke-width="3" stroke-linejoin="round"/></svg>
+        <span>Guarda este video</span>
+      </div>
+    </div>
+    <svg id="cta-arrow" width="1080" height="1920" style="position:absolute;left:0;top:0;opacity:0">
+      <g id="arrow-g" transform="translate(778 1256) scale(0 1)">
+        <line x1="0" y1="0" x2="190" y2="0" stroke="#FFC93C" stroke-width="16" stroke-linecap="round"/>
+        <path d="M176 -26 L222 0 L176 26 Z" fill="#FFC93C" stroke="#FFC93C" stroke-width="8" stroke-linejoin="round"/>
+      </g>
+    </svg>
+  </div>
+
+  <audio id="voz" src="assets/narracion.wav" data-start="0" data-duration="12.6" data-volume="1"></audio>
+</div>
+
+<script>
+(function () {
+  const DUR = 12.6;
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = (s) => document.querySelector(s);
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+  // PRNG con semilla: determinista en cada render
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  const R = rng(7);
+
+  const ease = (u) => u < .5 ? 4*u*u*u : 1 - Math.pow(-2*u + 2, 3) / 2;
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  // Keyframes [[t, v], ...] con ease in-out entre cada par
+  function kf(t, keys) { if (t <= keys[0][0]) return keys[0][1];
+    for (let i = 1; i < keys.length; i++) if (t <= keys[i][0]) { const [t0, v0] = keys[i-1], [t1, v1] = keys[i];
+      return v0 + (v1 - v0) * ease((t - t0) / (t1 - t0)); } return keys[keys.length-1][1]; }
+  function blink(t, off, every) { const u = (t + off) % every; return u < .14 ? Math.max(.08, Math.abs(1 - u / .07)) : 1; }
+
+  // ---------- Momentos clave (segundos del clip; en el pipeline saldrían de timing.json) ----------
+  const SEG6 = 5.08;          // «Cuando el pulpo nada…»
+  const STOP = 7.95;          // «…se detiene.»
+  const JETS = [6.35, 7.2, 9.75, 10.6, 11.45];
+
+  // ---------- Estrellas en 3 capas ----------
+  const starsSvg = $("#stars"), stars = [];
+  for (let i = 0; i < 120; i++) { const layer = i % 3;
+    const s = { x: R()*1180 - 50, y: R()*2020 - 50, r: [1.6, 2.4, 3.4][layer], ph: R()*6.28, w: .8 + R()*2.2, layer,
+      c: R() < .12 ? ["#46E0FF", "#FFC93C", "#2EE6A8"][i % 3] : "#FFF8EE" };
+    s.e = el("circle", { cx: s.x, cy: s.y, r: s.r, fill: s.c }, starsSvg); stars.push(s); }
+
+  // ---------- Tentáculos ----------
+  const tentG = $("#tentacles"), tents = [];
+  for (let i = 0; i < 8; i++) { const a = (i - 3.5) / 3.5;
+    tents.push({ x0: a * 92, a, ph: i * .9,
+      back: el("path", { fill: "none", stroke: "#5F37C9", "stroke-width": 26, "stroke-linecap": "round" }, tentG),
+      front: el("path", { fill: "none", stroke: "#9A72FF", "stroke-width": 14, "stroke-linecap": "round" }, tentG),
+      dots: [0,1,2].map(() => el("circle", { r: 4.5, fill: "#FFC93C", opacity: .8 }, tentG)) }); }
+
+  // ---------- Destellos alrededor del corazón ----------
+  const spG = $("#sparkles"), sparks = [];
+  for (let i = 0; i < 9; i++) sparks.push({ e: el("path", { d: "M0 -14 L3 -3 L14 0 L3 3 L0 14 L-3 3 L-14 0 L-3 -3Z", fill: i % 2 ? "#FFC93C" : "#FFF8EE" }, spG),
+    r: 170 + R()*70, ph: R()*6.28, sp: .35 + R()*.4 });
+
+  // ---------- Burbujas de los chorros ----------
+  const bubSvg = $("#bubbles"), bubs = [];
+  JETS.forEach((tj) => { for (let k = 0; k < 14; k++) bubs.push({ tj, vx: (R() - .5) * 160, vy: 120 + R()*140,
+    r: 5 + R()*10, life: .8 + R()*.5, e: el("circle", { r: 0, fill: "none", stroke: "#BFF4FF", "stroke-width": 3, opacity: 0 }, bubSvg) }); });
+
+  // ---------- Pulpo: chorros (anticipación → estirón → sube) ----------
+  function jetState(t) { let rise = 0, squash = 0, stretch = 0;
+    for (const tj of JETS) { const u = t - tj; if (u < -0.18) continue;
+      if (u < 0) squash = Math.max(squash, 1 - Math.abs(u + .09) / .09);
+      else { rise += 60 * ease(clamp(u / .45, 0, 1)); if (u < .5) stretch = Math.max(stretch, Math.sin(Math.PI * u / .5)); } }
+    return { rise, squash, stretch }; }
+
+  // ---------- Electrocardiograma ----------
+  function ecgPath(off) { let d = "", P = 170; const x0 = 110 - (off % P) - P;
+    for (let x = x0; x < 750 + P; x += P) d += `${d ? "L" : "M"}${x} 600 L${x+60} 600 L${x+72} 570 L${x+84} 640 L${x+98} 520 L${x+112} 620 L${x+124} 600 L${x+P} 600 `;
+    return d; }
+
+  // ---------- Render procedural: corre en cada seek ----------
+  const world = $("#world"), octoPos = $("#octo-pos"), octoBody = $("#octo-body"), heartBeat = $("#heart-beat");
+  const heartEyes = $("#heart-eyes"), octoEyes = $("#octo-eyes"), ecgLive = $("#ecg-live");
+  function render(t) {
+    // Cámara: balanceo suave + acercamientos con giro
+    const sway = 1.2 * Math.sin(2 * Math.PI * t / 7);
+    const zoom = kf(t, [[0,1],[2.9,1],[3.9,1.3],[4.9,1.3],[5.6,1],[7.7,1],[8.5,1.22],[10.6,1.22],[11.6,1.05],[12.6,1.05]]);
+    const rot = kf(t, [[0,0],[2.9,0],[3.9,-6],[4.9,-6],[5.6,0],[7.7,0],[8.5,6],[10.6,6],[11.6,0]]);
+    const fx = kf(t, [[0,540],[4.9,540],[5.6,640],[7.7,640],[8.5,680],[11.6,600]]);
+    const fy = kf(t, [[0,880],[4.9,880],[5.6,820],[7.7,820],[8.5,800],[11.6,860]]);
+    world.style.transformOrigin = `${fx}px ${fy}px`;
+    world.style.transform = `translate(${(540 - fx) * (zoom - 1) * .6}px, ${(900 - fy) * (zoom - 1) * .6}px) scale(${zoom}) rotate(${sway + rot}deg)`;
+
+    for (const s of stars) { const par = [6, 12, 20][s.layer];
+      s.e.setAttribute("cx", s.x + Math.sin(t * .2 + s.ph) * par);
+      s.e.setAttribute("cy", s.y - t * par * .6);
+      s.e.setAttribute("opacity", (.35 + .3 * s.layer) * (.55 + .45 * Math.sin(t * s.w + s.ph))); }
+
+    // Corazón: lub-dub hasta que se detiene
+    const P = .78, u = t % P, alive = t < STOP;
+    const beat = alive ? .13 * Math.exp(-Math.pow((u - .06) / .05, 2)) + .08 * Math.exp(-Math.pow((u - .24) / .05, 2)) : 0;
+    const k = clamp((t - STOP) / .5, 0, 1);
+    heartBeat.setAttribute("transform", `translate(0 ${8 * k}) scale(${1 + beat - .05 * k} ${1 + beat * 1.1 - .08 * k}) rotate(${alive ? 3 * Math.sin(t * 2.3) : -10 * k})`);
+    heartEyes.setAttribute("transform", `scale(1 ${blink(t, .4, 3.1)})`);
+
+    sparks.forEach((s, i) => { const a = s.ph + t * s.sp * (i % 2 ? 1 : -1);
+      const vis = clamp((t - .5) / .4, 0, 1) * clamp((SEG6 - t) / .4, 0, 1);
+      s.e.setAttribute("transform", `translate(${Math.cos(a) * s.r} ${Math.sin(a) * s.r * .85}) rotate(${t * 90}) scale(${Math.max(vis * (.7 + .3 * Math.sin(t * 5 + i)), .001)})`); });
+
+    // ECG en vivo: se desplaza mientras late
+    ecgLive.setAttribute("d", ecgPath((alive ? t : STOP) * 210));
+
+    // Pulpo
+    const j = jetState(t);
+    const ox = 400 + 30 * Math.sin(t * .7), oy = 1150 - j.rise + 10 * Math.sin(t * 2.2);
+    octoPos.style.transform = `translate(${ox}px, ${oy}px)`;
+    const sx = 1 + .14 * j.squash - .1 * j.stretch, sy = 1 - .14 * j.squash + .16 * j.stretch;
+    octoBody.setAttribute("transform", `rotate(${4 * Math.sin(t * 1.3)}) scale(${sx} ${sy})`);
+    octoEyes.setAttribute("transform", `scale(1 ${blink(t, 1.3, 2.7)})`);
+    tents.forEach((tn) => { const pts = []; const amp = 16 + 10 * j.stretch; const spread = 1 - .55 * j.stretch + .35 * j.squash;
+      for (let q = 0; q <= 6; q++) { const v = q / 6;
+        pts.push([tn.x0 * (1 - v * .2) + tn.a * 60 * v * spread + amp * v * Math.sin(t * 4 + tn.ph - v * 3.2),
+                  -40 + v * (150 + 40 * j.stretch - 25 * j.squash)]); }
+      let d = `M${pts[0][0]} ${pts[0][1]}`;
+      for (let q = 1; q < pts.length - 1; q++) d += ` Q${pts[q][0]} ${pts[q][1]} ${(pts[q][0] + pts[q+1][0]) / 2} ${(pts[q][1] + pts[q+1][1]) / 2}`;
+      d += ` L${pts[6][0]} ${pts[6][1]}`;
+      tn.back.setAttribute("d", d); tn.front.setAttribute("d", d);
+      tn.dots.forEach((c, q) => { const p = pts[2 + q]; c.setAttribute("cx", p[0]); c.setAttribute("cy", p[1]); }); });
+
+    // Burbujas de cada chorro (salen por debajo del pulpo)
+    for (const b of bubs) { const v = t - b.tj;
+      if (v < 0 || v > b.life) { b.e.setAttribute("opacity", 0); continue; }
+      const jb = jetState(b.tj);
+      b.e.setAttribute("cx", 400 + 30 * Math.sin(b.tj * .7) + b.vx * v);
+      b.e.setAttribute("cy", 1150 - jb.rise + 140 + b.vy * v - 60 * v * v);
+      b.e.setAttribute("r", b.r * (1 + v * .6));
+      b.e.setAttribute("opacity", .9 * (1 - v / b.life)); }
+  }
+
+  // Reloj: GSAP escribe «t» en cada seek y el setter dispara el render (los onUpdate se suprimen al hacer seek)
+  const clock = {}; let _t = 0;
+  Object.defineProperty(clock, "t", { get: () => _t, set: (v) => { _t = v; render(v); } });
+  const arrow = {}; let _a = { s: 0, n: 0 };
+  const paintArrow = () => $("#arrow-g").setAttribute("transform", `translate(${778 + _a.n} 1256) rotate(-2) scale(${Math.max(_a.s, .001)} 1)`);
+  Object.defineProperty(arrow, "s", { get: () => _a.s, set: (v) => { _a.s = v; paintArrow(); } });
+  Object.defineProperty(arrow, "n", { get: () => _a.n, set: (v) => { _a.n = v; paintArrow(); } });
+
+  // ---------- Línea de tiempo ----------
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo(clock, { t: 0 }, { t: DUR, duration: DUR, ease: "none" }, 0);
+
+  // Moods
+  tl.to("#m-calor", { opacity: 1, duration: 1.2, ease: "sine.inOut" }, SEG6 - .1);
+  tl.to("#m-energia", { opacity: 0, duration: 1.2, ease: "sine.inOut" }, SEG6 - .1);
+  tl.to("#m-frio", { opacity: 1, duration: 1.0, ease: "sine.inOut" }, STOP + .05);
+  tl.to("#m-calor", { opacity: 0, duration: 1.0, ease: "sine.inOut" }, STOP + .05);
+
+  // Mini-título de capítulo
+  tl.fromTo("#chapter", { xPercent: -50, yPercent: -50, scale: 0, rotation: -8 }, { scale: 1, rotation: 0, duration: .5, ease: "back.out(2.6)" }, .1);
+  tl.to("#chapter", { scale: 0, rotation: 6, duration: .35, ease: "back.in(2)" }, 1.75);
+
+  // Corazón grande: entra, crece en «lo más raro» y viaja en arco hasta el electrocardiograma
+  tl.fromTo("#heart-pop", { scale: 0, rotation: -15 }, { scale: 1.45, rotation: 0, duration: .7, ease: "elastic.out(1, .55)" }, .35);
+  tl.to("#heart-pop", { scale: 1.75, duration: .45, ease: "power2.out" }, 3.3);
+  tl.to("#heart-pos", { x: 280, duration: .9, ease: "power2.inOut" }, SEG6);
+  tl.to("#heart-pos", { y: -280, duration: .9, ease: "back.inOut(1.6)" }, SEG6);
+  tl.to("#heart-pop", { scale: .62, duration: .9, ease: "power2.inOut" }, SEG6);
+  // Se detiene
+  tl.to("#heart-body", { attr: { fill: "#A9A3D9" }, duration: .5 }, STOP);
+  tl.to("#heart-shadow", { attr: { fill: "#6E67A6" }, duration: .5 }, STOP);
+  tl.to("#heart-rim", { attr: { stroke: "#E2DEFF" }, duration: .5 }, STOP);
+  tl.to("#heart-halo", { opacity: 0, duration: .5 }, STOP);
+  tl.to("#heart-halo-d", { opacity: 1, duration: .5 }, STOP);
+  tl.set("#heart-smile", { opacity: 0 }, STOP + .1); tl.set("#heart-sleep", { opacity: 1 }, STOP + .1);
+  tl.to("#ecg-live", { opacity: 0, duration: .35 }, STOP + .05);
+  tl.to("#ecg-flat", { opacity: 1, duration: .35 }, STOP + .05);
+  tl.fromTo("#stop-pill", { xPercent: -50, yPercent: -50, scale: 0, rotation: 12 }, { scale: 1, rotation: -6, duration: .55, ease: "back.out(3)" }, STOP + .15);
+
+  // ECG aparece dibujándose de izquierda a derecha
+  tl.to("#ecg-rect", { attr: { width: 640 }, duration: .9, ease: "power2.out" }, SEG6 + .3);
+
+  // Pulpo entra desde abajo
+  tl.fromTo("#octo-pop", { scale: 0, y: 220 }, { scale: 1, y: 0, duration: .8, ease: "back.out(2.2)" }, SEG6 + .35);
+  tl.set("#octo-smile", { opacity: 0 }, STOP + .1); tl.set("#octo-oh", { opacity: 1 }, STOP + .1);
+  tl.set("#octo-smile", { opacity: 1 }, 10.9); tl.set("#octo-oh", { opacity: 0 }, 10.9);
+
+  // CTA de guardado: ícono + flecha que apunta a la columna de botones (derecha, ~65 % del alto)
+  const CTA_IN = 2.25, CTA_OUT = 4.85;
+  tl.fromTo("#cta", { xPercent: -50, yPercent: -50, scale: 0, rotation: -10 }, { scale: 1, rotation: 0, duration: .6, ease: "elastic.out(1.1, .5)" }, CTA_IN);
+  tl.to("#cta", { scale: 0, duration: .3, ease: "back.in(2)" }, CTA_OUT - .3);
+  tl.set("#cta-arrow", { opacity: 1 }, CTA_IN + .25);
+  tl.fromTo(arrow, { s: 0 }, { s: 1, duration: .6, ease: "back.inOut(2.4)" }, CTA_IN + .25);
+  for (let q = 0; q < 4; q++) tl.fromTo(arrow, { n: 0 }, { n: 16, duration: .16, ease: "sine.out", yoyo: true, repeat: 1 }, CTA_IN + 1.0 + q * .45);
+  tl.to("#cta-arrow", { opacity: 0, duration: .3 }, CTA_OUT - .3);
+
+  // ---------- Subtítulos (mismos cortes que el kit: 22 caracteres por línea, 2 líneas) ----------
+  const SEGS = [
+    { t0: 0, t1: SEG6, text: "Guarda este video para ganar trivias de animales. Porque ahora viene lo más raro de todo." },
+    { t0: SEG6, t1: DUR, text: "Cuando el pulpo nada, ese corazón principal se detiene. Sí, deja de latir mientras se impulsa con chorros de agua." },
+  ];
+  const capsDiv = $("#caps");
+  SEGS.forEach((sg) => {
+    const lines = []; let cur = "";
+    for (const w of sg.text.split(" ")) { if (cur && cur.length + w.length + 1 > 22) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim(); }
+    if (cur) lines.push(cur);
+    const chunks = []; for (let i = 0; i < lines.length; i += 2) chunks.push(lines.slice(i, i + 2));
+    const wts = chunks.map(c => c.join("").length + 6), tot = wts.reduce((a, b) => a + b, 0);
+    let acc = sg.t0;
+    chunks.forEach((c, ci) => { const d = (sg.t1 - sg.t0) * wts[ci] / tot;
+      const div = document.createElement("div"); div.className = "cap"; div.innerHTML = c.join("<br/>"); capsDiv.appendChild(div);
+      tl.set(div, { opacity: 1 }, acc);
+      tl.fromTo(div, { scale: .88 }, { scale: 1, duration: .2, ease: "back.out(2)" }, acc);
+      tl.set(div, { opacity: 0 }, Math.min(acc + d, DUR - .001));
+      acc += d; });
+  });
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+</script>
+</body>
+</html>
