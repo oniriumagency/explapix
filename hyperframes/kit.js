@@ -239,7 +239,8 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     });
 
     // ---------- Cámara (no bloqueante) ----------
-    const cam = { z: [], a: [], p: [], sway: [] };   // tramos {t0, dur, from, to}
+    const cam = { z: [], a: [], p: [], sway: [] };
+    const titulos = [];   // elementos de k.titulo (en horizontal se desvanecen con zoom)   // tramos {t0, dur, from, to}
     function camVal(list, t, def) {
       let v = def;
       for (const sg of list) {
@@ -273,6 +274,8 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
       if (sw) a += sw.amp * Math.sin((2 * Math.PI * (t - sw.t0)) / sw.period);
       // el punto p queda en el centro del contenido, con zoom y giro alrededor de él
       mundo.style.transform = `translate(${contentC[0]}px,${contentC[1]}px) rotate(${a}deg) scale(${z}) translate(${-p[0]}px,${-p[1]}px)`;
+      // horizontal: con la cámara acercada el título quedaría cortado contra el borde de arriba → se desvanece
+      if (LARGO) { const f = clamp((1.16 - z) / 0.1, 0, 1).toFixed(3); for (const e of titulos) e.style.opacity = f; }
     });
     mundo.style.transformOrigin = "0 0";
 
@@ -335,8 +338,12 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     k.texto = (txt, { size = 44, color = C.INK, peso = 700, fuente = "Fredoka", ancho = null, ...opts } = {}) =>
       k.obj({ html: `<div class="txt" style="font:${peso} ${size}px/1.12 '${fuente}';color:${color};${ancho ? `width:${ancho}px;white-space:normal;` : ""}">${esc(txt).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", ...opts });
     /** Título grande en mayúsculas (admite \n) con sombra suave. */
-    k.titulo = (txt, { size = 78, color = C.INK, ...opts } = {}) =>
-      k.obj({ html: `<div class="txt titulo" style="font-size:${size}px;color:${color}">${esc(txt.toUpperCase()).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", y: LARGO ? 170 : 230, ...opts });
+    k.titulo = (txt, { size = 78, color = C.INK, ...opts } = {}) => {
+      const o = k.obj({ html: `<div class="txt titulo" style="font-size:${size}px;color:${color}">${esc(txt.toUpperCase()).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", y: LARGO ? 170 : 230, ...opts });
+      const e = o.el.querySelector(".titulo");
+      if (e) titulos.push(e);
+      return o;
+    };
     /** Etiqueta en cápsula con volumen (nombrar partes; 3-4 palabras máx.). */
     k.pill = (txt, color = C.SUN, { size = 40, colorTexto = null, ...opts } = {}) => {
       const dark = [C.SUN, C.MINT, C.CYAN, C.CORAL, C.INK].includes(color);
