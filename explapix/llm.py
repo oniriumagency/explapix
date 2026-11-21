@@ -400,7 +400,7 @@ def _scene_system_hf_largo() -> str:
     pairs = [
         ("Lienzo de diseño 1080×1920 px", "Lienzo de diseño HORIZONTAL 1920×1080 px (YouTube)"),
         ("x∈[24, 1056], y∈[84, 1560]: el kit", "x∈[72, 1848], y∈[60, 924]: el kit"),
-        ("El título va arriba (k.titulo, y≈230).", "El título va arriba (k.titulo, y≈140)."),
+        ("El título va arriba (k.titulo, y≈230).", "El título va arriba (k.titulo, y≈170; no más arriba)."),
         ("10. Cierre: en el último segmento k.clearStage() y luego k.outro() (≈2 s en total).",
          "10. Cierre: sigue las reglas de CAPÍTULO DE VIDEO LARGO."),
         ("subtítulos. No dibujes íconos de CTA ni ocupes ese espacio (abajo del lienzo de diseño, y > 1450).",

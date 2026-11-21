@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -163,6 +164,11 @@ def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
     if not info.get("fuera"):
         eventos.insert(0, {"t": 0.0, "kind": "layout_safe", "gain": 0})
     (workdir / "sfx_events.json").write_text(json.dumps(sorted(eventos, key=lambda e: e["t"])), encoding="utf-8")
+    dur = float(info.get("duracion") or 0)
+    if dur > config_for(workdir, formato)["duracion"] + 0.05:     # la animación sigue tras la voz (pantalla final)
+        idx = proj / "index.html"
+        idx.write_text(re.sub(r'data-duration="[^"]*"', f'data-duration="{dur}"', idx.read_text(encoding="utf-8"), 1),
+                       encoding="utf-8")
     (workdir / "layout.json").write_text(json.dumps({"fuera": info.get("fuera", []), "avisos": info.get("avisos", [])},
                                                     ensure_ascii=False, indent=1), encoding="utf-8")
     q, fps = QUALITY.get(quality, QUALITY["hd"])

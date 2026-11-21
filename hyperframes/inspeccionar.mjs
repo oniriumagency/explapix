@@ -26,7 +26,7 @@ try {
   const info = await page.evaluate(() => window.__factos ? { eventos: window.__factos.eventos, avisos: window.__factos.avisos,
     duracion: window.__factos.duracion, zona: window.__factos.zona } : { error: window.__factos_error || null });
   if (!info.eventos) throw new Error(info.error || errs.join("\n") || "la escena no terminó de construirse");
-  Object.assign(out, { eventos: info.eventos, avisos: info.avisos });
+  Object.assign(out, { eventos: info.eventos, avisos: info.avisos, duracion: info.duracion });
   const fuera = await page.evaluate((paso) => {
     const f = window.__factos, z = f.zona, tol = 10, res = [];
     const visible = (e) => {

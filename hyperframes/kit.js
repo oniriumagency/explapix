@@ -182,7 +182,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     if (LARGO) { W = 1920; H = 1080; DESIGN_BOX = [72, 1848, 60, 924]; } else { W = 1080; H = 1920; DESIGN_BOX = [24, 1056, 84, 1560]; }
     const CTA = LARGO ? { ...CTA_TEXT, seguir: "Suscríbete" } : CTA_TEXT;
     const root = document.getElementById("root");
-    const DUR = cfg.duracion;
+    let DUR = cfg.duracion;   // en horizontal se alarga si la escena sigue (pantalla final de 20 s)
     const durs = cfg.segmentos.map((x) => x.duracion);
     const starts = []; let acc = 0;
     for (const d of durs) { starts.push(acc); acc += d; }
@@ -250,7 +250,9 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
       return v;
     }
     const restP = contentC.slice();
-    k.camSway = (amp = 1.2, period = 7) => { cam.sway.push({ t0: k.t, amp, period }); };
+    // en horizontal el lienzo es ancho: el mismo giro mueve mucho más los bordes, así que se usa la mitad
+    const GIRO = LARGO ? 0.5 : 1;
+    k.camSway = (amp = 1.2, period = 7) => { cam.sway.push({ t0: k.t, amp: amp * GIRO, period }); };
     /** Mueve la cámara SIN bloquear: centro (objeto o [x,y] de diseño), zoom (1 = normal) y giro en grados (±10). */
     k.camTo = (target, { zoom, angle, dur = 1.2 } = {}) => {
       const t0 = k.t;
@@ -260,7 +262,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
         cam.p.push({ t0, dur, from: camVal(cam.p, t0, restP), to: sp });
       }
       if (zoom != null) cam.z.push({ t0, dur, from: camVal(cam.z, t0, 1), to: zoom });
-      if (angle != null) cam.a.push({ t0, dur, from: camVal(cam.a, t0, 0), to: angle });
+      if (angle != null) cam.a.push({ t0, dur, from: camVal(cam.a, t0, 0), to: angle * GIRO });
       sfx("woosh", t0, 0.8);
     };
     k.camReset = (dur = 1.0) => k.camTo(restP.map((v, i) => (v - contentC[i]) / esc_ + designC[i]), { zoom: 1, angle: 0, dur });
@@ -334,7 +336,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
       k.obj({ html: `<div class="txt" style="font:${peso} ${size}px/1.12 '${fuente}';color:${color};${ancho ? `width:${ancho}px;white-space:normal;` : ""}">${esc(txt).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", ...opts });
     /** Título grande en mayúsculas (admite \n) con sombra suave. */
     k.titulo = (txt, { size = 78, color = C.INK, ...opts } = {}) =>
-      k.obj({ html: `<div class="txt titulo" style="font-size:${size}px;color:${color}">${esc(txt.toUpperCase()).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", y: LARGO ? 140 : 230, ...opts });
+      k.obj({ html: `<div class="txt titulo" style="font-size:${size}px;color:${color}">${esc(txt.toUpperCase()).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", y: LARGO ? 170 : 230, ...opts });
     /** Etiqueta en cápsula con volumen (nombrar partes; 3-4 palabras máx.). */
     k.pill = (txt, color = C.SUN, { size = 40, colorTexto = null, ...opts } = {}) => {
       const dark = [C.SUN, C.MINT, C.CYAN, C.CORAL, C.INK].includes(color);
@@ -769,11 +771,14 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
       k.t = t0;
       if (opts && opts.mood) k.mood(opts.mood);
       fn(d);
-      if (k.t > t0 + d + 0.05 && i === durs.length - 1) k.avisos.push(`el último segmento se pasó ${(k.t - t0 - d).toFixed(2)} s`);
+      if (!LARGO && k.t > t0 + d + 0.05 && i === durs.length - 1) k.avisos.push(`el último segmento se pasó ${(k.t - t0 - d).toFixed(2)} s`);
       k.t = Math.max(k.t, t0 + d);
     };
 
     k._finalizar = () => {
+      // video largo: el capítulo dura lo que dure más, la voz o la animación (la voz se rellena con silencio);
+      // así la pantalla final de 20 s no se corta cuando la narración del cierre es más corta
+      if (LARGO && k.t > DUR + 0.05) DUR = +k.t.toFixed(3);
       durs.forEach((_, i) => captions(i));
       cfg.segmentos.forEach((sg, i) => {
         if (!sg.cta) return;
