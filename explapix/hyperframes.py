@@ -136,6 +136,7 @@ def layout_problems(workdir: Path) -> str:
 
 def render_scene(scene_file: Path, workdir: Path, quality: str = "hd") -> tuple[bool, str, Path | None]:
     """Mismo contrato que render.render_scene: (ok, log, video_sin_audio)."""
+    scene_file, workdir = Path(scene_file).resolve(), Path(workdir).resolve()   # node corre desde hyperframes/
     try:
         node, chrome = ensure()
         proj = build_project(scene_file, workdir)
