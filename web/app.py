@@ -126,6 +126,7 @@ def video_summary(d: Path) -> dict:
         "privacy": meta.get("privacy"),
         "review": meta.get("review"),
         "has_video": (d / "final.mp4").exists(),
+        "motor": meta.get("motor") or ("hyperframes" if (d / "scene.js").exists() else "manim"),
     }
 
 
@@ -531,7 +532,7 @@ def api_video(vid: str):
         t = timing.get("segments", [])
         segs.append({**s, "duration": t[i]["duration"] if i < len(t) else None})
     err = d / "render_error.log"
-    scene = d / "scene.py"
+    scene = _scene_of(d) or d / "scene.py"
     return {**video_summary(d), "description": meta.get("description") or sb.get("description", ""),
             "tags": meta.get("tags") or sb.get("tags", []), "segments": segs,
             "notes": meta.get("notes"), "replaces": meta.get("replaces"),
@@ -601,15 +602,17 @@ def api_regenerate(vid: str, body: dict = Body(default={})):
     env = _tts_env(body)
     q = _quality(body)
     if mode == "voice":
-        if not (d / "scene.py").exists():
+        scene = _scene_of(d)
+        if scene is None:
             raise HTTPException(409, "No hay escena para re-renderizar")
         cmd = [PY, "make_video.py", "--storyboard", str(d / "storyboard.json"), "--scene",
-               str(d / "scene.py"), "--quality", q]
+               str(scene), "--quality", q]
         title = f"Re-render: {sb.get('topic', vid)}"
     elif mode == "ai":
         _need_anthropic()
+        motor = _motor(body) or meta.get("motor") or ("hyperframes" if (d / "scene.js").exists() else None)
         cmd = [PY, "make_video.py", "--topic", sb.get("topic") or meta.get("topic") or vid,
-               "--quality", q] + (["--notes", note] if note else [])
+               "--quality", q] + (["--notes", note] if note else []) + (["--motor", motor] if motor else [])
         title = f"Regenerar: {sb.get('topic', vid)}"
     else:
         raise HTTPException(422, "mode debe ser ai o voice")
@@ -648,8 +651,9 @@ def api_extend(vid: str, body: dict = Body(default={})):
     sb = read_json(d / "storyboard.json", {}) or {}
     note = str(body.get("note", "")).strip()[:1000]
     cmd = [PY, "make_video.py", "--storyboard", str(d / "storyboard.json"), "--expand"]
-    if (d / "scene.py").exists():
-        cmd += ["--base-scene", str(d / "scene.py")]
+    base = _scene_of(d)
+    if base is not None:
+        cmd += ["--base-scene", str(base)]
     if note:
         cmd += ["--notes", note]
     meta = read_json(d / "meta.json", {}) or {}
@@ -717,6 +721,28 @@ def _tts_env(body: dict) -> dict:
     return {"EXPLAPIX_TTS": eng} if eng else {}
 
 
+def _scene_of(d: Path) -> Path | None:
+    for name in ("scene.js", "scene.py"):
+        if (d / name).exists():
+            return d / name
+    return None
+
+
+def _motor(body: dict) -> str | None:
+    """Motor de animación pedido en el formulario (None = el de config/estilo.yaml)."""
+    m = body.get("motor")
+    if not m:
+        return None
+    if m not in ("manim", "hyperframes"):
+        raise HTTPException(422, "Motor de animación inválido")
+    if m == "hyperframes":
+        from explapix import hyperframes  # noqa: PLC0415
+        ok, why = hyperframes.ready()
+        if not ok:
+            raise HTTPException(409, f"HyperFrames no está instalado en el servidor: {why}")
+    return m
+
+
 def _quality(body: dict) -> str:
     q = body.get("quality", "hd")
     if q not in ("hd", "draft"):
@@ -743,8 +769,11 @@ def api_new_job(body: dict = Body(...)):
         raise HTTPException(422, "Escribe al menos un tema")
     _need_anthropic()
     notes = str(body.get("notes", "")).strip()[:1000]
-    return [jobs.add("video", t, [PY, "make_video.py", "--topic", t, "--quality", q] +
-                     (["--notes", notes] if notes else []), env) for t in topics]
+    motor = _motor(body)
+    return [jobs.add("video", t + (" (HyperFrames)" if motor == "hyperframes" else ""),
+                     [PY, "make_video.py", "--topic", t, "--quality", q] +
+                     (["--notes", notes] if notes else []) + (["--motor", motor] if motor else []), env)
+            for t in topics]
 
 
 @app.get("/api/jobs")
@@ -1072,6 +1101,12 @@ def _quota():
             "day": quota_day()}
 
 
+def _hf_status() -> dict:
+    from explapix import hyperframes, render  # noqa: PLC0415
+    ok, why = hyperframes.ready()
+    return {"ready": ok, "detail": why, "default_motor": render.motor_default()}
+
+
 @app.get("/api/status")
 def api_status():
     env = read_env()
@@ -1087,6 +1122,7 @@ def api_status():
         "youtube_token": (SECRETS / "token.json").exists(),
         "instagram": _ig().connected(),
         "tts": env.get("EXPLAPIX_TTS") or "chatterbox",
+        "hyperframes": _hf_status(),
         "gpu": _gpu(),
         "disk": {"free_gb": round(du.free / 1e9, 1), "total_gb": round(du.total / 1e9, 1),
                  "out_gb": round(out_size / 1e9, 2)},

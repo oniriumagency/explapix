@@ -6,6 +6,10 @@ Ejemplos:
   python make_video.py --storyboard examples/refrigerador/storyboard.json \
                        --scene examples/refrigerador/scene.py          # sin IA, sin costo
   python make_video.py --topics topics.txt --upload --privacy private  # lote
+  python make_video.py --topic "Cómo funciona un microondas" --motor hyperframes   # motor alternativo
+
+Motor de animación: manim (por defecto) o hyperframes (--motor, EXPLAPIX_MOTOR o visual.motor en
+config/estilo.yaml). Con --scene se usa el motor de la escena: .py = Manim, .js = HyperFrames.
 """
 from __future__ import annotations
 
@@ -29,7 +33,16 @@ def slug(s: str) -> str:
 
 def build(topic: str | None, storyboard: Path | None, scene: Path | None, quality: str,
           retries: int, music: Path | None, upload: bool, privacy: str, notes: str = "",
-          expand: bool = False, base_scene: Path | None = None) -> Path:
+          expand: bool = False, base_scene: Path | None = None, motor: str | None = None) -> Path:
+    if scene:
+        motor = render.motor_of(scene)
+    elif base_scene and not motor:
+        motor = render.motor_of(base_scene)
+    motor = motor or render.motor_default()
+    if motor not in render.MOTORES:
+        raise SystemExit(f"Motor desconocido: {motor} (usa {', '.join(render.MOTORES)})")
+    if base_scene and render.motor_of(base_scene) != motor:
+        base_scene = None      # la escena base es del otro motor: no sirve como punto de partida
     if storyboard:
         sb = json.loads(storyboard.read_text(encoding="utf-8"))
         if expand:
@@ -51,8 +64,8 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
     timing = tts.narrate([s["narration"] for s in sb["segments"]], work / "audio")
     shutil.copy(work / "audio" / "timing.json", work / "timing.json")
 
-    print("[3/4] Animación", flush=True)
-    scene_file = work / "scene.py"
+    print(f"[3/4] Animación ({motor})", flush=True)
+    scene_file = work / render.SCENE_FILES[motor]
     if scene:
         shutil.copy(scene, scene_file)
         ok, log, silent = render.render_scene(scene_file, work, quality)
@@ -61,9 +74,15 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
         code, err = None, None
         for attempt in range(retries + 1):
             code = llm.scene_code(sb, timing, previous=code, error=err,
-                                  base_scene=base_scene.read_text(encoding="utf-8") if base_scene else None)
+                                  base_scene=base_scene.read_text(encoding="utf-8") if base_scene else None,
+                                  motor=motor)
             scene_file.write_text(code, encoding="utf-8")
             ok, log, silent = render.render_scene(scene_file, work, quality)
+            if ok and motor == "hyperframes" and attempt < retries:
+                from explapix import hyperframes  # noqa: PLC0415
+                probs = hyperframes.layout_problems(work)
+                if probs:        # se renderizó, pero hay texto fuera de la zona segura: que Claude lo acomode
+                    ok, log = False, probs
             if ok:
                 break
             err = log
@@ -92,7 +111,8 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
                 "duration": timing.get("total"), "quality": quality,
                 "created": datetime.now().isoformat(timespec="seconds"),
                 "music": m.name if m else None, "sfx": bool(ev),
-                "target_s": sb.get("duracion_objetivo_s"), "duration_reason": sb.get("justificacion_duracion")}
+                "target_s": sb.get("duracion_objetivo_s"), "duration_reason": sb.get("justificacion_duracion"),
+                "motor": motor}
         if notes:
             meta["notes"] = notes
         meta.update(extra or {})
@@ -117,6 +137,8 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
             break
         bad = [c for c in res["checks"] if not c["ok"]]
         fixes = {c["fix"] for c in bad} - {"", "textos"}
+        if motor == "hyperframes" and {c["id"] for c in bad if c["fix"] == "render"} <= {"zona_segura"}:
+            fixes.discard("render")   # re-renderizar la misma escena no mueve el texto (ver layout.json)
         print(f"   verificación {res['passed']}/{res['total']}: falla " +
               ", ".join(c["id"] for c in bad) + (f" → corrijo ({', '.join(sorted(fixes))})" if fixes else ""),
               flush=True)
@@ -130,7 +152,7 @@ def build(topic: str | None, storyboard: Path | None, scene: Path | None, qualit
                 (work / "storyboard.json").write_text(json.dumps(sb, ensure_ascii=False, indent=2), encoding="utf-8")
                 timing = tts.narrate([s_["narration"] for s_ in sb["segments"]], work / "audio")
                 shutil.copy(work / "audio" / "timing.json", work / "timing.json")
-                code = llm.scene_code(sb, timing)
+                code = llm.scene_code(sb, timing, motor=motor)
                 scene_file.write_text(code, encoding="utf-8")
                 rerender()
             elif "tts" in fixes:
@@ -178,6 +200,8 @@ def main():
     ap.add_argument("--scene", type=Path, help="usar esta escena en vez de generarla")
     ap.add_argument("--expand", action="store_true", help="ampliar el guion a la estructura de 61-90 s")
     ap.add_argument("--base-scene", type=Path, help="escena corta a reutilizar al extender")
+    ap.add_argument("--motor", choices=list(render.MOTORES), default=None,
+                    help="motor de animación (por defecto: EXPLAPIX_MOTOR o visual.motor de estilo.yaml)")
     ap.add_argument("--notes", default="", help="indicaciones extra para el guion (p. ej. nota de revisión)")
     from explapix import config
     ap.add_argument("--quality", choices=list(render.QUALITY), default=config.get("formato.calidad", "hd"))
@@ -191,7 +215,7 @@ def main():
               [l.strip() for l in a.topics.read_text(encoding="utf-8").splitlines() if l.strip()])
     for t in topics:
         build(t, a.storyboard, a.scene, a.quality, a.retries, a.music, a.upload, a.privacy, a.notes,
-              a.expand, a.base_scene)
+              a.expand, a.base_scene, a.motor)
 
 
 if __name__ == "__main__":

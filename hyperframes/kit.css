@@ -1,0 +1,25 @@
+/* Estilos base del kit HyperFrames de Factos Didácticos */
+@font-face { font-family: "Fredoka"; src: url("fonts/Fredoka.ttf"); font-weight: 300 700; }
+@font-face { font-family: "Nunito"; src: url("fonts/Nunito.ttf"); font-weight: 200 1000; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0D26; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Fredoka", sans-serif; color: #FFF8EE; }
+.capa { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.mood { position: absolute; inset: 0; }
+#ui { pointer-events: none; }
+.obj, .vida, .cuerpo { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.obj { will-change: transform; }
+.cuerpo > svg { overflow: visible; }
+.html { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap; text-align: center; }
+.txt { text-align: center; }
+.titulo { font: 700 78px/1.08 "Fredoka"; letter-spacing: .5px; text-shadow: 4px 6px 0 rgba(0, 0, 0, .35); }
+.pill { display: inline-flex; align-items: center; justify-content: center; padding: .34em .8em .38em; border-radius: 999px;
+  font-weight: 700; line-height: 1; white-space: nowrap;
+  box-shadow: 4px 8px 0 rgba(0, 0, 0, .35), inset 0 -.18em 0 rgba(0, 0, 0, .18), inset 0 .1em 0 rgba(255, 255, 255, .3); }
+.sub { position: absolute; visibility: hidden; text-align: center; color: #FFF8EE; font: 900 50px/1.18 "Nunito";
+  -webkit-text-stroke: 12px #000; paint-order: stroke fill; }
+.cta { position: absolute; visibility: hidden; }
+.cta .badge { display: flex; align-items: center; gap: 22px; padding: 14px 34px 16px 28px; border-radius: 44px;
+  background: rgba(0, 0, 0, .45); color: #FFF8EE; font: 900 40px/1 "Nunito"; white-space: nowrap;
+  -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
+.flecha { visibility: hidden; }

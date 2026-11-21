@@ -8,3 +8,4 @@ __pycache__/
 .venv-tts/
 .venv-kokoro/
 assets/music/retro-lofi-*.mp3
+hyperframes/node_modules/

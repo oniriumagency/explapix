@@ -1,4 +1,4 @@
-"""Render con Manim + mezcla final con ffmpeg."""
+"""Render de la escena (Manim para .py, HyperFrames para .js) + mezcla final con ffmpeg."""
 from __future__ import annotations
 
 import os
@@ -15,6 +15,11 @@ QUALITY = {  # (ancho, alto, fps) en vertical; en formato "largo" se intercambia
 
 def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
                  scene_name: str = "Video", formato: str = "vertical") -> tuple[bool, str, Path | None]:
+    if Path(scene_file).suffix == ".js":       # motor HyperFrames (solo vertical por ahora)
+        if formato != "vertical":
+            return False, "El motor HyperFrames todavía no hace el video largo horizontal; usa Manim", None
+        from explapix import hyperframes  # noqa: PLC0415
+        return hyperframes.render_scene(Path(scene_file), workdir, quality)
     w, h, fps = QUALITY[quality]
     if formato == "largo":
         w, h = h, w
@@ -33,6 +38,34 @@ def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
         return False, log[-6000:], None
     out = next(media.rglob("silent.mp4"), None)
     return out is not None, log[-2000:], out
+
+
+MOTORES = ("manim", "hyperframes")
+SCENE_FILES = {"manim": "scene.py", "hyperframes": "scene.js"}
+
+
+def motor_default() -> str:
+    """Motor de animación: EXPLAPIX_MOTOR o visual.motor de config/estilo.yaml (manim por defecto)."""
+    from explapix import config  # noqa: PLC0415
+    m = config.env_or("EXPLAPIX_MOTOR", "visual.motor", "manim").strip().lower()
+    return m if m in MOTORES else "manim"
+
+
+def scene_file(folder: Path) -> Path | None:
+    """La escena de una carpeta de video (scene.js si se hizo con HyperFrames, si no scene.py)."""
+    for name in ("scene.js", "scene.py"):
+        if (folder / name).exists():
+            return folder / name
+    return None
+
+
+def silent_file(folder: Path) -> Path | None:
+    """La animación muda ya renderizada (Manim: media/videos/*/*/silent.mp4; HyperFrames: media/hyperframes)."""
+    return next(folder.glob("media/videos/*/*/silent.mp4"), None) or next(folder.glob("media/hyperframes/silent.mp4"), None)
+
+
+def motor_of(path: Path | None) -> str:
+    return "hyperframes" if path is not None and Path(path).suffix == ".js" else "manim"
 
 
 def _dur(p: Path) -> float:

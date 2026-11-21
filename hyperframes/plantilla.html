@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<!-- Generado por explapix/hyperframes.py: no editar a mano (la escena está en escena.js) -->
+<script src="gsap.min.js"></script>
+<script src="kit.js"></script>
+<link rel="stylesheet" href="kit.css" />
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="__DURACION__" data-width="1080" data-height="1920"></div>
+<script>window.FACTOS_CFG = __CONFIG__;</script>
+<script src="escena.js"></script>
+<script>
+(function () {
+  const k = Factos.crear(window.FACTOS_CFG);
+  try {
+    escena(k);
+  } catch (e) {
+    window.__factos_error = String(e && e.stack || e);
+    throw e;
+  }
+  const tl = k._finalizar();
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+</script>
+</body>
+</html>
