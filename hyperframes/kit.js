@@ -16,6 +16,8 @@ Una escena es un archivo escena.js con UNA función:
 LIENZO DE DISEÑO: 1080×1920 px, origen arriba a la izquierda, y hacia abajo. Todo lo importante va en la
 caja x∈[24, 1056], y∈[84, 1560] (equivale a DESIGN_BOX de kit.py). El kit la encuadra sola dentro de la
 zona segura de config/reglas.yaml y pone debajo la franja de subtítulos (no dibujes ahí).
+VIDEO LARGO HORIZONTAL (cfg.formato = "largo"): lienzo 1920×1080, caja x∈[72, 1848], y∈[60, 924], margen de TV
+del 5 %, capítulos con k.chapter(titulo, { numero }) y pantalla final con k.endScreen(20) (en vez de k.outro()).
 
 TIEMPO: como en Manim, hay un cursor k.t. k.play(...) agrega animaciones en paralelo en el cursor y lo
 avanza lo que dure la más larga; k.wait(s) lo avanza. k.segmento(i) pone el cursor al inicio exacto del
@@ -27,7 +29,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
 (function () {
   "use strict";
   const NS = "http://www.w3.org/2000/svg";
-  const W = 1080, H = 1920;
+  let W = 1080, H = 1920;   // se fijan en crear() según el formato (vertical u horizontal)
 
   // ---------- Paleta (la de kit.py) ----------
   const C = {
@@ -45,7 +47,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     sol: ["#1E1206", "#3A2208", "#6A3A0C", C.SUN],
     magia: ["#1A0726", "#33104A", "#5E1A6E", C.PINK],
   };
-  const DESIGN_BOX = [24, 1056, 84, 1560];   // x0, x1, y0, y1
+  let DESIGN_BOX = [24, 1056, 84, 1560];   // x0, x1, y0, y1 (vertical; en horizontal [72, 1848, 60, 924])
   const CTA_TEXT = { guardar: "Guarda este video", comentar: "Comenta", compartir: "Compártelo",
     seguir: "Síguenos", like: "Dale like" };
 
@@ -176,6 +178,9 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
 
   // ---------- Kit ----------
   function crear(cfg) {
+    const LARGO = cfg.formato === "largo";   // horizontal 16:9 para YouTube (igual que LARGO de kit.py)
+    if (LARGO) { W = 1920; H = 1080; DESIGN_BOX = [72, 1848, 60, 924]; } else { W = 1080; H = 1920; DESIGN_BOX = [24, 1056, 84, 1560]; }
+    const CTA = LARGO ? { ...CTA_TEXT, seguir: "Suscríbete" } : CTA_TEXT;
     const root = document.getElementById("root");
     const DUR = cfg.duracion;
     const durs = cfg.segmentos.map((x) => x.duracion);
@@ -206,7 +211,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     const ui = el("div", { id: "ui", class: "capa" }, root);
 
     const tl = gsap.timeline({ paused: true });
-    const k = { C, PALETTE, MOODS, s, W, H, tl, t: 0, eventos: [], avisos: [], objetos: [], shade, rng };
+    const k = { C, PALETTE, MOODS, s, W, H, LARGO, tl, t: 0, eventos: [], avisos: [], objetos: [], shade, rng };
     const procs = [];          // funciones (t) => void, llamadas en cada cuadro
     const R = rng(cfg.semilla || 7);
 
@@ -216,9 +221,9 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
 
     // ---------- Fondo: polvo de estrellas en 3 capas (parallax) ----------
     const stars = [];
-    for (let i = 0; i < 130; i++) {
+    for (let i = 0; i < (LARGO ? 170 : 130); i++) {
       const layer = i % 6 < 3 ? 0 : i % 6 < 5 ? 1 : 2;
-      const st = { x: R() * 1500 - 210, y: R() * 2500 - 290, r: [1.6, 2.6, 3.8][layer], ph: R() * 6.28, w: 0.8 + R() * 2.2,
+      const st = { x: R() * (W + 420) - 210, y: R() * (H + 580) - 290, r: [1.6, 2.6, 3.8][layer], ph: R() * 6.28, w: 0.8 + R() * 2.2,
         layer, c: R() < 0.2 ? PALETTE[i % PALETTE.length] : C.INK };
       st.e = el("circle", { r: st.r, fill: st.c }, estrellas, true);
       stars.push(st);
@@ -226,7 +231,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     procs.push((t) => {
       for (const st of stars) {
         const spd = [8, 16, 28][st.layer];
-        let y = st.y - t * spd; y = ((y + 290) % 2500 + 2500) % 2500 - 290;
+        let y = st.y - t * spd; y = ((y + 290) % (H + 580) + (H + 580)) % (H + 580) - 290;
         st.e.setAttribute("cx", st.x + Math.sin(t * 0.2 + st.ph) * spd * 0.6);
         st.e.setAttribute("cy", y);
         st.e.setAttribute("opacity", ((0.35 + 0.25 * st.layer) * (0.55 + 0.45 * Math.sin(t * st.w + st.ph))).toFixed(3));
@@ -285,7 +290,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
      * Opciones: x, y (centro), escala, rot (grados), z (orden), ancla ("abajo" | "centro") para pop/squash.
      * Aparece al usarlo en k.popIn (o al instante si visible: true).
      */
-    k.obj = (contenido, { x = 540, y = 960, escala = 1, rot = 0, z = 0, ancla = "abajo", visible = false, opacidad = 1 } = {}) => {
+    k.obj = (contenido, { x = W / 2, y = H / 2, escala = 1, rot = 0, z = 0, ancla = "abajo", visible = false, opacidad = 1 } = {}) => {
       const pos = el("div", { class: "obj", style: `z-index:${z}` }, encuadre);
       const vida = el("div", { class: "vida" }, pos);
       const cuerpo = el("div", { class: "cuerpo" }, vida);
@@ -329,7 +334,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
       k.obj({ html: `<div class="txt" style="font:${peso} ${size}px/1.12 '${fuente}';color:${color};${ancho ? `width:${ancho}px;white-space:normal;` : ""}">${esc(txt).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", ...opts });
     /** Título grande en mayúsculas (admite \n) con sombra suave. */
     k.titulo = (txt, { size = 78, color = C.INK, ...opts } = {}) =>
-      k.obj({ html: `<div class="txt titulo" style="font-size:${size}px;color:${color}">${esc(txt.toUpperCase()).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", y: 230, ...opts });
+      k.obj({ html: `<div class="txt titulo" style="font-size:${size}px;color:${color}">${esc(txt.toUpperCase()).replace(/\n/g, "<br/>")}</div>` }, { ancla: "centro", y: LARGO ? 140 : 230, ...opts });
     /** Etiqueta en cápsula con volumen (nombrar partes; 3-4 palabras máx.). */
     k.pill = (txt, color = C.SUN, { size = 40, colorTexto = null, ...opts } = {}) => {
       const dark = [C.SUN, C.MINT, C.CYAN, C.CORAL, C.INK].includes(color);
@@ -515,7 +520,7 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
      * Sistema de partículas vivo: tipo chispas | burbujas | calor | estrellas | confeti | frio | orbita | polvo.
      * {x, y, w, h, n, sigue: obj, colores, tam}. Se quita con k.exitOut(p) o k.fadeOut(p).
      */
-    k.particulas = (tipo = "polvo", { x = 540, y = 900, w = 400, h = 400, n = 30, sigue = null, colores = null, tam = 1, z = 5 } = {}) => {
+    k.particulas = (tipo = "polvo", { x = W / 2, y = LARGO ? 480 : 900, w = 400, h = 400, n = 30, sigue = null, colores = null, tam = 1, z = 5 } = {}) => {
       const P = rng(Math.floor(R() * 1e9));
       const cols = colores || PCOL[tipo] || PALETTE;
       const o = k.obj("", { x, y, z, ancla: "centro", visible: true });
@@ -644,18 +649,19 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
     function cta(kind, t, dur) {
       const y = captionY - band / 2 - 66, x = (sx0 + sx1) / 2;
       const box = el("div", { class: "cta", style: `left:${x}px;top:${y}px` }, ui);
-      box.innerHTML = `<div class="badge txt"><svg width="64" height="64" viewBox="-32 -32 64 64">${ICONS[kind] || ICONS.seguir}</svg><span>${esc(CTA_TEXT[kind] || kind)}</span></div>`;
+      box.innerHTML = `<div class="badge txt"><svg width="64" height="64" viewBox="-32 -32 64 64">${ICONS[kind] || ICONS.seguir}</svg><span>${esc(CTA[kind] || kind)}</span></div>`;
       tl.set(box, { visibility: "visible" }, t);
       tl.fromTo(box, { xPercent: -50, yPercent: -50, scale: 0, rotation: -10 }, { scale: 1, rotation: 0, duration: 0.6, ease: "elastic.out(1.1, .5)" }, t);
       tl.fromTo(box, { scale: 1 }, { scale: 0, duration: 0.3, ease: "back.in(2)", immediateRender: false }, t + dur - 0.3);
       tl.set(box, { visibility: "hidden" }, t + dur);
       sfx(`cta_${kind}`, t, 0); sfx("pop", t, 1); sfx("blip", t + 0.15, 1);
+      if (LARGO) return ctaFlechaAbajo(kind, x, y, t, dur);
       if (!["guardar", "comentar", "compartir", "like"].includes(kind)) return;
       // flecha: anticipación, disparo con rebote y empujoncitos hacia la columna de botones (derecha)
       const btnY = cfg.botones_altura * H, endX = W - 66;
       const svg = el("svg", { width: W, height: H, class: "capa flecha", style: "overflow:visible" }, ui, true);
       const g = el("g", {}, svg, true);
-      const label = CTA_TEXT[kind] || kind;
+      const label = CTA[kind] || kind;
       const startX = x + (64 + 22 + 62 + label.length * 21) / 2 + 18;   // borde derecho del ícono + aire
       g.innerHTML = `<line x1="0" y1="0" x2="1" y2="0" stroke="${C.SUN}" stroke-width="16" stroke-linecap="round"/><path d="M-12 -26 L34 0 L-12 26Z" fill="${C.SUN}" stroke="${C.SUN}" stroke-width="8" stroke-linejoin="round"/>`;
       const line = g.querySelector("line"), head = g.querySelector("path");
@@ -679,13 +685,64 @@ cuadro, así que la vida continua (idles, cámara, partículas, parpadeo) se cal
       tl.fromTo(svg, { opacity: 1 }, { opacity: 0, duration: 0.3, immediateRender: false }, t + dur - 0.3);
       tl.set(svg, { visibility: "hidden" }, t + dur);
     }
-    /** Mini-título de capítulo (entra, se queda y sale; ≈1.2 s, bloquea). */
-    k.chapter = (titulo, { color = C.VIOLET } = {}) => {
-      const p = k.pill(titulo, color, { size: 54, colorTexto: C.INK, x: designC[0], y: designC[1] - 360, z: 50 });
+    /** Horizontal: los botones están bajo el reproductor → flecha que rebota hacia abajo junto al ícono. */
+    function ctaFlechaAbajo(kind, x, y, t, dur) {
+      if (!["guardar", "comentar", "compartir", "like", "seguir"].includes(kind)) return;
+      const label = CTA[kind] || kind;
+      const ax = x + (64 + 22 + 62 + label.length * 21) / 2 + 40, top = y - 34;
+      const svg = el("svg", { width: W, height: H, class: "capa flecha", style: "overflow:visible" }, ui, true);
+      const g = el("g", {}, svg, true);
+      g.innerHTML = `<line x1="0" y1="0" x2="0" y2="1" stroke="${C.SUN}" stroke-width="14" stroke-linecap="round"/><path d="M-22 -10 L0 30 L22 -10Z" fill="${C.SUN}" stroke="${C.SUN}" stroke-width="8" stroke-linejoin="round"/>`;
+      const line = g.querySelector("line"), head = g.querySelector("path");
+      const st = { u: 0, b: 0 };
+      const paint = () => {
+        const bot = top + (36 + st.b) * st.u;
+        line.setAttribute("x1", ax); line.setAttribute("x2", ax); line.setAttribute("y1", top); line.setAttribute("y2", bot);
+        head.setAttribute("transform", `translate(${ax} ${bot}) scale(${clamp(st.u * 3, 0, 1)})`);
+      };
+      const proxy = {};
+      Object.defineProperty(proxy, "u", { get: () => st.u, set: (v) => { st.u = v; paint(); } });
+      Object.defineProperty(proxy, "b", { get: () => st.b, set: (v) => { st.b = v; paint(); } });
+      paint();
+      tl.set(svg, { visibility: "visible", opacity: 1 }, t + 0.25);
+      tl.fromTo(proxy, { u: 0 }, { u: 1, duration: 0.45, ease: "back.out(2.5)" }, t + 0.25);
+      for (let q = 0; q < Math.floor((dur - 1.0) / 0.4); q++)
+        tl.fromTo(proxy, { b: 0 }, { b: 18, duration: 0.2, ease: "sine.out", yoyo: true, repeat: 1 }, t + 0.7 + q * 0.4);
+      tl.fromTo(svg, { opacity: 1 }, { opacity: 0, duration: 0.3, immediateRender: false }, t + dur - 0.3);
+      tl.set(svg, { visibility: "hidden" }, t + dur);
+    }
+    /** Mini-título de capítulo (entra, se queda y sale, bloquea): ≈1.2 s en vertical; en horizontal ≈1.8 s con
+     *  «CAPÍTULO N» encima (es la pausa natural donde YouTube puede poner un anuncio). */
+    k.chapter = (titulo, { color = C.VIOLET, numero = null } = {}) => {
+      const [cx, cy] = designC;
+      const p = k.pill(titulo, color, { size: LARGO ? 76 : 54, colorTexto: C.INK, x: cx, y: LARGO ? cy + 20 : cy - 360, z: 50 });
+      const n = LARGO && numero != null
+        ? k.texto(`CAPÍTULO ${numero}`, { size: 40, color: C.MUTED, x: cx, y: cy - 70, z: 50 }) : null;
       sfx("chapter", k.t, 0);
-      k.play(k.popIn(p, { dur: 0.5 }));
-      k.wait(0.35);
-      k.play(k.exitOut(p, { dur: 0.35 }));
+      k.play(k.popIn(p, { dur: 0.5 }), ...(n ? [k.despues(0.1, k.popIn(n, { dur: 0.45 }))] : []));
+      k.wait(LARGO ? 0.9 : 0.35);
+      k.play(k.exitOut(p, { dur: 0.35 }), ...(n ? [k.exitOut(n, { dur: 0.35 })] : []));
+    };
+    /** Pantalla final de YouTube (solo horizontal): logo y mensaje en la mitad izquierda; la derecha queda libre
+     *  para los elementos de YouTube Studio (video sugerido y suscribirse), con guías suaves. Dura `dur` s (bloquea). */
+    k.endScreen = (dur = 20, mensaje = "¡Gracias por ver!") => {
+      if (!LARGO) throw new Error("k.endScreen es solo para el video largo horizontal; en vertical usa k.outro()");
+      const cx = W * 0.27, cy = H * 0.46;
+      sfx("end_screen", k.t, 0);
+      const halo = k.obj(s.brillo(380, C.VIOLET, 0, 0, 0.35), { x: cx, y: cy - 30, ancla: "centro", z: 40 });
+      const l1 = k.texto("FACTOS", { size: 150, x: cx, y: cy - 90, z: 41 });
+      const l2 = k.texto("DIDÁCTICOS", { size: 100, color: C.SUN, x: cx, y: cy + 30, z: 41 });
+      const sub = k.texto(mensaje, { size: 46, color: C.MUTED, peso: 500, x: cx, y: cy + 130, z: 41 });
+      const gx = W * 0.73;
+      const guias = k.obj(`<rect x="-336" y="-250" width="672" height="378" rx="24" fill="rgba(0,0,0,.18)" stroke="${C.INK}" stroke-opacity=".25" stroke-width="3"/>`
+        + `<circle cx="0" cy="${128 + 40 + 114}" r="114" fill="rgba(0,0,0,.18)" stroke="${C.INK}" stroke-opacity=".25" stroke-width="3"/>`,
+        { x: gx, y: H * 0.42, ancla: "centro", z: 39 });
+      k.particulas("estrellas", { x: W / 2, y: H / 2, w: W, h: H, n: 40, z: 38 });
+      sfx("pop", k.t + 0.1, 1);
+      k.play(k.fadeIn(halo, { dur: 0.4 }), k.popIn(l1, { dur: 0.8 }), k.despues(0.15, k.popIn(l2, { dur: 0.7 })),
+        k.fadeIn(sub, { dur: 0.6 }), k.fadeIn(guias, { dur: 0.8 }));
+      k.idlePulse(l1, { amp: 0.02, period: 1.8 }); k.idlePulse(l2, { amp: 0.02, period: 1.8 });
+      k.wait(Math.max(dur - 0.8, 0.1));
     };
     /** Cierre de marca con confeti (≈1.2 s). Llámalo al final del último segmento, después de k.clearStage(). */
     k.outro = () => {

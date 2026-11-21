@@ -146,7 +146,7 @@ renderiza con Manim y una `.js` con HyperFrames.
   se sale, Claude la corrige (cuenta como intento) y si no, el verificador lo marca.
 - Instalación: `setup_server.sh` instala Node 22, los paquetes fijados (`hyperframes/package-lock.json`) y Chrome.
   Telemetría y avisos de actualización apagados. Versiones fijas: no actualizar sin probar.
-- Todavía no hace el video largo horizontal (sigue en Manim).
+- También hace el video largo horizontal: `python make_long.py data/largos/<id>.json --motor hyperframes` (va a `out/largo-<id>-hyperframes/`, reutiliza la voz del largo de Manim si el guion no cambió; capítulos con `k.chapter(titulo, { numero })` y pantalla final con `k.endScreen(20)`).
 
 ```bash
 python make_video.py --storyboard examples/microondas/storyboard.json --scene examples/microondas/scene.js  # sin IA

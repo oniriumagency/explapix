@@ -2,9 +2,9 @@
 @font-face { font-family: "Fredoka"; src: url("fonts/Fredoka.ttf"); font-weight: 300 700; }
 @font-face { font-family: "Nunito"; src: url("fonts/Nunito.ttf"); font-weight: 200 1000; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0D26; }
-#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Fredoka", sans-serif; color: #FFF8EE; }
-.capa { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+html, body { width: var(--W, 1080px); height: var(--H, 1920px); overflow: hidden; background: #0B0D26; }
+#root { position: relative; width: var(--W, 1080px); height: var(--H, 1920px); overflow: hidden; font-family: "Fredoka", sans-serif; color: #FFF8EE; }
+.capa { position: absolute; left: 0; top: 0; width: var(--W, 1080px); height: var(--H, 1920px); }
 .mood { position: absolute; inset: 0; }
 #ui { pointer-events: none; }
 .obj, .vida, .cuerpo { position: absolute; left: 0; top: 0; width: 0; height: 0; }

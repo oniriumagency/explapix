@@ -394,6 +394,42 @@ EJEMPLO DE REFERENCIA PRINCIPAL (microondas: imita su ritmo, dinamismo y estruct
 ```"""
 
 
+def _scene_system_hf_largo() -> str:
+    """Prompt HyperFrames para el video largo horizontal (16:9): el mismo estándar, otro lienzo."""
+    t = SCENE_SYSTEM_HF
+    pairs = [
+        ("Lienzo de diseño 1080×1920 px", "Lienzo de diseño HORIZONTAL 1920×1080 px (YouTube)"),
+        ("x∈[24, 1056], y∈[84, 1560]: el kit", "x∈[72, 1848], y∈[60, 924]: el kit"),
+        ("El título va arriba (k.titulo, y≈230).", "El título va arriba (k.titulo, y≈140)."),
+        ("10. Cierre: en el último segmento k.clearStage() y luego k.outro() (≈2 s en total).",
+         "10. Cierre: sigue las reglas de CAPÍTULO DE VIDEO LARGO."),
+        ("subtítulos. No dibujes íconos de CTA ni ocupes ese espacio (abajo del lienzo de diseño, y > 1450).",
+         "subtítulos, con una flecha que rebota hacia abajo (los botones están bajo el reproductor). No dibujes "
+         "íconos de CTA ni ocupes ese espacio (abajo del lienzo de diseño, y > 840)."),
+        ("no pongas texto cerca de y < 150 ni de x > 1000.", "no pongas texto cerca de y < 90 ni de los lados (x < 110 o x > 1810)."),
+    ]
+    for a_, b_ in pairs:
+        assert a_ in t, a_
+        t = t.replace(a_, b_)
+    i, j = t.index("CAPÍTULOS (videos de más de 90 s)"), t.index("CTA EN PANTALLA")
+    t = t[:i] + """LIENZO HORIZONTAL:
+- Aprovecha el ancho: composiciones lado a lado (antes → después, causa → efecto, dos piezas que se comparan)
+  y diagramas que se van armando de izquierda a derecha. Objetos algo más grandes que en vertical.
+- El EJEMPLO de referencia es vertical: imita su ritmo y estilo, pero adapta las coordenadas a este lienzo
+  (centro del lienzo ≈ (960, 490)). Partículas y cámara funcionan igual.
+
+CAPÍTULO DE VIDEO LARGO (obligatorio):
+- Esta escena es UN capítulo de un video largo de YouTube. Si el segmento 0 trae CAPÍTULO, empieza ese bloque
+  con k.chapter("título", { numero: <número de capítulo> }) (≈1,8 s; es la pausa donde puede ir un anuncio).
+- Al final del último segmento llama k.clearStage() para que el siguiente capítulo empiece limpio.
+  NO llames k.outro() (solo existe un cierre por video).
+- Si te digo que es el CIERRE: en el último segmento llama k.clearStage() y luego k.endScreen(20)
+  (pantalla final de 20 s; deja libre la mitad derecha para los elementos de YouTube). No pongas nada después.
+
+""" + t[j:]
+    return t + "\n\nREGLAS DEL VIDEO LARGO (config/reglas.yaml):\n" + rules("video_largo")
+
+
 def _text(resp) -> str:
     if resp.stop_reason == "refusal":
         raise RuntimeError("El modelo rechazó la solicitud")
@@ -472,9 +508,10 @@ def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str |
                base_scene: str | None = None, formato: str = "vertical", extra: str = "",
                motor: str = "manim") -> str:
     hf = motor == "hyperframes"
-    if hf and formato == "largo":
-        raise ValueError("El motor HyperFrames todavía no hace el video largo horizontal")
-    system = SCENE_SYSTEM_HF if hf else (_scene_system_largo() if formato == "largo" else SCENE_SYSTEM)
+    if formato == "largo":
+        system = _scene_system_hf_largo() if hf else _scene_system_largo()
+    else:
+        system = SCENE_SYSTEM_HF if hf else SCENE_SYSTEM
     lang = "javascript" if hf else "python"
     segs = "\n".join(f"{i}. ({t['duration']:.2f} s) [{s.get('beat', '')}]"
                      f"{(' CTA: ' + s['cta']) if s.get('cta') else ''}"
@@ -483,7 +520,8 @@ def scene_code(sb: dict, timing: dict, previous: str | None = None, error: str |
                      for i, (s, t) in enumerate(zip(sb["segments"], timing["segments"])))
     content = f"Tema: {sb['topic']}\n{extra}\nSegmentos:\n{segs}".replace("\n\n", "\n")
     if formato == "largo" and sb.get("capitulo"):
-        content += f"\nNúmero de capítulo para self.chapter: {sb['capitulo']}"
+        content += (f"\nNúmero de capítulo para k.chapter: {sb['capitulo']}" if hf else
+                    f"\nNúmero de capítulo para self.chapter: {sb['capitulo']}")
     if base_scene:
         seg = "k.segmento(i)" if hf else "self.segment(i)"
         content += ("\n\nVERSIÓN EXTENDIDA: ya existe esta escena de la versión corta. Reutiliza su código "

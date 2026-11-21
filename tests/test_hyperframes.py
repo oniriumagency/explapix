@@ -1,5 +1,6 @@
 """Motor alternativo HyperFrames: selección de motor, panel y configuración de la escena (sin Chrome ni render)."""
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -29,9 +30,31 @@ def test_motor_default(monkeypatch):
     assert render.motor_default() == "manim"
 
 
-def test_hyperframes_no_horizontal(tmp_path):
-    ok, log, out = render.render_scene(tmp_path / "scene.js", tmp_path, "hd", formato="largo")
-    assert not ok and out is None and "horizontal" in log
+def test_config_horizontal(tmp_path):
+    """Video largo horizontal: lienzo 1920×1080, margen de TV del 5 % y líneas de subtítulo más largas (kit.py)."""
+    (tmp_path / "timing.json").write_text(json.dumps({"segments": [{"text": "Hola", "duration": 2.0}]}))
+    cfg = hyperframes.config_for(tmp_path, "largo")
+    assert (cfg["formato"], cfg["ancho"], cfg["alto"]) == ("largo", 1920, 1080)
+    assert set(cfg["zona"].values()) == {0.05}
+    assert cfg["caracteres_por_linea"] == 44
+    v = hyperframes.config_for(tmp_path)
+    assert (v["formato"], v["ancho"], v["alto"]) == ("vertical", 1080, 1920)
+
+
+def test_project_horizontal(tmp_path):
+    (tmp_path / "timing.json").write_text(json.dumps({"segments": [{"text": "Hola", "duration": 2.0}]}))
+    (tmp_path / "scene.js").write_text("function escena(k) {}")
+    if not (hyperframes.HF / "node_modules" / "gsap").exists():
+        pytest.skip("sin paquetes de hyperframes/")
+    html = (hyperframes.build_project(tmp_path / "scene.js", tmp_path, "largo") / "index.html").read_text()
+    assert 'data-width="1920" data-height="1080"' in html and "landscape" in html and not re.search(r"__[A-Z]+__", html)
+
+
+def test_long_scene_prompt():
+    from explapix import llm
+    t = llm._scene_system_hf_largo()
+    assert "1920×1080" in t and "k.endScreen(20)" in t and "REGLAS DEL VIDEO LARGO" in t
+    assert "1080×1920" not in t.split("KIT (hyperframes/kit.js)")[0]
 
 
 def test_config_reads_rules(tmp_path):

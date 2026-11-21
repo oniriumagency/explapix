@@ -15,11 +15,9 @@ QUALITY = {  # (ancho, alto, fps) en vertical; en formato "largo" se intercambia
 
 def render_scene(scene_file: Path, workdir: Path, quality: str = "hd",
                  scene_name: str = "Video", formato: str = "vertical") -> tuple[bool, str, Path | None]:
-    if Path(scene_file).suffix == ".js":       # motor HyperFrames (solo vertical por ahora)
-        if formato != "vertical":
-            return False, "El motor HyperFrames todavía no hace el video largo horizontal; usa Manim", None
+    if Path(scene_file).suffix == ".js":       # motor HyperFrames (vertical u horizontal)
         from explapix import hyperframes  # noqa: PLC0415
-        return hyperframes.render_scene(Path(scene_file), workdir, quality)
+        return hyperframes.render_scene(Path(scene_file), workdir, quality, formato=formato)
     w, h, fps = QUALITY[quality]
     if formato == "largo":
         w, h = h, w

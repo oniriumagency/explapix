@@ -1,15 +1,16 @@
 <!doctype html>
-<html lang="es" data-resolution="portrait">
+<html lang="es" data-resolution="__ORIENTACION__">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=1080, height=1920" />
+<meta name="viewport" content="width=__ANCHO__, height=__ALTO__" />
 <!-- Generado por explapix/hyperframes.py: no editar a mano (la escena está en escena.js) -->
 <script src="gsap.min.js"></script>
 <script src="kit.js"></script>
 <link rel="stylesheet" href="kit.css" />
+<style>:root { --W: __ANCHO__px; --H: __ALTO__px; }</style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="__DURACION__" data-width="1080" data-height="1920"></div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="__DURACION__" data-width="__ANCHO__" data-height="__ALTO__"></div>
 <script>window.FACTOS_CFG = __CONFIG__;</script>
 <script src="escena.js"></script>
 <script>

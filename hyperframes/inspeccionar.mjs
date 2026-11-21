@@ -4,6 +4,7 @@
 // Imprime un JSON: {ok, error, eventos, avisos, fuera: [{t, texto, borde}]}
 import { pathToFileURL } from "node:url";
 import path from "node:path";
+import { readFileSync } from "node:fs";
 import puppeteer from "puppeteer-core";
 
 const [dir, chrome, pasoArg] = process.argv.slice(2);
@@ -16,7 +17,10 @@ try {
   const page = await browser.newPage();
   const errs = [];
   page.on("pageerror", (e) => errs.push(String(e.message || e)));
-  await page.setViewport({ width: 1080, height: 1920 });
+  const html = readFileSync(path.resolve(dir, "index.html"), "utf8");
+  const ancho = Number((html.match(/data-width="(\d+)"/) || [])[1] || 1080);
+  const alto = Number((html.match(/data-height="(\d+)"/) || [])[1] || 1920);
+  await page.setViewport({ width: ancho, height: alto });
   await page.goto(pathToFileURL(path.resolve(dir, "index.html")).href, { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
   const info = await page.evaluate(() => window.__factos ? { eventos: window.__factos.eventos, avisos: window.__factos.avisos,
